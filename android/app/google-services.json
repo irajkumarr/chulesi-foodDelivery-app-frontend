@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "802878070287",
+    "project_id": "chulesi-fooddelivery",
+    "storage_bucket": "chulesi-fooddelivery.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:802878070287:android:895024f7c60960edb74d7a",
+        "android_client_info": {
+          "package_name": "com.chulesi.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC-x4SPWIhWbpTQAMlu52qvdmDclE_egHU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

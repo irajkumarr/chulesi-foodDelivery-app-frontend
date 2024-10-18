@@ -1,0 +1,163 @@
+import 'dart:convert';
+
+List<OrderModel> orderModelFromJson(String str) =>
+    List<OrderModel>.from(json.decode(str).map((x) => OrderModel.fromJson(x)));
+
+String orderModelToJson(List<OrderModel> data) =>
+    json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
+
+class OrderModel {
+  final String paymentMethod;
+  final String id;
+  final String userId;
+  final List<OrderItem> orderItems;
+  final int orderTotal;
+  final int deliveryFee;
+  final int grandTotal;
+  final DeliveryAddress deliveryAddress;
+  final String paymentStatus;
+  final String orderStatus;
+
+  final DateTime orderDate;
+  final int rating;
+  final String feedback;
+  final String orderNote;
+  final int discountAmount;
+  final int v;
+
+  OrderModel({
+    required this.paymentMethod,
+    required this.id,
+    required this.userId,
+    required this.orderItems,
+    required this.orderTotal,
+    required this.deliveryFee,
+    required this.grandTotal,
+    required this.deliveryAddress,
+    required this.paymentStatus,
+    required this.orderStatus,
+    required this.orderDate,
+    required this.rating,
+    required this.feedback,
+    required this.orderNote,
+    required this.discountAmount,
+    required this.v,
+  });
+
+  factory OrderModel.fromJson(Map<String, dynamic> json) => OrderModel(
+        paymentMethod: json["paymentMethod"],
+        id: json["_id"],
+        userId: json["userId"],
+        orderItems: List<OrderItem>.from(
+            json["orderItems"].map((x) => OrderItem.fromJson(x))),
+        orderTotal: json["orderTotal"],
+        deliveryFee: json["deliveryFee"],
+        grandTotal: json["grandTotal"],
+        deliveryAddress: DeliveryAddress.fromJson(json["deliveryAddress"]),
+        paymentStatus: json["paymentStatus"],
+        orderStatus: json["orderStatus"],
+        orderDate: DateTime.parse(json["orderDate"]),
+        rating: json["rating"],
+        feedback: json["feedback"],
+        orderNote: json["orderNote"],
+        discountAmount: json["discountAmount"],
+        v: json["__v"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "paymentMethod": paymentMethod,
+        "_id": id,
+        "userId": userId,
+        "orderItems": List<dynamic>.from(orderItems.map((x) => x.toJson())),
+        "orderTotal": orderTotal,
+        "deliveryFee": deliveryFee,
+        "grandTotal": grandTotal,
+        "deliveryAddress": deliveryAddress.toJson(),
+        "paymentStatus": paymentStatus,
+        "orderStatus": orderStatus,
+        "orderDate": orderDate.toIso8601String(),
+        "rating": rating,
+        "feedback": feedback,
+        "orderNote": orderNote,
+        "discountAmount": discountAmount,
+        "__v": v,
+      };
+}
+
+class DeliveryAddress {
+  final String id;
+  final String addressTitle;
+  final String location;
+  final String customerName;
+  final String phone;
+  final double latitude;
+  final double longitude;
+
+  DeliveryAddress({
+    required this.id,
+    required this.addressTitle,
+    required this.location,
+    required this.customerName,
+    required this.phone,
+    required this.latitude,
+    required this.longitude,
+  });
+
+  factory DeliveryAddress.fromJson(Map<String, dynamic> json) =>
+      DeliveryAddress(
+        id: json["_id"],
+        addressTitle: json["addressTitle"],
+        location: json["location"],
+        customerName: json["customerName"],
+        phone: json["phone"],
+        latitude: json["latitude"]?.toDouble(),
+        longitude: json["longitude"]?.toDouble(),
+      );
+
+  Map<String, dynamic> toJson() => {
+        "_id": id,
+        "addressTitle": addressTitle,
+        "location": location,
+        "customerName": customerName,
+        "phone": phone,
+        "latitude": latitude,
+        "longitude": longitude,
+      };
+}
+
+class OrderItem {
+  final String foodId;
+  final String title;
+  final int quantity;
+  final int price;
+  final String instructions;
+  final String id;
+
+  OrderItem({
+    required this.foodId,
+    required this.title,
+    required this.quantity,
+    required this.price,
+    required this.instructions,
+    required this.id,
+  });
+
+  factory OrderItem.fromJson(Map<String, dynamic> json) => OrderItem(
+        foodId: json["foodId"],
+        title: json["title"],
+        quantity: json["quantity"],
+        price: json["price"],
+        instructions: json["instructions"],
+        id: json["_id"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "foodId": foodId,
+        "title": title,
+        "quantity": quantity,
+        "price": price,
+        "instructions": instructions,
+        "_id": id,
+      };
+}
+
