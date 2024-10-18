@@ -2,8 +2,6 @@ import 'package:chulesi/core/utils/helpers/custom_cache_manager.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
-import 'package:get_storage/get_storage.dart';
 import '../../../../core/utils/constants/colors.dart';
 import '../../../../core/utils/constants/image_strings.dart';
 import '../../../../core/utils/constants/sizes.dart';
@@ -23,8 +21,6 @@ class ProductCardVertical extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final box = GetStorage();
-    // String? token = box.read("token");
 
     return GestureDetector(
       onTap: () {

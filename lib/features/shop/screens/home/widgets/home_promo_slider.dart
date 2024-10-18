@@ -2,7 +2,6 @@ import 'package:chulesi/core/utils/helpers/custom_cache_manager.dart';
 import 'package:chulesi/features/shop/providers/slider_provider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:chulesi/common/widgets/custom_shapes/container/circular_container.dart';
 import 'package:chulesi/core/utils/constants/colors.dart';

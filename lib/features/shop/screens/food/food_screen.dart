@@ -15,7 +15,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:provider/provider.dart';
 
 void showFoodModalSheet(BuildContext context, FoodsModel food) {
-  final cartProvider = Provider.of<CartProvider>(context, listen: false);
+  
   // foodsProvider
   //     .resetCount(food.id); // Reset the count for the selected food item
   final box = GetStorage();

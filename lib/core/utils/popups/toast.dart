@@ -1,9 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:chulesi/core/utils/constants/colors.dart';
-import 'package:chulesi/core/utils/constants/image_strings.dart';
-import 'package:chulesi/core/utils/constants/sizes.dart';
 
 void showToast(String text) {
   Fluttertoast.showToast(

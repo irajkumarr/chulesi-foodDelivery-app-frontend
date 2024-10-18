@@ -49,12 +49,12 @@ class _CartScreenState extends State<CartScreen> {
     final hookResult = useFetchCart();
     List<CartResponse>? cartList = hookResult.data;
     final isLoading = hookResult.isLoading;
-    final apiError = hookResult.error;
+  
     final refetch = hookResult.refetch;
     LoginResponse? user;
-    CartResponse? cart;
+    
     final loginProvider = Provider.of<LoginProvider>(context);
-    final cartProvider = Provider.of<CartProvider>(context);
+    
     String? token = box.read("token");
     if (token != null) {
       user = loginProvider.getUserInfo();

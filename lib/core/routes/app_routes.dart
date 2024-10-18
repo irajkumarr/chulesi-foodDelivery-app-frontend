@@ -66,7 +66,7 @@ class AppRoutes {
   static const String navigationMenu = "/navigationMenu";
 
   static Route<dynamic> onGenerateRoute(RouteSettings settings) {
-    final args = settings.arguments;
+    // final args = settings.arguments;
     switch (settings.name) {
       case splash:
         return CupertinoPageRoute(builder: (_) => const SplashScreen());
