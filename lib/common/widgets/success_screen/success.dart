@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-
 import 'package:lottie/lottie.dart';
 
 import '../../../core/utils/constants/colors.dart';
@@ -8,7 +7,6 @@ import '../../../core/utils/constants/sizes.dart';
 import '../../../core/utils/constants/text_strings.dart';
 import '../../../core/utils/helpers/helper_functions.dart';
 import '../../styles/spacing_style.dart';
-
 
 class SuccessScreen extends StatelessWidget {
   final String imagePath;

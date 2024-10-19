@@ -78,16 +78,3 @@ class OrderHistory extends HookWidget {
     );
   }
 }
-// Container(
-//         width: double.infinity,
-//         child: Column(
-//           mainAxisAlignment: MainAxisAlignment.center,
-//           crossAxisAlignment: CrossAxisAlignment.center,
-//           children: [
-//             Text(
-//               "No Purchase History",
-//               style: Theme.of(context).textTheme.headlineMedium,
-//             ),
-//           ],
-//         ),
-//       ),

@@ -35,23 +35,7 @@ class SettingsListTile extends StatelessWidget {
             size: KSizes.iconMd - 3,
           ),
         )
-        // Padding(
-        //   padding:
-        //       EdgeInsets.symmetric(horizontal: KSizes.sm, vertical: KSizes.md),
-        //   child: Row(
-        //     children: [
-        //       Icon(
-        //         icon,
-        //         // size: KSizes.iconSm,
-        //       ),
-        //       const SizedBox(width: KSizes.md),
-        //       Text(title,
-        //           style: Theme.of(context).textTheme.titleSmall!.copyWith(
-        //               fontWeight: FontWeight.w600, fontSize: KSizes.fontSizeSm)),
-
-        //     ],
-        //   ),
-        // ),
+       
         );
   }
 }

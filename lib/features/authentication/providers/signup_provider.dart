@@ -23,7 +23,7 @@ class SignupProvider with ChangeNotifier {
 
     try {
       var response = await http.post(url, headers: headers, body: data);
-      print(response.statusCode);
+      // print(response.statusCode);
       if (response.statusCode == 201) {
         var data = successModelFromJson(response.body);
 

@@ -1,3 +1,4 @@
+import 'package:chulesi/common/widgets/alert_box/alert_box.dart';
 import 'package:chulesi/features/shop/providers/category_provider.dart';
 import 'package:chulesi/features/shop/providers/foods_list_provider.dart';
 import 'package:chulesi/features/shop/providers/offers_food_list_provider.dart';
@@ -6,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
-import 'package:chulesi/common/widgets/alert_box/alert_close_app.dart';
 import 'package:chulesi/core/network/connectivity_checker.dart';
 import 'package:chulesi/core/utils/exceptions/error_widget.dart';
 import 'package:chulesi/features/personalization/screens/profile/profile.dart';
@@ -18,130 +18,6 @@ import 'package:provider/provider.dart';
 import 'core/utils/constants/colors.dart';
 import 'core/utils/constants/sizes.dart';
 
-// class NavigationMenu extends HookWidget {
-//   const NavigationMenu({super.key});
-
-//   @override
-//   Widget build(BuildContext context) {
-//     // final fetchNewFoods =
-//     //     Provider.of<FoodsListProvider>(context).fetchNewFoods();
-//     // final fetchAllBestRatedFoods =
-//     //     Provider.of<FoodsListProvider>(context).fetchBestRatedFoods();
-//     // final fetchPopularFoods =
-//     //     Provider.of<FoodsListProvider>(context).fetchPopularFoods();
-//     // // final fetchAllFoods = useFetchAllFoods();
-//     // final fetchAllCategory =
-//     //     Provider.of<CategoryProvider>(context).fetchallCategories();
-//     // final promoSliderHook = useFetchAllPromoSlider();
-//     // final fetchOfferSlider =
-//     //     Provider.of<SliderProvider>(context).fetchofferSliders();
-//     // final fetchPromoSlider =
-//     //     Provider.of<SliderProvider>(context).fetchpromoSliders();
-//     // final fetchCategory =
-//     //     Provider.of<CategoryProvider>(context).fetchCategories();
-
-//     Future<void> retryFetchData() async {
-//       await Future.wait([
-//         Provider.of<FoodsListProvider>(context).refetchNewFoodsList(),
-//         Provider.of<FoodsListProvider>(context).refetchBestRatedFoods(),
-//         Provider.of<FoodsListProvider>(context).refetchPopularFoodsList(),
-//         Provider.of<CategoryProvider>(context).refetchAllCategories(),
-//         Provider.of<CategoryProvider>(context).refetchCategories(),
-//         Provider.of<SliderProvider>(context).refetchpromoSliders(),
-//         Provider.of<SliderProvider>(context).refetchofferSliders(),
-//         Provider.of<OffersFoodListProvider>(context, listen: false)
-//             .refetchOfferFoodList(),
-//         // promoSliderHook.refetch(),
-//       ]);
-//     }
-
-//     final hasError = [
-//       Provider.of<FoodsListProvider>(context).error,
-//       Provider.of<OffersFoodListProvider>(context).error,
-//       Provider.of<CategoryProvider>(context).error,
-//       Provider.of<SliderProvider>(context).error,
-//     ].any((error) => error != null);
-
-//     // Show the error widget immediately if there's any error
-//     if (hasError) {
-//       return Scaffold(
-//         body: Center(
-//           child: FullScreenErrorWidget(
-//             message: "Server Error",
-//             onRetry: () async {
-//               await Future.wait([retryFetchData()]);
-//             },
-//           ),
-//         ),
-//       );
-//     }
-
-//     // ignore: deprecated_member_use
-//     return WillPopScope(
-//       onWillPop: () async {
-//         return await alertCloseApp(context);
-//       },
-//       child: ConnectivityChecker(
-//           child: Scaffold(
-//         bottomNavigationBar: Consumer<NavigationProvider>(
-//             builder: (context, navigationProvider, child) {
-//           return NavigationBar(
-//             elevation: 0,
-//             height: 80.h,
-//             selectedIndex: navigationProvider.selectedIndex,
-//             onDestinationSelected: (index) =>
-//                 navigationProvider.onItemTapped(index),
-//             backgroundColor: KColors.white,
-//             indicatorColor: KColors.black.withOpacity(0.1),
-//             destinations: [
-//               const NavigationDestination(
-//                 icon: Icon(Iconsax.home),
-//                 label: "Home",
-//                 selectedIcon: Icon(
-//                   Iconsax.home_15,
-//                   color: KColors.primary,
-//                 ),
-//               ),
-//               const NavigationDestination(
-//                 icon: Icon(Iconsax.category),
-//                 label: "Category",
-//                 selectedIcon: Icon(
-//                   Iconsax.category5,
-//                   color: KColors.primary,
-//                 ),
-//               ),
-//               NavigationDestination(
-//                 icon: Icon(
-//                   MaterialCommunityIcons.account_outline,
-//                   size: KSizes.iconMd + 3,
-//                 ),
-//                 label: "Account",
-//                 selectedIcon: Icon(
-//                   MaterialCommunityIcons.account,
-//                   size: KSizes.iconMd + 3,
-//                   color: KColors.primary,
-//                 ),
-//               ),
-//               const NavigationDestination(
-//                 icon: Icon(Iconsax.more_square),
-//                 label: "More",
-//                 selectedIcon: Icon(
-//                   Iconsax.more_square5,
-//                   color: KColors.primary,
-//                 ),
-//               ),
-//             ],
-//           );
-//         }),
-//         body: Consumer<NavigationProvider>(
-//             builder: (context, navigationProvider, child) {
-//           return navigationProvider.screens
-//               .elementAt(navigationProvider.selectedIndex);
-//         }),
-//       )),
-//     );
-//   }
-// }
 class NavigationMenu extends HookWidget {
   const NavigationMenu({super.key});
 
@@ -193,7 +69,7 @@ class NavigationMenu extends HookWidget {
     // ignore: deprecated_member_use
     return WillPopScope(
       onWillPop: () async {
-        return await alertCloseApp(context);
+        return await CustomAlertBox.alertCloseApp(context);
       },
       child: ConnectivityChecker(
         child: Scaffold(

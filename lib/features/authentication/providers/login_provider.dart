@@ -1,4 +1,4 @@
-import 'package:chulesi/navigation_menu.dart';
+
 import 'package:flutter/material.dart';
 
 import 'package:chulesi/core/utils/constants/api_constants.dart';
@@ -9,7 +9,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:chulesi/data/models/login_response.dart';
-import 'package:provider/provider.dart';
+
 
 class LoginProvider with ChangeNotifier {
   final box = GetStorage();
@@ -42,15 +42,9 @@ class LoginProvider with ChangeNotifier {
         setLoading = false;
 
         showToast("You are successfully logged in");
+        Navigator.pushNamedAndRemoveUntil(
+            context, "/navigationMenu", (route) => false);
 
-        // Navigate back to Home
-        Navigator.popUntil(
-            context, (route) => route.isFirst); // Pop to the first route (Home)
-        Provider.of<NavigationProvider>(context, listen: false).goToHome();
-
-        // Provider.of<NavigationProvider>(context, listen: false).goToHome();
-        // Navigator.pushNamedAndRemoveUntil(
-        //     context, "/navigationMenu", (route) => false);
       } else {
         setLoading = false;
         var error = apiErrorFromJson(response.body);
@@ -79,9 +73,6 @@ class LoginProvider with ChangeNotifier {
     showToast("Logout Successfully");
 
     Navigator.pushNamedAndRemoveUntil(context, "/splash", (route) => false);
-    //  Navigator.popUntil(
-    //         context, (route) => route.isFirst); // Pop to the first route (Home)
-    //     Provider.of<NavigationProvider>(context, listen: false).goToHome();
   }
 
 //getting user data

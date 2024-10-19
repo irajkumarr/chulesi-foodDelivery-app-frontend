@@ -19,9 +19,6 @@ class LoginHeader extends StatelessWidget {
           image: const AssetImage(KImages.darkAppLogo),
           fit: BoxFit.cover,
         ),
-        // SizedBox(
-        //   height: KSizes.spaceBtwItems,
-        // ),
         Text(
           KTexts.loginTitle,
           style: Theme.of(context).textTheme.headlineMedium,

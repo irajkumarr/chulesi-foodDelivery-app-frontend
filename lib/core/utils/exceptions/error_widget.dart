@@ -40,7 +40,7 @@ class FullScreenErrorWidget extends StatelessWidget {
               onTap: () async {
                 try {
                   await onRetry();
-                  showToast("Retrying, Please try to restart the app");
+                  showToast("Retrying, Please try again later");
                 } catch (e) {
                   showToast("Server Error");
                 }
