@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 
 import 'package:chulesi/core/utils/constants/api_constants.dart';
@@ -9,7 +8,6 @@ import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:chulesi/data/models/login_response.dart';
-
 
 class LoginProvider with ChangeNotifier {
   final box = GetStorage();
@@ -44,7 +42,6 @@ class LoginProvider with ChangeNotifier {
         showToast("You are successfully logged in");
         Navigator.pushNamedAndRemoveUntil(
             context, "/navigationMenu", (route) => false);
-
       } else {
         setLoading = false;
         var error = apiErrorFromJson(response.body);

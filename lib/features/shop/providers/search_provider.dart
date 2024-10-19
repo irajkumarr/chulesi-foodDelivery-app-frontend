@@ -1,3 +1,4 @@
+import 'package:chulesi/core/utils/popups/toast.dart';
 import 'package:flutter/material.dart';
 import 'package:chulesi/core/utils/constants/api_constants.dart';
 import 'package:chulesi/data/models/api_error.dart';
@@ -38,6 +39,7 @@ class SearchProvider with ChangeNotifier {
         searchResults = foodsModelFromJson(response.body);
       } else {
         var error = apiErrorFromJson(response.body);
+        showToast(error.toString());
         // Handle error
       }
     } catch (e) {

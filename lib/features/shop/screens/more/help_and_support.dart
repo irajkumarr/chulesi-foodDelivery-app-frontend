@@ -28,7 +28,7 @@ class HelpAndSupportScreen extends StatelessWidget {
                 image: KImages.whatsapp,
                 text: "Whatsapp",
                 onPressed: () {
-                  launchUrlString("https://wa.me/9807227662");
+                  launchUrlString("https://wa.me/9821101186");
                 },
               ),
               SizedBox(height: KSizes.spaceBtwItems),
@@ -36,7 +36,7 @@ class HelpAndSupportScreen extends StatelessWidget {
                 image: KImages.phone,
                 text: "Contact",
                 onPressed: () async {
-                  final Uri url = Uri(scheme: "tel", path: "9807227662");
+                  final Uri url = Uri(scheme: "tel", path: "9821101186");
                   await launchUrl(url);
                   // if (await canLaunchUrl(url)) {
                   // } else {
@@ -49,8 +49,7 @@ class HelpAndSupportScreen extends StatelessWidget {
                 image: KImages.messenger,
                 text: "Messenger",
                 onPressed: () {
-                  launchUrlString(
-                      "https://www.messenger.com/t/100075365573298/");
+                  launchUrlString("https://www.messenger.com/");
                 },
               ),
               SizedBox(height: KSizes.spaceBtwItems),

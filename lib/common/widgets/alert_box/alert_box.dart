@@ -35,6 +35,8 @@ class CustomAlertBox {
                 TextButton(
                   child: const Text("Login"),
                   onPressed: () {
+                    // Navigator.of(context).pop();
+                    Navigator.of(context).pop();
                     Navigator.of(context).pushNamed("/login");
                   },
                 ),
@@ -45,67 +47,60 @@ class CustomAlertBox {
   }
 //alert close app
 
+  static Future<bool> alertCloseApp(BuildContext context) async {
+    return await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return SizedBox(
+          // width: 400.w,
+          width: KDeviceUtils.getScreenWidth(context),
+          child: AlertDialog(
+            backgroundColor: KColors.white,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(KSizes.xs),
+            ),
+            // title: Text(title),
+            content: SizedBox(
+                // width: 400.w,
+                width: KDeviceUtils.getScreenWidth(context),
+                child: Text(
+                  'Are you sure you want to exit?',
+                  style: Theme.of(context).textTheme.bodyLarge,
+                  textAlign: TextAlign.center,
+                )),
+            actions: [
+              TextButton(
+                child: Text(
+                  "CANCEL",
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyMedium!
+                      .copyWith(color: KColors.black),
+                ),
+                onPressed: () {
+                  Navigator.of(context).pop(false);
+                },
+              ),
+              TextButton(
+                child: Text(
+                  "EXIT",
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyMedium!
+                      .copyWith(color: KColors.primary),
+                ),
+                onPressed: () {
+                  // Navigator.of(context).pop();
 
-
-
-
-
-static Future<bool> alertCloseApp(BuildContext context) async {
-  return await showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return SizedBox(
-        // width: 400.w,
-        width: KDeviceUtils.getScreenWidth(context),
-        child: AlertDialog(
-          backgroundColor: KColors.white,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(KSizes.xs),
+                  SystemNavigator.pop();
+                },
+              ),
+            ],
           ),
-          // title: Text(title),
-          content: SizedBox(
-              // width: 400.w,
-              width: KDeviceUtils.getScreenWidth(context),
-              child: Text(
-                'Are you sure you want to exit?',
-                style: Theme.of(context).textTheme.bodyLarge,
-                textAlign: TextAlign.center,
-              )),
-          actions: [
-            TextButton(
-              child: Text(
-                "CANCEL",
-                style: Theme.of(context)
-                    .textTheme
-                    .bodyMedium!
-                    .copyWith(color: KColors.black),
-              ),
-              onPressed: () {
-                Navigator.of(context).pop(false);
-              },
-            ),
-            TextButton(
-              child: Text(
-                "EXIT",
-                style: Theme.of(context)
-                    .textTheme
-                    .bodyMedium!
-                    .copyWith(color: KColors.primary),
-              ),
-              onPressed: () {
-                // Navigator.of(context).pop();
-
-                SystemNavigator.pop();
-              },
-            ),
-          ],
-        ),
-      );
-    },
-  );
-}
-
-
+        );
+      },
+    );
+  }
 
   static showAlertDialog(BuildContext context) {
     // set up the buttons
@@ -156,7 +151,6 @@ static Future<bool> alertCloseApp(BuildContext context) async {
       },
     );
   }
-
 
   static Future<void> showAlert(
       BuildContext context, String subTitle, VoidCallback onPressed) {
