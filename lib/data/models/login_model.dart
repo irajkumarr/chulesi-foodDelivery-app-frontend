@@ -10,24 +10,24 @@ LoginModel loginModelFromJson(String str) =>
 String loginModelToJson(LoginModel data) => json.encode(data.toJson());
 
 class LoginModel {
-  final String emailOrPhone;
+  final String email;
   final String password;
   final String fcm;
 
   LoginModel({
-    required this.emailOrPhone,
+    required this.email,
     required this.password,
     required this.fcm,
   });
 
   factory LoginModel.fromJson(Map<String, dynamic> json) => LoginModel(
-        emailOrPhone: json["emailOrPhone"],
+        email: json["email"],
         password: json["password"],
         fcm: json["fcm"],
       );
 
   Map<String, dynamic> toJson() => {
-        "emailOrPhone": emailOrPhone,
+        "email": email,
         "password": password,
         "fcm": fcm,
       };

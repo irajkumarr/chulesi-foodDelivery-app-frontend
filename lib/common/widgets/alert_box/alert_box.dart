@@ -27,13 +27,13 @@ class CustomAlertBox {
 
               actions: <Widget>[
                 TextButton(
-                  child: const Text("Cancel"),
+                  child: const Text("CANCEL"),
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
                 ),
                 TextButton(
-                  child: const Text("Login"),
+                  child: const Text("LOGIN"),
                   onPressed: () {
                     // Navigator.of(context).pop();
                     Navigator.of(context).pop();
@@ -45,6 +45,7 @@ class CustomAlertBox {
           );
         });
   }
+
 //alert close app
 
   static Future<bool> alertCloseApp(BuildContext context) async {

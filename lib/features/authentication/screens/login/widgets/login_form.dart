@@ -126,7 +126,7 @@ class _LoginFormState extends State<LoginForm> {
                       var fcmToken = await notificationService.getDeviceToken();
                       if (_formKey.currentState!.validate()) {
                         LoginModel model = LoginModel(
-                          emailOrPhone: _emailOrPhoneController.text.trim(),
+                          email: _emailOrPhoneController.text.trim(),
                           password: _passwordController.text,
                           fcm: fcmToken ?? '',
                         );

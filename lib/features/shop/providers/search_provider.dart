@@ -39,7 +39,7 @@ class SearchProvider with ChangeNotifier {
         searchResults = foodsModelFromJson(response.body);
       } else {
         var error = apiErrorFromJson(response.body);
-        showToast(error.toString());
+        // showToast(error.message.toString());
         // Handle error
       }
     } catch (e) {
