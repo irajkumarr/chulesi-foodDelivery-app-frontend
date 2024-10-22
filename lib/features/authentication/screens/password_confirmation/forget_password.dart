@@ -1,3 +1,4 @@
+import 'package:chulesi/features/authentication/providers/timer_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:chulesi/core/utils/constants/colors.dart';
@@ -31,6 +32,8 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
   @override
   Widget build(BuildContext context) {
     final loginProvider = Provider.of<LoginProvider>(context);
+    final timerProvider =
+        Provider.of<ResendTimerProvider>(context, listen: false);
     return Scaffold(
       backgroundColor: KColors.white,
       appBar: AppBar(
@@ -90,8 +93,13 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                               ? null
                               : () async {
                                   if (_formKey.currentState!.validate()) {
+                                    timerProvider.startTimer();
+
+                                    // Call forgotPassword which will handle navigation
                                     await loginProvider.forgotPassword(
-                                        context, _emailController.text.trim());
+                                      context,
+                                      _emailController.text.trim(),
+                                    );
                                   }
                                 },
                           child: loginProvider.isLoading

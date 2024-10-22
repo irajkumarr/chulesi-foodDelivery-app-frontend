@@ -1,7 +1,5 @@
+import 'package:chulesi/core/utils/circular_progress_indicator/circlular_indicator.dart';
 import 'package:flutter/material.dart';
-
-
-import '../../../core/utils/constants/colors.dart';
 
 class FullScreenOverlay extends StatelessWidget {
   final bool isLoading;
@@ -24,10 +22,8 @@ class FullScreenOverlay extends StatelessWidget {
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.height,
               color: Colors.black.withOpacity(0.5),
-              child: const Center(
-                child: CircularProgressIndicator(
-                  color: KColors.primary,
-                ),
+              child: Center(
+                child: KIndicator.circularIndicator(),
               ),
             ),
           ),

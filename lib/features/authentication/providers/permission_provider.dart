@@ -18,7 +18,7 @@ class PermissionProvider extends ChangeNotifier {
       context,
       Permission.location,
       "Location Permission",
-      "Location access is required for finding foods nearby.",
+      "This permission is required for the app to function properly.",
     );
 
     // Update permissions checked flag and notify listeners
@@ -117,7 +117,7 @@ class PermissionProvider extends ChangeNotifier {
         ),
         title: Text('$title Denied'),
         content: Text(
-            'This permission is required for the app to function properly. $message'),
+            'This permission is required for the app to function properly.'),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, 'cancel'),

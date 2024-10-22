@@ -1,3 +1,5 @@
+
+import 'package:chulesi/features/authentication/providers/timer_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:chulesi/core/utils/constants/colors.dart';
@@ -37,6 +39,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
   @override
   Widget build(BuildContext context) {
     final loginProvider = Provider.of<LoginProvider>(context);
+    final timerProvider = Provider.of<ResendTimerProvider>(context);
     return Scaffold(
       backgroundColor: KColors.white,
       appBar: AppBar(
@@ -250,17 +253,26 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                       style: Theme.of(context).textTheme.labelMedium,
                     ),
                     TextButton(
-                      onPressed: () async {
-                        _passwordController.clear();
-                        _confirmPasswordController.clear();
-                        _otpController.clear();
-                        loginProvider.setOtp('');
-                        await loginProvider.resendCode(context, widget.email);
-                      },
+                      onPressed: timerProvider.canResendCode
+                          ? () async {
+                              _passwordController.clear();
+                              _confirmPasswordController.clear();
+                              _otpController.clear();
+                              loginProvider.setOtp('');
+                              await loginProvider.resendCode(
+                                  context, widget.email);
+                              timerProvider
+                                  .startTimer(); // Restart timer after resending
+                            }
+                          : null,
                       child: Text(
-                        "Resend Code",
+                        timerProvider.canResendCode
+                            ? "Resend Code"
+                            : "Resend in ${timerProvider.formattedTime}s",
                         style: Theme.of(context).textTheme.labelLarge!.copyWith(
-                            color: KColors.primary,
+                            color: timerProvider.canResendCode
+                                ? KColors.primary
+                                : KColors.grey,
                             fontWeight: FontWeight.w600),
                       ),
                     ),

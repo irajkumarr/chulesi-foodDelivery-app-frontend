@@ -1,10 +1,17 @@
 import 'package:flutter/material.dart';
 
 class HomeProvider with ChangeNotifier {
-  var carouselCurrentIndex = 0;
+  var carouselPromoCurrentIndex = 0;
 
-  void updatePageIndicator(index) {
-    carouselCurrentIndex = index;
+  void updatePromoPageIndicator(index) {
+    carouselPromoCurrentIndex = index;
+    notifyListeners();
+  }
+  
+  var carouselOfferCurrentIndex = 0;
+
+  void updateOfferPageIndicator(index) {
+    carouselOfferCurrentIndex = index;
     notifyListeners();
   }
 }

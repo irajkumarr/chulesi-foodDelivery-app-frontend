@@ -42,7 +42,7 @@ class HomePromoSlider extends StatelessWidget {
                       aspectRatio: 16 / 7,
                       viewportFraction: 0.8,
                       pageChanged: (index, _) {
-                        homeProvider.updatePageIndicator(index);
+                        homeProvider.updatePromoPageIndicator(index);
                       },
                       itemBuilder: (context, index, pageviewIndex) {
                         SliderModel slider =
@@ -98,12 +98,14 @@ class HomePromoSlider extends StatelessWidget {
                           i < offerSliderProvider.promoSliders!.length;
                           i++)
                         CircularContainer(
-                          color: homeProvider.carouselCurrentIndex == i
+                          color: homeProvider.carouselPromoCurrentIndex == i
                               ? KColors.primary
                               : KColors.grey,
-                          width: 7,
-                          height: 7,
-                          margin: EdgeInsets.only(right: 10.w),
+                          width: homeProvider.carouselPromoCurrentIndex == i
+                              ? 15.w
+                              : 7.w,
+                          height: 7.h,
+                          margin: EdgeInsets.only(right: 5.w),
                         )
                     ],
                   ),

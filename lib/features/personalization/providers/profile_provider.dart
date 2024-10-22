@@ -70,16 +70,18 @@ class ProfileProvider extends ChangeNotifier {
         isLoading = false;
         notifyListeners();
         // Handle success
-        showToast('Password changed successfully');
-        print('Password changed successfully');
+        final data = json.decode(response.body);
+        showToast(data['message']);
+        // showToast('Password changed successfully');
+        // print('Password changed successfully');
         Navigator.pop(context);
       } else {
         // Handle error
         isLoading = false;
         notifyListeners();
-        // final errorResponse = json.decode(response.body);
-        // showToast(errorResponse['message']);
-        showToast('Failed to change password');
+        final errorResponse = json.decode(response.body);
+        showToast(errorResponse['message']);
+        // showToast('Failed to change password');
       }
     } catch (error) {
       isLoading = false;
@@ -118,6 +120,11 @@ class ProfileProvider extends ChangeNotifier {
           verification: user!.verification,
           userType: user!.userType,
         );
+        // Update the cache (GetStorage)
+        String updatedUserData = jsonEncode(user);
+        box.write(user!.id, updatedUserData); // Update user cache by ID
+        box.write("userId", user!.id); // Make sure userId is updated in cache
+
         showToast('Profile Updated Successfully');
         Navigator.pop(context);
       } else {

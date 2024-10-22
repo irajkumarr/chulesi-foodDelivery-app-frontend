@@ -1,7 +1,6 @@
-import 'package:chulesi/core/utils/popups/toast.dart';
 import 'package:flutter/material.dart';
 import 'package:chulesi/core/utils/constants/api_constants.dart';
-import 'package:chulesi/data/models/api_error.dart';
+// import 'package:chulesi/data/models/api_error.dart';
 import 'package:chulesi/data/models/foods_model.dart';
 import 'package:http/http.dart' as http;
 
@@ -38,7 +37,7 @@ class SearchProvider with ChangeNotifier {
       if (response.statusCode == 200) {
         searchResults = foodsModelFromJson(response.body);
       } else {
-        var error = apiErrorFromJson(response.body);
+        // var error = apiErrorFromJson(response.body);
         // showToast(error.message.toString());
         // Handle error
       }

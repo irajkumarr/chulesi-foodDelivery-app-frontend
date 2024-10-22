@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:chulesi/core/services/notification_service.dart';
@@ -124,7 +123,7 @@ class _SplashScreenState extends State<SplashScreen> {
               height: 300.h,
               width: 300.w,
               fit: BoxFit.cover,
-            ),           
+            ),
             KIndicator.circularIndicator(
               color: KColors.white,
             ),

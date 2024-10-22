@@ -4,7 +4,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:chulesi/common/widgets/custom_shapes/container/circular_container.dart';
-import 'package:chulesi/core/utils/circular_progress_indicator/circlular_indicator.dart';
 import 'package:chulesi/core/utils/constants/colors.dart';
 import 'package:chulesi/core/utils/constants/image_strings.dart';
 import 'package:chulesi/core/utils/constants/sizes.dart';
@@ -22,9 +21,7 @@ class HomeOfferSlider extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final homeProvider = Provider.of<HomeProvider>(context);
-    // final hookResult = useFetchAllOfferSlider();
-    // List<SliderModel>? sliderList = hookResult.data;
-    // final isLoading = hookResult.isLoading;
+
     final offerSliderProvider = Provider.of<SliderProvider>(context);
     return offerSliderProvider.isLoading
         ? const FullShimmer()
@@ -39,7 +36,7 @@ class HomeOfferSlider extends StatelessWidget {
                       aspectRatio: 16 / 7,
                       viewportFraction: 0.8,
                       pageChanged: (index, _) {
-                        homeProvider.updatePageIndicator(index);
+                        homeProvider.updateOfferPageIndicator(index);
                       },
                       itemBuilder: (context, index, pageviewIndex) {
                         SliderModel slider =
@@ -68,6 +65,7 @@ class HomeOfferSlider extends StatelessWidget {
                     ),
                   ),
                   // SizedBox(height: KSizes.spaceBtwItems),
+                  //circular button
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -75,19 +73,19 @@ class HomeOfferSlider extends StatelessWidget {
                           i < offerSliderProvider.offerSliders!.length;
                           i++)
                         CircularContainer(
-                          color: homeProvider.carouselCurrentIndex == i
+                          color: homeProvider.carouselOfferCurrentIndex == i
                               ? KColors.primary
                               : KColors.grey,
-                          width: 7,
-                          height: 7,
-                          margin: EdgeInsets.only(right: 10.w),
+                          width: homeProvider.carouselOfferCurrentIndex == i
+                              ? 15.w
+                              : 7.w,
+                          height: 7.h,
+                          margin: EdgeInsets.only(right: 5.w),
                         )
                     ],
                   ),
                 ],
               )
-            : Center(
-                child: KIndicator.circularIndicator(),
-              );
+            : SizedBox();
   }
 }

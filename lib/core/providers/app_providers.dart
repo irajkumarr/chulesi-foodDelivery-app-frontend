@@ -3,6 +3,7 @@ import 'package:chulesi/features/authentication/providers/login_provider.dart';
 import 'package:chulesi/features/authentication/providers/password_provider.dart';
 import 'package:chulesi/features/authentication/providers/permission_provider.dart';
 import 'package:chulesi/features/authentication/providers/signup_provider.dart';
+import 'package:chulesi/features/authentication/providers/timer_provider.dart';
 import 'package:chulesi/features/personalization/providers/address_provider.dart';
 import 'package:chulesi/features/personalization/providers/location_provider.dart';
 import 'package:chulesi/features/personalization/providers/map_provider.dart';
@@ -24,6 +25,7 @@ import 'package:provider/single_child_widget.dart';
 
 class AppProviders {
   static List<SingleChildWidget> providers = [
+    ChangeNotifierProvider(create: (_) => ResendTimerProvider()),
     ChangeNotifierProvider(create: (_) => ConnectivityProvider()),
     ChangeNotifierProvider(create: (_) => LocationProvider()),
     ChangeNotifierProvider(create: (_) => MapProvider()),

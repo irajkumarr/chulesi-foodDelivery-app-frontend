@@ -61,7 +61,7 @@ class FoodOffersTileVertical extends StatelessWidget {
                               height: 150.h,
                               width: KDeviceUtils.getScreenWidth(context),
                               child: Image.asset(
-                                KImages.placeholder_default,
+                                KImages.food_placeholder,
                                 fit: BoxFit.cover,
                               ),
                             ),
@@ -72,7 +72,7 @@ class FoodOffersTileVertical extends StatelessWidget {
                             //       child: KIndicator.circularIndicator(),
                             //     )),
                             errorWidget: (context, url, error) => Image.asset(
-                              KImages.placeholder_default,
+                              KImages.food_placeholder,
                             ),
                             fit: BoxFit.cover,
                           ),

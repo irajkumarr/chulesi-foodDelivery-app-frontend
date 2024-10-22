@@ -144,7 +144,10 @@ class CategoryFoodsList extends HookWidget {
                     width: MediaQuery.of(context).size.width,
                     height: MediaQuery.of(context).size.height,
                     child: isLoadingVeg
-                        ? const FoodsListShimmer()
+                        ? const Padding(
+                            padding: EdgeInsets.only(top: KSizes.md),
+                            child: FoodsListShimmer(),
+                          )
                         : (vegFoodsList == null || vegFoodsList.isEmpty)
                             ? Center(
                                 child: Text(
@@ -179,7 +182,10 @@ class CategoryFoodsList extends HookWidget {
                     width: MediaQuery.of(context).size.width,
                     height: MediaQuery.of(context).size.height,
                     child: isLoadingNonveg
-                        ? const FoodsListShimmer()
+                        ? const Padding(
+                            padding: EdgeInsets.only(top: KSizes.md),
+                            child: FoodsListShimmer(),
+                          )
                         : (nonvegFoodsList == null || nonvegFoodsList.isEmpty)
                             ? Center(
                                 child: Text(
