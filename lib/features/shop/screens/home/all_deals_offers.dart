@@ -1,4 +1,3 @@
-import 'package:chulesi/core/utils/device/device_utility.dart';
 import 'package:chulesi/features/shop/providers/offers_food_list_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';

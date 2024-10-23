@@ -1,4 +1,3 @@
-import 'package:chulesi/core/utils/circular_progress_indicator/circlular_indicator.dart';
 import 'package:chulesi/core/utils/constants/image_strings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';

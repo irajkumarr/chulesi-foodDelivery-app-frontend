@@ -156,7 +156,7 @@ class _HomeAddAddressWidgetState extends State<HomeAddAddressWidget>
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            "Hi ${profileProvider.user?.firstName ?? " "}!",
+                            "Hi ${profileProvider.user?.firstName.toUpperCase() ?? " "} !",
                             style: Theme.of(context)
                                 .textTheme
                                 .headlineSmall
