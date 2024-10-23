@@ -57,11 +57,11 @@ class FoodOffersTileHorizontal extends StatelessWidget {
                           width: 115.w,
                           height: 115.h,
                           child: Image.asset(
-                            KImages.food_placeholder,
+                            KImages.chulesi_placeholder,
                             fit: BoxFit.cover,
                           )),
                       errorWidget: (context, url, error) =>
-                          Image.asset(KImages.food_placeholder),
+                          Image.asset(KImages.chulesi_placeholder),
                       fit: BoxFit.cover,
                     ),
                   ),

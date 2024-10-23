@@ -53,16 +53,16 @@ class ProductCardHorizontal extends StatelessWidget {
                     child: CachedNetworkImage(
                       imageUrl: food.imageUrl[0],
                       cacheKey: food.id,
-                            cacheManager: MyCustomCacheManager.instance,
+                      cacheManager: MyCustomCacheManager.instance,
                       placeholder: (context, url) => SizedBox(
                           width: 115.w,
                           height: 115.h,
                           child: Image.asset(
-                            KImages.food_placeholder,
+                            KImages.chulesi_placeholder,
                             fit: BoxFit.cover,
                           )),
                       errorWidget: (context, url, error) =>
-                          Image.asset(KImages.food_placeholder),
+                          Image.asset(KImages.chulesi_placeholder),
                       fit: BoxFit.cover,
                     ),
                   ),

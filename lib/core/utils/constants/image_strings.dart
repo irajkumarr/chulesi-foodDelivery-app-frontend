@@ -49,6 +49,8 @@ class KImages {
       "assets/images/content/banner_placeholder.png";
   static const String food_placeholder =
       "assets/images/content/food_placeholder.png";
+  static const String chulesi_placeholder =
+      "assets/images/content/chulesi_placeholder.png";
 
   // -- Payment Methods
   static const String esewa = "assets/icons/esewa.png";

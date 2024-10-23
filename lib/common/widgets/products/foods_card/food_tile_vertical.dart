@@ -54,12 +54,12 @@ class ProductCardVertical extends StatelessWidget {
                               height: 150.h,
                               width: KDeviceUtils.getScreenWidth(context),
                               child: Image.asset(
-                                KImages.food_placeholder,
+                                KImages.chulesi_placeholder,
                                 fit: BoxFit.cover,
                               ),
                             ),
                             errorWidget: (context, url, error) => Image.asset(
-                              KImages.food_placeholder,
+                              KImages.chulesi_placeholder,
                             ),
                             fit: BoxFit.cover,
                           ),

@@ -15,7 +15,6 @@ import 'package:get_storage/get_storage.dart';
 import 'package:provider/provider.dart';
 
 void showFoodModalSheet(BuildContext context, FoodsModel food) {
-  
   // foodsProvider
   //     .resetCount(food.id); // Reset the count for the selected food item
   final box = GetStorage();
@@ -53,9 +52,9 @@ void showFoodModalSheet(BuildContext context, FoodsModel food) {
                         child: CachedNetworkImage(
                           imageUrl: food.imageUrl[0],
                           placeholder: (context, url) =>
-                              Image.asset(KImages.food_placeholder),
+                              Image.asset(KImages.chulesi_placeholder),
                           errorWidget: (context, url, error) =>
-                              Image.asset(KImages.food_placeholder),
+                              Image.asset(KImages.chulesi_placeholder),
                           fit: BoxFit.cover,
                         ),
                       ),

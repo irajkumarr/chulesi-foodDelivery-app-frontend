@@ -55,9 +55,9 @@ void showfoodOffersModel(BuildContext context, FoodsWithOffersModel food) {
                         child: CachedNetworkImage(
                           imageUrl: food.imageUrl[0],
                           placeholder: (context, url) =>
-                              Image.asset(KImages.placeholder_default),
+                              Image.asset(KImages.chulesi_placeholder),
                           errorWidget: (context, url, error) =>
-                              Image.asset(KImages.placeholder_default),
+                              Image.asset(KImages.chulesi_placeholder),
                           fit: BoxFit.cover,
                         ),
                       ),
