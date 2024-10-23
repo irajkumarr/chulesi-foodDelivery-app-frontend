@@ -7,6 +7,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 import '../../../../../core/utils/constants/colors.dart';
+import '../../../../core/utils/device/device_utility.dart';
 
 class HelpAndSupportScreen extends StatelessWidget {
   const HelpAndSupportScreen({super.key});
@@ -14,10 +15,14 @@ class HelpAndSupportScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: KColors.secondaryBackground,
-      appBar: AppBar(
-        backgroundColor: KColors.white,
-        title: const Text("Support"),
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(KDeviceUtils.getAppBarHeight()),
+        child: Material(
+          elevation: 1,
+          child: AppBar(
+            title: const Text("Support"),
+          ),
+        ),
       ),
       body: SafeArea(
         child: Padding(

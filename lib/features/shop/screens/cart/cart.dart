@@ -49,12 +49,12 @@ class _CartScreenState extends State<CartScreen> {
     final hookResult = useFetchCart();
     List<CartResponse>? cartList = hookResult.data;
     final isLoading = hookResult.isLoading;
-  
+
     final refetch = hookResult.refetch;
     LoginResponse? user;
-    
+
     final loginProvider = Provider.of<LoginProvider>(context);
-    
+
     String? token = box.read("token");
     if (token != null) {
       user = loginProvider.getUserInfo();
@@ -63,8 +63,14 @@ class _CartScreenState extends State<CartScreen> {
     if (token == null) {
       return ConnectivityChecker(
         child: Scaffold(
-          appBar: AppBar(
-            title: const Text("My Cart"),
+          appBar: PreferredSize(
+            preferredSize: const Size.fromHeight(60.0),
+            child: Material(
+              elevation: 1.0,
+              child: AppBar(
+                title: const Text("Your Shopping Cart"),
+              ),
+            ),
           ),
           body: const LoginRedirect(),
         ),
@@ -73,117 +79,134 @@ class _CartScreenState extends State<CartScreen> {
 
     return ConnectivityChecker(
       child: Scaffold(
-          appBar: AppBar(
-            title: const Text("My Cart"),
+          appBar: PreferredSize(
+            preferredSize: const Size.fromHeight(60.0),
+            child: Material(
+              elevation: 1.0,
+              child: AppBar(
+                title: const Text("Your Shopping Cart"),
+              ),
+            ),
           ),
           bottomNavigationBar: (cartList == null || cartList.isEmpty)
               ? const SizedBox()
-              : BottomAppBar(
-                  height: 75.h,
-                  color: Colors.white,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: KSizes.defaultSpace),
-                    child: ElevatedButton(
-                      onPressed: () {
-                        if (cartList.isNotEmpty) {
-                          // Prepare the order items
-                          List<OrderItem> orderItems = cartList.map((cartItem) {
-                            return OrderItem(
-                              foodId: cartItem.productId.id,
-                              title: cartItem.productId.title,
-                              quantity: cartItem.quantity,
-                              price: cartItem.totalPrice.toInt(),
-                              instructions: '', // or any special instructions
-                            );
-                          }).toList();
-
-                          // Pass to CheckoutScreen
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  CheckoutScreen(item: orderItems),
-                            ),
-                          );
-                        }
-                        // Navigator.push(
-                        //     context,
-                        //     MaterialPageRoute(
-                        //         builder: (context) =>
-                        //             CheckoutScreen(item: )));
-                      },
-                      style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(
-                            borderRadius:
-                                BorderRadius.circular(KSizes.borderRadiusLg)),
-                        padding: EdgeInsets.zero,
-                        minimumSize: const Size(
-                            double.infinity, 80), // Full width button
-                      ),
-                      child: (cartList.isEmpty)
-                          ? Center(
-                              child: Text(
-                                "Your Cart is Empty",
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .titleMedium!
-                                    .copyWith(fontWeight: FontWeight.w600),
-                              ),
-                            )
-                          : Container(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: KSizes.defaultSpace),
-                              child: Consumer<CartProvider>(
-                                  builder: (context, cartProvider, child) {
-                                return Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Text(
-                                          "${cartProvider.cartCount} items",
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .labelLarge!
-                                              .copyWith(color: KColors.white),
-                                        ),
-                                        Text(
-                                          // "Rs 600",
-                                          "Rs ${cartProvider.totalPrice.toStringAsFixed(0)}",
-
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .titleMedium!
-                                              .copyWith(color: KColors.white),
-                                        ),
-                                      ],
-                                    ),
-                                    Row(
-                                      children: [
-                                        Text(
-                                          "CONTINUE",
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .titleMedium!
-                                              .copyWith(color: KColors.white),
-                                        ),
-                                        SizedBox(width: KSizes.xs),
-                                        const Icon(
-                                          Icons.arrow_forward_ios,
-                                          size: KSizes.md - 2,
-                                        ),
-                                      ],
-                                    )
-                                  ],
+              : PreferredSize(
+                  preferredSize: Size.fromHeight(75.h),
+                  child: Material(
+                    elevation: 4,
+                    child: BottomAppBar(
+                      // height: 75.h,
+                      color: Colors.white,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: KSizes.defaultSpace),
+                        child: ElevatedButton(
+                          onPressed: () {
+                            if (cartList.isNotEmpty) {
+                              // Prepare the order items
+                              List<OrderItem> orderItems =
+                                  cartList.map((cartItem) {
+                                return OrderItem(
+                                  foodId: cartItem.productId.id,
+                                  title: cartItem.productId.title,
+                                  quantity: cartItem.quantity,
+                                  price: cartItem.totalPrice.toInt(),
+                                  instructions:
+                                      '', // or any special instructions
                                 );
-                              }),
-                            ),
+                              }).toList();
+
+                              // Pass to CheckoutScreen
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      CheckoutScreen(item: orderItems),
+                                ),
+                              );
+                            }
+                            // Navigator.push(
+                            //     context,
+                            //     MaterialPageRoute(
+                            //         builder: (context) =>
+                            //             CheckoutScreen(item: )));
+                          },
+                          style: ElevatedButton.styleFrom(
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(
+                                    KSizes.borderRadiusLg)),
+                            padding: EdgeInsets.zero,
+                            minimumSize: const Size(
+                                double.infinity, 80), // Full width button
+                          ),
+                          child: (cartList.isEmpty)
+                              ? Center(
+                                  child: Text(
+                                    "Your Cart is Empty",
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .titleMedium!
+                                        .copyWith(fontWeight: FontWeight.w600),
+                                  ),
+                                )
+                              : Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: KSizes.defaultSpace),
+                                  child: Consumer<CartProvider>(
+                                      builder: (context, cartProvider, child) {
+                                    return Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Text(
+                                              "${cartProvider.cartCount} items",
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .labelLarge!
+                                                  .copyWith(
+                                                      color: KColors.white),
+                                            ),
+                                            Text(
+                                              // "Rs 600",
+                                              "Rs ${cartProvider.totalPrice.toStringAsFixed(0)}",
+
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .titleMedium!
+                                                  .copyWith(
+                                                      color: KColors.white),
+                                            ),
+                                          ],
+                                        ),
+                                        Row(
+                                          children: [
+                                            Text(
+                                              "CONTINUE",
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .titleMedium!
+                                                  .copyWith(
+                                                      color: KColors.white),
+                                            ),
+                                            SizedBox(width: KSizes.xs),
+                                            const Icon(
+                                              Icons.arrow_forward_ios,
+                                              size: KSizes.md - 2,
+                                            ),
+                                          ],
+                                        )
+                                      ],
+                                    );
+                                  }),
+                                ),
+                        ),
+                      ),
                     ),
                   ),
                 ),
@@ -229,31 +252,43 @@ class _CartScreenState extends State<CartScreen> {
                     right: KSizes.md,
                   ),
                   width: KDeviceUtils.getScreenWidth(context),
-                  height: KDeviceUtils.getScreenHeight(context) * 0.72,
+                  height: KDeviceUtils.getScreenHeight(context) * 0.71,
                   child: isLoading
                       // ? const FoodsListShimmer()
                       ? KIndicator.circularIndicator()
                       : (cartList == null || cartList.isEmpty)
                           ? Center(
                               child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                const Icon(
-                                  Icons.shopping_bag_outlined,
-                                  size: 70,
-                                  color: KColors.primary,
-                                ),
-                                SizedBox(height: KSizes.spaceBtwItems),
-                                Text(
-                                  // "Your Cart is Empty",
-                                  "Looks like you haven't added any item yet",
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .titleLarge!
-                                      .copyWith(fontWeight: FontWeight.w600),
-                                ),
-                                SizedBox(height: KSizes.spaceBtwSections),
-                                ElevatedButton(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  const Icon(
+                                    Icons.shopping_bag_outlined,
+                                    size: 80,
+                                    color: KColors.primary,
+                                  ),
+                                  SizedBox(height: KSizes.spaceBtwItems),
+                                  Text(
+                                    "Your cart is empty!",
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .titleLarge!
+                                        .copyWith(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 22),
+                                  ),
+                                  SizedBox(height: KSizes.spaceBtwSections),
+                                  Text(
+                                    "Looks like you haven't added anything yet.\nStart exploring our wide selection of products.",
+                                    textAlign: TextAlign.center,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyMedium!
+                                        .copyWith(
+                                          color: KColors.darkGrey,
+                                        ),
+                                  ),
+                                  SizedBox(height: KSizes.spaceBtwSections),
+                                  ElevatedButton(
                                     style: ElevatedButton.styleFrom(
                                       padding: const EdgeInsets.symmetric(
                                           horizontal: KSizes.md),
@@ -262,9 +297,11 @@ class _CartScreenState extends State<CartScreen> {
                                       Navigator.pushNamedAndRemoveUntil(context,
                                           "/navigationMenu", (route) => false);
                                     },
-                                    child: const Text("Continue Shopping")),
-                              ],
-                            ))
+                                    child: const Text("Start Shopping"),
+                                  ),
+                                ],
+                              ),
+                            )
                           : ListView.builder(
                               itemCount: cartList.length,
                               itemBuilder: (context, index) {

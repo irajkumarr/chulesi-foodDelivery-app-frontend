@@ -1,5 +1,8 @@
 import 'package:chulesi/core/utils/circular_progress_indicator/circlular_indicator.dart';
+import 'package:chulesi/core/utils/constants/image_strings.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:lottie/lottie.dart';
 
 class FullScreenOverlay extends StatelessWidget {
   final bool isLoading;
@@ -23,7 +26,11 @@ class FullScreenOverlay extends StatelessWidget {
               height: MediaQuery.of(context).size.height,
               color: Colors.black.withOpacity(0.5),
               child: Center(
-                child: KIndicator.circularIndicator(),
+                child: Lottie.asset(
+                  KImages.loadingAnimation,
+                  width: 75.w,
+                  height: 75.h,
+                ),
               ),
             ),
           ),

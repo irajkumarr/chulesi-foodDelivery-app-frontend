@@ -5,6 +5,7 @@ import 'package:chulesi/common/widgets/products/foods_card/food_tile_horizontal.
 import 'package:chulesi/core/network/connectivity_checker.dart';
 import 'package:chulesi/core/utils/shimmers/foodlist_shimmer.dart';
 import 'package:chulesi/data/models/foods_model.dart';
+import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../common/widgets/products/carts/cart_counter_icon.dart';
@@ -21,61 +22,67 @@ class RecommendedFoodsScreen extends StatelessWidget {
       child: DefaultTabController(
         length: 1,
         child: Scaffold(
-          appBar: AppBar(
-            centerTitle: true,
-            title: const Text("Newest Foods"),
-            bottom: PreferredSize(
-              preferredSize: Size.fromHeight(50.0.h),
-              child: Align(
-                alignment: Alignment.topLeft,
-                child: TabBar(
-                  dividerColor: KColors.softGrey,
-                  onTap: (value) async {
-                    await Future.delayed(const Duration(seconds: 1));
-                    await foodsListProvider.refetchNewFoodsList();
-                  },
-                  splashFactory: NoSplash.splashFactory,
-                  tabAlignment: TabAlignment.start,
-                  isScrollable: true,
-                  indicator: BoxDecoration(
-                    borderRadius: BorderRadius.circular(KSizes.borderRadiusMd),
-                  ),
-                  unselectedLabelColor: KColors.black,
-                  labelColor: Colors.white,
-                  tabs: [
-                    Tab(
-                      height: 40,
-                      child: Container(
-                        padding:
-                            const EdgeInsets.symmetric(horizontal: KSizes.md),
-                        decoration: BoxDecoration(
-                          borderRadius:
-                              BorderRadius.circular(KSizes.borderRadiusMd),
-                          color: KColors.secondary,
-                        ),
-                        child: const Align(
-                          alignment: Alignment.center,
-                          child: Text("All"),
-                        ),
+          appBar: PreferredSize(
+            preferredSize: Size.fromHeight(95.h),
+            child: Material(
+              elevation: 1.0,
+              child: AppBar(
+                centerTitle: true,
+                title: const Text("Newest Foods"),
+                bottom: PreferredSize(
+                  preferredSize: Size.fromHeight(50.0.h),
+                  child: Align(
+                    alignment: Alignment.topLeft,
+                    child: TabBar(
+                      dividerColor: KColors.softGrey,
+                      onTap: (value) async {
+                        await Future.delayed(const Duration(seconds: 1));
+                        await foodsListProvider.refetchNewFoodsList();
+                      },
+                      splashFactory: NoSplash.splashFactory,
+                      tabAlignment: TabAlignment.start,
+                      isScrollable: true,
+                      indicator: BoxDecoration(
+                        borderRadius:
+                            BorderRadius.circular(KSizes.borderRadiusMd),
                       ),
+                      unselectedLabelColor: KColors.black,
+                      labelColor: Colors.white,
+                      tabs: [
+                        Tab(
+                          height: 35.h,
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: KSizes.md),
+                            decoration: BoxDecoration(
+                              borderRadius:
+                                  BorderRadius.circular(KSizes.borderRadiusSm),
+                              color: KColors.secondary,
+                            ),
+                            child: const Align(
+                              alignment: Alignment.center,
+                              child: Text("All"),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                  ],
+                  ),
                 ),
+                actions: [
+                  IconButton(
+                    onPressed: () {
+                      Navigator.pushNamed(context, "/search");
+                    },
+                    icon: Icon(
+                      AntDesign.search1,
+                      size: KSizes.iconMd,
+                    ),
+                  ),
+                  const CartCounterIcon(iconColor: KColors.black),
+                ],
               ),
             ),
-            actions: [
-              IconButton(
-                onPressed: () {
-                  Navigator.pushNamed(context, "/search");
-                },
-                icon: Icon(
-                  Icons.search,
-                  color: KColors.black,
-                  size: KSizes.iconMd + 3,
-                ),
-              ),
-              const CartCounterIcon(iconColor: KColors.black),
-            ],
           ),
           body: TabBarView(
             children: [
@@ -100,8 +107,7 @@ class RecommendedFoodsScreen extends StatelessWidget {
                             : ListView.builder(
                                 physics: const BouncingScrollPhysics(),
                                 itemCount:
-                                    foodsListProvider.newFoodsList?.length ??
-                                        0,
+                                    foodsListProvider.newFoodsList?.length ?? 0,
                                 itemBuilder: (context, index) {
                                   FoodsModel food =
                                       foodsListProvider.newFoodsList![index];

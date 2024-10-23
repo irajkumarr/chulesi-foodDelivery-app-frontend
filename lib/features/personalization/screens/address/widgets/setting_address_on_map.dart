@@ -1,3 +1,4 @@
+import 'package:chulesi/core/utils/popups/toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:chulesi/features/personalization/providers/location_provider.dart';
@@ -11,6 +12,8 @@ import '../../../../../core/utils/constants/sizes.dart';
 
 import 'package:geocoding/geocoding.dart';
 import 'dart:async';
+
+import '../../../../../core/utils/device/device_utility.dart';
 
 class SettingAddressOnMapScreen extends StatefulWidget {
   const SettingAddressOnMapScreen({super.key});
@@ -50,13 +53,18 @@ class _SettingAddressOnMapScreenState extends State<SettingAddressOnMapScreen> {
   }
 
   Future<void> _searchLocation() async {
-    String query = _searchController.text;
-    List<Location> locations = await locationFromAddress(query);
-    if (locations.isNotEmpty) {
-      final location = locations.first;
-      LatLng latLng = LatLng(location.latitude, location.longitude);
-      _controller?.animateCamera(CameraUpdate.newLatLngZoom(latLng, 15));
-      context.read<MapProvider>().setSelectedLocation(latLng);
+    try {
+      String query = _searchController.text;
+      List<Location> locations = await locationFromAddress(query);
+      if (locations.isNotEmpty) {
+        final location = locations.first;
+        LatLng latLng = LatLng(location.latitude, location.longitude);
+        _controller?.animateCamera(CameraUpdate.newLatLngZoom(latLng, 15));
+        context.read<MapProvider>().setSelectedLocation(latLng);
+      }
+    } catch (e) {
+      // print(e.toString());
+      showToast(e.toString());
     }
   }
 
@@ -78,8 +86,14 @@ class _SettingAddressOnMapScreenState extends State<SettingAddressOnMapScreen> {
   Widget build(BuildContext context) {
     final locationProvider = Provider.of<LocationProvider>(context);
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Your Location"),
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(KDeviceUtils.getAppBarHeight()),
+        child: Material(
+          elevation: 1,
+          child: AppBar(
+            title: const Text("Your Location"),
+          ),
+        ),
       ),
       body: locationProvider.currentPosition == null
           ? const Center(
@@ -128,40 +142,47 @@ class _SettingAddressOnMapScreenState extends State<SettingAddressOnMapScreen> {
                             const EdgeInsets.symmetric(horizontal: KSizes.md),
                         child: TextFormField(
                           controller: _searchController,
+                          textInputAction: TextInputAction.search,
                           cursorColor: KColors.black,
                           onEditingComplete: _searchLocation,
                           style: Theme.of(context).textTheme.headlineSmall,
                           decoration: InputDecoration(
-                            filled: true,
-                            fillColor: KColors.white,
-                            hintText: mapProvider.address ?? 'Search Location',
-                            hintStyle: Theme.of(context)
-                                .textTheme
-                                .titleMedium!
-                                .copyWith(color: KColors.textGrey),
-                            border: OutlineInputBorder(
-                                borderSide: BorderSide.none,
-                                borderRadius: BorderRadius.circular(23)),
-                            enabledBorder: OutlineInputBorder(
-                                borderSide: BorderSide.none,
-                                borderRadius: BorderRadius.circular(23)),
-                            focusedBorder: OutlineInputBorder(
-                                borderSide: BorderSide.none,
-                                borderRadius: BorderRadius.circular(23)),
-                            focusedErrorBorder: OutlineInputBorder(
-                                borderSide: BorderSide.none,
-                                borderRadius: BorderRadius.circular(23)),
-                            errorBorder: OutlineInputBorder(
-                                borderSide: BorderSide.none,
-                                borderRadius: BorderRadius.circular(23)),
-                            disabledBorder: OutlineInputBorder(
-                                borderSide: BorderSide.none,
-                                borderRadius: BorderRadius.circular(23)),
-                            prefixIcon: const Icon(
-                              Icons.search,
-                              color: KColors.primary,
-                            ),
-                          ),
+                              filled: true,
+                              fillColor: KColors.white,
+                              hintText:
+                                  mapProvider.address ?? 'Search Location',
+                              hintStyle: Theme.of(context)
+                                  .textTheme
+                                  .titleMedium!
+                                  .copyWith(color: KColors.darkGrey),
+                              border: OutlineInputBorder(
+                                  borderSide: BorderSide.none,
+                                  borderRadius: BorderRadius.circular(23)),
+                              enabledBorder: OutlineInputBorder(
+                                  borderSide: BorderSide.none,
+                                  borderRadius: BorderRadius.circular(23)),
+                              focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide.none,
+                                  borderRadius: BorderRadius.circular(23)),
+                              focusedErrorBorder: OutlineInputBorder(
+                                  borderSide: BorderSide.none,
+                                  borderRadius: BorderRadius.circular(23)),
+                              errorBorder: OutlineInputBorder(
+                                  borderSide: BorderSide.none,
+                                  borderRadius: BorderRadius.circular(23)),
+                              disabledBorder: OutlineInputBorder(
+                                  borderSide: BorderSide.none,
+                                  borderRadius: BorderRadius.circular(23)),
+                              prefixIcon: const Icon(
+                                Icons.location_on,
+                                color: KColors.primary,
+                              ),
+                              suffixIcon: IconButton(
+                                  onPressed: _searchLocation,
+                                  icon: Icon(
+                                    Icons.search,
+                                    color: KColors.primary,
+                                  ))),
                         ),
                       );
                     },

@@ -27,18 +27,18 @@ class HomePromoSlider extends StatelessWidget {
     //     maxNrOfCacheObjects: 100, // Maximum number of objects in the cache
     //   ),
     // );
-    final offerSliderProvider = Provider.of<SliderProvider>(context);
+    final promoSliderProvider = Provider.of<SliderProvider>(context);
     final homeProvider = Provider.of<HomeProvider>(context);
-    return offerSliderProvider.isLoading
+    return promoSliderProvider.isLoading
         ? const FullShimmer()
-        : (offerSliderProvider.promoSliders != null &&
-                offerSliderProvider.promoSliders!.isNotEmpty)
+        : (promoSliderProvider.promoSliders != null &&
+                promoSliderProvider.promoSliders!.isNotEmpty)
             ? Column(
                 children: [
                   SizedBox(
                     height: 200.h,
                     child: CarouselWidget(
-                      itemCount: offerSliderProvider.promoSliders!.length,
+                      itemCount: promoSliderProvider.promoSliders!.length,
                       aspectRatio: 16 / 7,
                       viewportFraction: 0.8,
                       pageChanged: (index, _) {
@@ -46,7 +46,7 @@ class HomePromoSlider extends StatelessWidget {
                       },
                       itemBuilder: (context, index, pageviewIndex) {
                         SliderModel slider =
-                            offerSliderProvider.promoSliders![index];
+                            promoSliderProvider.promoSliders![index];
                         // checkCache(slider.imageUrl);
                         return ClipRRect(
                           borderRadius: BorderRadius.circular(KSizes.sm),
@@ -67,24 +67,6 @@ class HomePromoSlider extends StatelessWidget {
                             fit: BoxFit.cover,
                             // height: 175.h,
                             width: double.infinity,
-                            // progressIndicatorBuilder:
-                            //     (context, url, downloadProgress) {
-                            //   // print("Image is loading from network...");
-                            //   return Center(
-                            //     child: CircularProgressIndicator(
-                            //         value: downloadProgress.progress),
-                            //   );
-                            // },
-                            // imageBuilder: (context, imageProvider) {
-                            //   // print("Image loaded from cache or network.");
-                            //   return Image(
-                            //     image: imageProvider,
-                            //     fit: BoxFit.cover,
-                            //     width: double.infinity,
-                            //   );
-                            // },
-                            // errorWidget: (context, url, error) =>
-                            //     Image.asset(KImages.banner_placeholder),
                           ),
                         );
                       },
@@ -95,14 +77,14 @@ class HomePromoSlider extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       for (int i = 0;
-                          i < offerSliderProvider.promoSliders!.length;
+                          i < promoSliderProvider.promoSliders!.length;
                           i++)
                         CircularContainer(
                           color: homeProvider.carouselPromoCurrentIndex == i
                               ? KColors.primary
                               : KColors.grey,
                           width: homeProvider.carouselPromoCurrentIndex == i
-                              ? 15.w
+                              ? 13.w
                               : 7.w,
                           height: 7.h,
                           margin: EdgeInsets.only(right: 5.w),
@@ -111,6 +93,6 @@ class HomePromoSlider extends StatelessWidget {
                   ),
                 ],
               )
-            : const FullShimmer();
+            : const SizedBox();
   }
 }

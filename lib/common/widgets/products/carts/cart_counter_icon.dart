@@ -46,6 +46,7 @@ class _CartCounterIconState extends State<CartCounterIcon> {
       child: Stack(
         children: [
           IconButton(
+              tooltip: "Cart",
               onPressed: () {
                 Navigator.pushNamed(context, "/cart");
               },

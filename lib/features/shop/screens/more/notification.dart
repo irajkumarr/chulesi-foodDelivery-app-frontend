@@ -34,18 +34,24 @@ class NotificationScreen extends StatelessWidget {
     });
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Notifications'),
-        // actions: [
-        //   IconButton(
-        //     icon: const Icon(Iconsax.trash),
-        //     onPressed: () {
-        //       _notificationService.clearNotifications();
-        //       // Refresh the screen to show no notifications
-        //       (context as Element).reassemble();
-        //     },
-        //   ),
-        // ],
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(KDeviceUtils.getAppBarHeight()),
+        child: Material(
+          elevation: 1,
+          child: AppBar(
+            title: const Text("Notifications"),
+            // actions: [
+            //   IconButton(
+            //     icon: const Icon(Iconsax.trash),
+            //     onPressed: () {
+            //       _notificationService.clearNotifications();
+            //       // Refresh the screen to show no notifications
+            //       (context as Element).reassemble();
+            //     },
+            //   ),
+            // ],
+          ),
+        ),
       ),
       body: RefreshIndicator(
         onRefresh: _refreshNotifications,

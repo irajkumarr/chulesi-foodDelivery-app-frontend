@@ -6,6 +6,7 @@ import 'package:iconsax/iconsax.dart';
 
 import '../../../../../core/utils/constants/colors.dart';
 import '../../../../../core/utils/constants/sizes.dart';
+import '../../../../core/utils/device/device_utility.dart';
 
 class MoreScreen extends StatelessWidget {
   const MoreScreen({super.key});
@@ -15,16 +16,19 @@ class MoreScreen extends StatelessWidget {
     return ConnectivityChecker(
       child: Scaffold(
         backgroundColor: KColors.secondaryBackground,
-        appBar: AppBar(
-          elevation: 0.5,
-          shadowColor: Colors.black,
-          backgroundColor: KColors.primary,
-          automaticallyImplyLeading: false,
-          title: const Text(
-            "More",
-            style: TextStyle(color: KColors.white),
+        appBar: PreferredSize(
+          preferredSize: Size.fromHeight(KDeviceUtils.getAppBarHeight()),
+          child: Material(
+            elevation: 1,
+            child: AppBar(
+              backgroundColor: KColors.primary,
+              title: const Text(
+                "More",
+                style: TextStyle(color: KColors.white),
+              ),
+              centerTitle: true,
+            ),
           ),
-          centerTitle: true,
         ),
         body: SafeArea(
           child: SizedBox(

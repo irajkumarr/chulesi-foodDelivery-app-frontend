@@ -10,6 +10,8 @@ import 'package:chulesi/features/personalization/providers/map_provider.dart';
 import 'package:chulesi/features/personalization/screens/address/widgets/setting_address_on_map.dart';
 import 'package:provider/provider.dart';
 
+import '../../../../core/utils/constants/colors.dart';
+
 void showAddressModal(BuildContext context, Function? refetch,
     {AddressResponse? address}) {
   // final locationProvider =
@@ -121,7 +123,8 @@ void showAddressModal(BuildContext context, Function? refetch,
                 Center(
                   child: SizedBox(
                     height: 45.h,
-                    width: 200.w,
+                    width: double.infinity,
+                    // width: 200.w,
                     child: Consumer<AddressProvider>(
                       builder: (context, addressProvider, child) {
                         return ElevatedButton(
@@ -161,7 +164,7 @@ void showAddressModal(BuildContext context, Function? refetch,
                                   }
                                 },
                           child: addressProvider.isLoading
-                              ?  Row(
+                              ? Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     const Text("CONFIRM"),
@@ -170,7 +173,7 @@ void showAddressModal(BuildContext context, Function? refetch,
                                       height: 12.0.h,
                                       width: 12.0.w,
                                       child: const CircularProgressIndicator(
-                                        color: Colors.white,
+                                        color: KColors.primary,
                                         strokeWidth: 1.5,
                                       ),
                                     ),

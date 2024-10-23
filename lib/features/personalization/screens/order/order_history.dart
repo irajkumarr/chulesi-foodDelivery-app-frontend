@@ -1,3 +1,4 @@
+import 'package:chulesi/core/utils/device/device_utility.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -23,10 +24,13 @@ class OrderHistory extends HookWidget {
     final refetch = hookResult.refetch;
     return ConnectivityChecker(
       child: Scaffold(
-          appBar: AppBar(
-            title: Text(
-              "Order History",
-              style: Theme.of(context).textTheme.headlineSmall,
+          appBar: PreferredSize(
+            preferredSize: Size.fromHeight(KDeviceUtils.getAppBarHeight()),
+            child: Material(
+              elevation: 1,
+              child: AppBar(
+                title: const Text("Order History"),
+              ),
             ),
           ),
           body: RefreshIndicator(

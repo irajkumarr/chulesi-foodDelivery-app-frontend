@@ -19,7 +19,17 @@ class SocialIconWidget extends StatelessWidget {
     return InkWell(
       onTap: onPressed,
       child: Container(
-        color: KColors.white,
+        decoration: BoxDecoration(
+          color: KColors.white,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.1),
+              offset: Offset(0, 1),
+              blurRadius: 2,
+              spreadRadius: 0,
+            ),
+          ],
+        ),
         padding:
             EdgeInsets.symmetric(horizontal: KSizes.md, vertical: KSizes.sm),
         child: Row(

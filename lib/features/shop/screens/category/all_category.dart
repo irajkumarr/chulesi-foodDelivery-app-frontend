@@ -1,3 +1,4 @@
+import 'package:chulesi/core/utils/device/device_utility.dart';
 import 'package:chulesi/features/shop/providers/category_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -20,39 +21,50 @@ class AllCategoryScreen extends StatelessWidget {
     final categoryProvider = Provider.of<CategoryProvider>(context);
     return ConnectivityChecker(
       child: Scaffold(
-          appBar: AppBar(
-            title: const Text(
-              "Categories",
-              style: TextStyle(color: KColors.white),
+          appBar: PreferredSize(
+            preferredSize: Size.fromHeight(KDeviceUtils.getAppBarHeight()),
+            child: Material(
+              elevation: 1.0,
+              child: AppBar(
+                title: const Text(
+                  "Categories",
+                  style: TextStyle(color: KColors.white),
+                ),
+                centerTitle: true,
+                backgroundColor: KColors.primary,
+                elevation: 4,
+                automaticallyImplyLeading: false,
+              ),
             ),
-            centerTitle: true,
-            backgroundColor: KColors.primary,
-            elevation: 4,
-            automaticallyImplyLeading: false,
           ),
-          body: Padding(
-            padding: const EdgeInsets.only(left: KSizes.md, right: KSizes.md),
-            child: categoryProvider.isLoading
-                ? const Padding(
-                    padding: EdgeInsets.only(top: KSizes.md),
-                    child: CategoriesVerticalShimmer(),
-                  )
-                : SingleChildScrollView(
-                    physics: const AlwaysScrollableScrollPhysics(),
-                    child: Padding(
-                      padding: const EdgeInsets.only(top: KSizes.md),
-                      child: GridLayout(
-                          itemCount: categoryProvider.allCategories!.length,
-                          mainAxisExtent: 120.w,
-                          itemBuilder: (context, index) {
-                            CategoriesModel category =
-                                categoryProvider.allCategories![index];
-                            return CategoryTile(category: category);
-                          }),
+          body: RefreshIndicator(
+            onRefresh: () async {
+              await Future.delayed(Duration(seconds: 1));
+              await categoryProvider.refetchAllCategories();
+            },
+            child: Padding(
+              padding: const EdgeInsets.only(left: KSizes.md, right: KSizes.md),
+              child: categoryProvider.isLoading
+                  ? const Padding(
+                      padding: EdgeInsets.only(top: KSizes.md),
+                      child: CategoriesVerticalShimmer(),
+                    )
+                  : SingleChildScrollView(
+                      physics: const AlwaysScrollableScrollPhysics(),
+                      child: Padding(
+                        padding: const EdgeInsets.only(top: KSizes.md),
+                        child: GridLayout(
+                            itemCount: categoryProvider.allCategories!.length,
+                            mainAxisExtent: 120.w,
+                            itemBuilder: (context, index) {
+                              CategoriesModel category =
+                                  categoryProvider.allCategories![index];
+                              return CategoryTile(category: category);
+                            }),
+                      ),
                     ),
-                  ),
+            ),
           )),
     );
   }
 }
-

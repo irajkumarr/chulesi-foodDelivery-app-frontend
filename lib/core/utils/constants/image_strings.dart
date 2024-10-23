@@ -30,6 +30,8 @@ class KImages {
   // -- Animations
   static const String successfullyRegisterAnimation =
       "assets/images/animations/72462-check-register.json";
+  static const String loadingAnimation =
+      "assets/images/animations/Animation - 1729667452686.json";
   static const String warningIllustration =
       "assets/images/animations/Warning-rafiki.svg";
 

@@ -97,17 +97,20 @@ class CheckoutScreen extends HookWidget {
           // Only show the SnackBar if it's not an order
           if (!isOrder) {
             ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(data['message'])),
+              SnackBar(
+                  backgroundColor: KColors.black,
+                  content: Text(data['message'])),
             );
           }
           discount.value = 0;
           appliedPromoCode.value = "";
         }
       } catch (e) {
-        debugPrint(e.toString());
+        // debugPrint(e.toString());
         if (!isOrder) {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
+              backgroundColor: KColors.black,
               content: Text("An error occurred while applying the promo code."),
             ),
           );
@@ -123,13 +126,16 @@ class CheckoutScreen extends HookWidget {
             context,
             "The total amount should be at least Rs 500 to place an order.",
             "Continue Shopping", () {
-          Navigator.pushNamed(context, '/navigationMenu');
+          Navigator.pushNamedAndRemoveUntil(
+              context, "/navigationMenu", (route) => false);
         });
         return; // Exit the method to prevent placing the order
       }
       if (deliveryAddress == null) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("Please select a delivery address.")),
+          const SnackBar(
+              backgroundColor: KColors.black,
+              content: Text("Please select a delivery address.")),
         );
         return;
       }
@@ -153,14 +159,14 @@ class CheckoutScreen extends HookWidget {
                 TextButton(
                   onPressed: () => Navigator.of(context).pop(false),
                   child: const Text(
-                    "Cancel",
+                    "CANCEL",
                     style: TextStyle(color: KColors.darkGrey),
                   ),
                 ),
                 TextButton(
                   onPressed: () => Navigator.of(context).pop(true),
                   child: const Text(
-                    "Confirm",
+                    "CONFIRM",
                     style: TextStyle(color: KColors.primary),
                   ),
                 ),
@@ -224,27 +230,40 @@ class CheckoutScreen extends HookWidget {
 
     return ConnectivityChecker(
       child: Scaffold(
-        appBar: AppBar(
-          elevation: 4,
-          title: const Text("Checkout"),
+        appBar: PreferredSize(
+          preferredSize: const Size.fromHeight(60.0),
+          child: Material(
+            elevation: 1.0,
+            child: AppBar(
+              title: const Text("Checkout"),
+            ),
+          ),
         ),
-        bottomNavigationBar: BottomAppBar(
-          height: 75.h,
-          color: Colors.white,
-          child: Padding(
-            padding:
-                const EdgeInsets.symmetric(horizontal: KSizes.defaultSpace),
-            child: ElevatedButton(
-              onPressed: () async {
-                await placeOrder();
-              },
-              style: ElevatedButton.styleFrom(
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(KSizes.borderRadiusLg)),
-                padding: EdgeInsets.zero,
-                minimumSize: Size(double.infinity, 75.h), // Full width button
+        bottomNavigationBar: PreferredSize(
+          preferredSize: Size.fromHeight(75.h),
+          child: Material(
+            elevation: 4,
+            child: BottomAppBar(
+              // height: 75.h,
+              color: Colors.white,
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: KSizes.defaultSpace),
+                child: ElevatedButton(
+                  onPressed: () async {
+                    await placeOrder();
+                  },
+                  style: ElevatedButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                        borderRadius:
+                            BorderRadius.circular(KSizes.borderRadiusLg)),
+                    padding: EdgeInsets.zero,
+                    minimumSize:
+                        Size(double.infinity, 75.h), // Full width button
+                  ),
+                  child: const Text("CONFIRM ORDER"),
+                ),
               ),
-              child: const Text("CONFIRM ORDER"),
             ),
           ),
         ),
@@ -253,7 +272,7 @@ class CheckoutScreen extends HookWidget {
             children: [
               Container(
                 padding: const EdgeInsets.all(KSizes.md),
-                margin: EdgeInsets.only(top: 1, bottom: KSizes.xs),
+                margin: EdgeInsets.only(bottom: KSizes.xs),
                 color: KColors.white,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,

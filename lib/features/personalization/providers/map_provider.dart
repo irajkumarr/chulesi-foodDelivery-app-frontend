@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
@@ -17,15 +16,19 @@ class MapProvider with ChangeNotifier {
   }
 
   Future<void> _fetchAddress(LatLng location) async {
-    List<Placemark> placemarks =
-        await placemarkFromCoordinates(location.latitude, location.longitude);
-    if (placemarks.isNotEmpty) {
-      final placemark = placemarks.first;
-      _address =
-          '${placemark.name}, ${placemark.locality}, ${placemark.country}';
-      notifyListeners();
-    } else {
-      _address = "Hetauda";
+    try {
+      List<Placemark> placemarks =
+          await placemarkFromCoordinates(location.latitude, location.longitude);
+      if (placemarks.isNotEmpty) {
+        final placemark = placemarks.first;
+        _address =
+            '${placemark.name}, ${placemark.locality}, ${placemark.country}';
+        notifyListeners();
+      } else {
+        _address = "Hetauda";
+      }
+    } catch (e) {
+      print("Error from map:${e.toString()}");
     }
   }
 

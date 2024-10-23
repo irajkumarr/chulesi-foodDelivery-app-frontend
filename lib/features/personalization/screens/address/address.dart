@@ -1,4 +1,4 @@
-
+import 'package:chulesi/core/utils/device/device_utility.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -34,7 +34,11 @@ class AddressScreen extends HookWidget {
           backgroundColor: KColors.primary,
           child: const Icon(Iconsax.add, color: KColors.white),
         ),
-        appBar: AppBar(title: const Text("Delivery Address")),
+        appBar: PreferredSize(
+            preferredSize: Size.fromHeight(KDeviceUtils.getAppBarHeight()),
+            child: Material(
+                elevation: 1,
+                child: AppBar(title: const Text("Your Delivery Address")))),
         body: RefreshIndicator(
           onRefresh: () async {
             await refetch();
@@ -43,10 +47,6 @@ class AddressScreen extends HookWidget {
               ? Center(
                   child: KIndicator.circularIndicator(),
                 )
-              // const Padding(
-              //     padding: EdgeInsets.all(KSizes.md),
-              //     child: FoodsListShimmer(),
-              //   )
               : (addresses.isEmpty)
                   ? Padding(
                       padding: const EdgeInsets.symmetric(
@@ -64,6 +64,12 @@ class AddressScreen extends HookWidget {
                             SizedBox(height: KSizes.spaceBtwSections),
                             Text("No Delivery Address",
                                 style: Theme.of(context).textTheme.titleLarge),
+                            SizedBox(height: KSizes.sm),
+                            Text(
+                              "Delivery options and delivery speeds may vary for different locations.",
+                              style: Theme.of(context).textTheme.bodySmall,
+                              textAlign: TextAlign.center,
+                            ),
                           ],
                         ),
                       ),

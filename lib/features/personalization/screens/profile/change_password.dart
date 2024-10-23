@@ -1,3 +1,4 @@
+import 'package:chulesi/core/utils/device/device_utility.dart';
 import 'package:flutter/material.dart';
 import 'package:chulesi/common/widgets/loaders/full_screen_overlay.dart';
 import 'package:chulesi/core/utils/constants/colors.dart';
@@ -35,8 +36,14 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
     return FullScreenOverlay(
       isLoading: profileProvider.isLoading,
       child: Scaffold(
-        appBar: AppBar(
-          title: const Text("Change Password"),
+        appBar: PreferredSize(
+          preferredSize: Size.fromHeight(KDeviceUtils.getAppBarHeight()),
+          child: Material(
+            elevation: 1,
+            child: AppBar(
+              title: const Text("Change Password"),
+            ),
+          ),
         ),
         body: Padding(
           padding: EdgeInsets.symmetric(
@@ -147,7 +154,6 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                         ? null
                         : () async {
                             if (_formKey.currentState!.validate()) {
-                              //changing password logic
                               await profileProvider.changePassword(
                                   context,
                                   _oldPasswordController.text,

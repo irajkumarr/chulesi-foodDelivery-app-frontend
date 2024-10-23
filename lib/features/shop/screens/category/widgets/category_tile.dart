@@ -37,6 +37,14 @@ class CategoryTile extends StatelessWidget {
           decoration: BoxDecoration(
             color: KColors.white,
             borderRadius: BorderRadius.circular(KSizes.sm),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.1),
+                offset: Offset(0, 1),
+                blurRadius: 2,
+                spreadRadius: 0,
+              ),
+            ],
           ),
           child: Column(
             children: [

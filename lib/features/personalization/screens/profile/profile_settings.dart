@@ -10,6 +10,8 @@ import 'package:chulesi/core/utils/constants/sizes.dart';
 import 'package:chulesi/core/utils/constants/text_strings.dart';
 import 'package:chulesi/core/utils/validators/validation.dart';
 
+import '../../../../core/utils/device/device_utility.dart';
+
 class ProfileSettings extends StatefulWidget {
   final String firstName;
   final String lastName;
@@ -57,8 +59,14 @@ class _ProfileSettingsState extends State<ProfileSettings> {
     return Consumer<ProfileProvider>(
         builder: (context, profileProvider, child) {
       return Scaffold(
-        appBar: AppBar(
-          title: const Text("Update Profile"),
+        appBar: PreferredSize(
+          preferredSize: Size.fromHeight(KDeviceUtils.getAppBarHeight()),
+          child: Material(
+            elevation: 1,
+            child: AppBar(
+              title: const Text("Edit Profile"),
+            ),
+          ),
         ),
         body: SingleChildScrollView(
           child: Padding(

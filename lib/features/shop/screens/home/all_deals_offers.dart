@@ -1,3 +1,4 @@
+import 'package:chulesi/core/utils/device/device_utility.dart';
 import 'package:chulesi/features/shop/providers/offers_food_list_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -12,7 +13,6 @@ import '../../../../common/widgets/products/carts/cart_counter_icon.dart';
 import '../../../../core/utils/constants/colors.dart';
 import '../../../../core/utils/constants/sizes.dart';
 
-
 class DealsAndOffersScreen extends StatelessWidget {
   const DealsAndOffersScreen({super.key});
 
@@ -23,60 +23,66 @@ class DealsAndOffersScreen extends StatelessWidget {
       child: DefaultTabController(
         length: 1,
         child: Scaffold(
-          appBar: AppBar(
-            elevation: 0,
-            centerTitle: true,
-            title: const Text("Deals and Offers"),
-            bottom: PreferredSize(
-              preferredSize: Size.fromHeight(50.0.h),
-              child: Align(
-                alignment: Alignment.topLeft,
-                child: TabBar(
-                  dividerColor: KColors.softGrey,
-                  onTap: (value) async {
-                    await Future.delayed(const Duration(seconds: 1));
-                    await offerFoodsListProvider.refetchOfferFoodList();
-                  },
-                  splashFactory: NoSplash.splashFactory,
-                  tabAlignment: TabAlignment.start,
-                  isScrollable: true,
-                  indicator: BoxDecoration(
-                    borderRadius: BorderRadius.circular(KSizes.borderRadiusMd),
-                  ),
-                  unselectedLabelColor: KColors.black,
-                  labelColor: Colors.white,
-                  tabs: [
-                    Tab(
-                      height: 35.h,
-                      child: Container(
-                        padding:
-                            const EdgeInsets.symmetric(horizontal: KSizes.md),
-                        decoration: BoxDecoration(
-                          borderRadius:
-                              BorderRadius.circular(KSizes.borderRadiusSm),
-                          color: KColors.secondary,
-                        ),
-                        child: const Align(
-                          alignment: Alignment.center,
-                          child: Text("All"),
-                        ),
+          appBar: PreferredSize(
+            preferredSize: Size.fromHeight(95.h),
+            child: Material(
+              elevation: 1.0,
+              child: AppBar(
+                centerTitle: true,
+                title: const Text("Deals and Offers"),
+                bottom: PreferredSize(
+                  preferredSize: Size.fromHeight(50.0.h),
+                  child: Align(
+                    alignment: Alignment.topLeft,
+                    child: TabBar(
+                      dividerColor: KColors.softGrey,
+                      onTap: (value) async {
+                        await Future.delayed(const Duration(seconds: 1));
+                        await offerFoodsListProvider.refetchOfferFoodList();
+                      },
+                      splashFactory: NoSplash.splashFactory,
+                      tabAlignment: TabAlignment.start,
+                      isScrollable: true,
+                      indicator: BoxDecoration(
+                        borderRadius:
+                            BorderRadius.circular(KSizes.borderRadiusMd),
                       ),
+                      unselectedLabelColor: KColors.black,
+                      labelColor: Colors.white,
+                      tabs: [
+                        Tab(
+                          height: 35.h,
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: KSizes.md),
+                            decoration: BoxDecoration(
+                              borderRadius:
+                                  BorderRadius.circular(KSizes.borderRadiusSm),
+                              color: KColors.secondary,
+                            ),
+                            child: const Align(
+                              alignment: Alignment.center,
+                              child: Text("All"),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                  ],
+                  ),
                 ),
+                actions: [
+                  IconButton(
+                      onPressed: () {
+                        Navigator.pushNamed(context, "/search");
+                      },
+                      icon: Icon(
+                        AntDesign.search1,
+                        size: KSizes.iconMd ,
+                      )),
+                  const CartCounterIcon(iconColor: KColors.black),
+                ],
               ),
             ),
-            actions: [
-              IconButton(
-                  onPressed: () {
-                    Navigator.pushNamed(context, "/search");
-                  },
-                  icon: Icon(
-                    AntDesign.search1,
-                    size: KSizes.iconMd,
-                  )),
-              const CartCounterIcon(iconColor: KColors.black),
-            ],
           ),
           body: TabBarView(
             // physics: BouncingScrollPhysics(),

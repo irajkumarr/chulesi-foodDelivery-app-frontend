@@ -105,7 +105,6 @@ class KLoaders {
                       )),
                   onPressed: onPressed,
                   child: Text(
-                    // 'Go to Cart',
                     buttonText,
                     style: Theme.of(context)
                         .textTheme

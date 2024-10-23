@@ -1,9 +1,9 @@
+import 'package:chulesi/core/utils/circular_progress_indicator/circlular_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:chulesi/common/widgets/alert_box/alert_box.dart';
 import 'package:chulesi/common/widgets/loaders/full_screen_overlay.dart';
 import 'package:chulesi/core/network/connectivity_checker.dart';
-import 'package:chulesi/core/utils/shimmers/foodlist_shimmer.dart';
 import 'package:chulesi/features/authentication/screens/login/widgets/login_redirect.dart';
 import 'package:chulesi/features/personalization/providers/profile_provider.dart';
 import 'package:chulesi/features/personalization/screens/profile/widgets/user_profile_widget.dart';
@@ -16,6 +16,8 @@ import 'package:chulesi/features/personalization/screens/profile/widgets/profile
 
 import 'package:chulesi/core/utils/constants/colors.dart';
 import 'package:chulesi/core/utils/constants/sizes.dart';
+
+import '../../../../core/utils/device/device_utility.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -34,26 +36,42 @@ class _ProfileScreenState extends State<ProfileScreen> {
         builder: (context, profileProvider, child) {
           if (profileProvider.isLoading) {
             return Scaffold(
-              appBar: AppBar(
-                title: const Text("Profile"),
-                centerTitle: true,
-                automaticallyImplyLeading: false,
+              appBar: PreferredSize(
+                preferredSize: Size.fromHeight(KDeviceUtils.getAppBarHeight()),
+                child: Material(
+                  elevation: 1,
+                  child: AppBar(
+                    backgroundColor: KColors.primary,
+                    automaticallyImplyLeading: false,
+                    title: const Text(
+                      "Account",
+                      style: TextStyle(color: KColors.white),
+                    ),
+                    centerTitle: true,
+                  ),
+                ),
               ),
-              body: const FoodsListShimmer(),
+              body: KIndicator.circularIndicator(),
             );
           }
 
           final user = profileProvider.user;
           if (user == null) {
             return Scaffold(
-              appBar: AppBar(
-                backgroundColor: KColors.primary,
-                automaticallyImplyLeading: false,
-                title: const Text(
-                  "Profile",
-                  style: TextStyle(color: KColors.white),
+              appBar: PreferredSize(
+                preferredSize: Size.fromHeight(KDeviceUtils.getAppBarHeight()),
+                child: Material(
+                  elevation: 1,
+                  child: AppBar(
+                    backgroundColor: KColors.primary,
+                    automaticallyImplyLeading: false,
+                    title: const Text(
+                      "Account",
+                      style: TextStyle(color: KColors.white),
+                    ),
+                    centerTitle: true,
+                  ),
                 ),
-                centerTitle: true,
               ),
               body: const LoginRedirect(),
             );
@@ -64,14 +82,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
           return FullScreenOverlay(
             isLoading: loginProvider.isLoading,
             child: Scaffold(
-              appBar: AppBar(
-                backgroundColor: KColors.primary,
-                automaticallyImplyLeading: false,
-                title: const Text(
-                  "Account",
-                  style: TextStyle(color: KColors.white),
+              appBar: PreferredSize(
+                preferredSize: Size.fromHeight(KDeviceUtils.getAppBarHeight()),
+                child: Material(
+                  elevation: 1,
+                  child: AppBar(
+                    backgroundColor: KColors.primary,
+                    automaticallyImplyLeading: false,
+                    title: const Text(
+                      "Account",
+                      style: TextStyle(color: KColors.white),
+                    ),
+                    centerTitle: true,
+                  ),
                 ),
-                centerTitle: true,
               ),
               body: SingleChildScrollView(
                 child: Column(
@@ -86,7 +110,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       child: Column(
                         children: [
                           ProfileMenu(
-                            title: "Order History",
+                            title: "Your Orders",
                             subTitle: "Your Purchase History",
                             icon: Iconsax.book,
                             onPressed: () {

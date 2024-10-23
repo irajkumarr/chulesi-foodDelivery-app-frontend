@@ -77,7 +77,7 @@ class HomeOfferSlider extends StatelessWidget {
                               ? KColors.primary
                               : KColors.grey,
                           width: homeProvider.carouselOfferCurrentIndex == i
-                              ? 15.w
+                              ? 13.w
                               : 7.w,
                           height: 7.h,
                           margin: EdgeInsets.only(right: 5.w),
