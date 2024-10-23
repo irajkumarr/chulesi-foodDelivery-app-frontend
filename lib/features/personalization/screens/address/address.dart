@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:chulesi/core/utils/device/device_utility.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -24,7 +26,15 @@ class AddressScreen extends HookWidget {
     List<AddressResponse> addresses = hookResult.data ?? [];
     final isLoading = hookResult.isLoading;
     final refetch = hookResult.refetch;
+    List<String> emptyMessages = [
+      "Where are we delivering today? Add your address to begin.",
+      "Let's get you set up! Add a delivery address to start.",
+      "You haven't added an address yet! Let's fix that.",
+      "Ready to explore? Add your delivery address now!"
+    ];
 
+    // Randomly select a message from the list
+    final randomMessage = emptyMessages[Random().nextInt(emptyMessages.length)];
     return ConnectivityChecker(
       child: Scaffold(
         floatingActionButton: FloatingActionButton(
@@ -58,18 +68,24 @@ class AddressScreen extends HookWidget {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             SizedBox(
-                                height: 120.h,
-                                width: 120.w,
-                                child: SvgPicture.asset(KImages.address)),
-                            SizedBox(height: KSizes.spaceBtwSections),
-                            Text("No Delivery Address",
+                                height: 200.h,
+                                width: 200.w,
+                                child: SvgPicture.asset(
+                                    KImages.deliveryIllustration)),
+                            // SizedBox(height: KSizes.spaceBtwSections),
+                            Text("No Delivery Address Found",
                                 style: Theme.of(context).textTheme.titleLarge),
                             SizedBox(height: KSizes.sm),
                             Text(
-                              "Delivery options and delivery speeds may vary for different locations.",
+                              randomMessage,
                               style: Theme.of(context).textTheme.bodySmall,
                               textAlign: TextAlign.center,
                             ),
+                            // Text(
+                            //   "Delivery options and delivery speeds may vary for different locations.",
+                            //   style: Theme.of(context).textTheme.bodySmall,
+                            //   textAlign: TextAlign.center,
+                            // ),
                           ],
                         ),
                       ),

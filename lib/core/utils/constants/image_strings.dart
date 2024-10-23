@@ -34,6 +34,15 @@ class KImages {
       "assets/images/animations/Animation - 1729667452686.json";
   static const String warningIllustration =
       "assets/images/animations/Warning-rafiki.svg";
+  static const String loginIllustration =
+      "assets/images/animations/login_illustration.svg";
+  static const String deliveryIllustration =
+      "assets/images/animations/delivery_illustration.svg";
+  static const String orderIllustration = "assets/images/animations/order1.svg";
+  // static const String orderIllustration =
+  //     "assets/images/animations/order_illustration.svg";
+  static const String trackIllustration =
+      "assets/images/animations/track-your-order.svg";
 
   // -- network connection timeout
   static const String noConnection =

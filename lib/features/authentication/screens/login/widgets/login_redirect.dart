@@ -95,7 +95,7 @@ class LoginRedirect extends StatelessWidget {
               width: 200.w,
               height: 200.h,
               child: SvgPicture.asset(
-                KImages.warningIllustration,
+                KImages.loginIllustration,
               ),
             ),
             Column(
@@ -115,7 +115,7 @@ class LoginRedirect extends StatelessWidget {
                   style: Theme.of(context).textTheme.labelSmall!.copyWith(
                         color: KColors.black,
                         fontSize: 16.sp,
-                        fontStyle: FontStyle.italic,
+                        // fontStyle: FontStyle.italic,
                       ),
                 ),
                 SizedBox(height: KSizes.md),

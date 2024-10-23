@@ -68,12 +68,13 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                     decoration: InputDecoration(
                       labelText: "Old Password",
                       suffixIcon: IconButton(
-                          onPressed: () {
-                            value.toggleOldPasswordVisibility();
-                          },
-                          icon: Icon(value.oldPasswordVisible
-                              ? Iconsax.eye_slash
-                              : Iconsax.eye)),
+                        onPressed: () {
+                          value.toggleOldPasswordVisibility();
+                        },
+                        icon: Icon(value.oldPasswordVisible
+                            ? Iconsax.eye_slash
+                            : Iconsax.eye),
+                      ),
                     ),
                   );
                 }),
