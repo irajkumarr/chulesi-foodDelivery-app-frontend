@@ -152,12 +152,6 @@ class NotificationService {
   }
 
   Future<void> showNotification(RemoteMessage message) async {
-    // AndroidNotificationChannel channel = const AndroidNotificationChannel(
-    //   'chulesi',
-    //   'Default Channel',
-    //   description: 'This is the default channel for notifications',
-    //   importance: Importance.max,
-    // );
     String? imageUrl = message.notification?.android?.imageUrl;
     AndroidNotificationChannel channel = AndroidNotificationChannel(
       message.notification!.android!.channelId.toString(),
@@ -171,7 +165,8 @@ class NotificationService {
         AndroidNotificationDetails(
       channel.id.toString(), channel.name.toString(),
       // channelDescription: channel.description,
-      channelDescription: 'your channel description',
+      channelDescription:
+          'Notifications for updates and important alerts related to your orders, latest offers and promotions and app activity.',
       importance: Importance.high,
       priority: Priority.high,
       playSound: true,
@@ -196,17 +191,6 @@ class NotificationService {
     NotificationDetails notificationDetails = NotificationDetails(
         android: androidNotificationDetails, iOS: darwinNotificationDetails);
 
-    // await _flutterLocalNotificationsPlugin.show(
-    //   0,
-    //   // message.notification?.title ?? 'No Title',
-    //   // message.notification?.body ?? 'No Body',
-    //   // notificationDetails,
-    //   // payload: 'my_data',
-    //    message.notification!.title.toString(),
-    //     message.notification!.body.toString(),
-    //     notificationDetails,
-    //     payload: 'my_data',
-    // );
     Future.delayed(Duration.zero, () {
       _flutterLocalNotificationsPlugin.show(
         0,
@@ -231,11 +215,11 @@ class NotificationService {
     BuildContext context,
     RemoteMessage message,
   ) async {
-    if (kDebugMode) {
-      print("Navigating to screen with message: ${message.data}");
-    }
-    print(
-        "Navigating to appointments screen. Hit here to handle the message. Message data: ${message.data}");
+    // if (kDebugMode) {
+    //   print("Navigating to screen with message: ${message.data}");
+    // }
+    // print(
+    //     "Navigating to appointments screen. Hit here to handle the message. Message data: ${message.data}");
 
     if (message.data.containsKey('screen')) {
       String screen = message.data['screen'];
@@ -249,38 +233,7 @@ class NotificationService {
     }
   }
 
-  // Future<void> storeNotification(RemoteMessage message) async {
-  //   final notification = NotificationModel(
-  //     title: message.notification?.title ?? 'No Title',
-  //     body: message.notification?.body ?? 'No Body',
-  //     date: DateTime.now(), // Save current date and time
-  //   );
-
-  //   // Load existing notifications, ensuring type consistency
-  //   final existingNotifications =
-  //       (box.read<List<dynamic>>(_notificationsKey) ?? [])
-  //           .cast<Map<String, dynamic>>()
-  //           .toList();
-
-  //   // Add new notification to the list
-  //   existingNotifications.add(notification.toJson());
-
-  //   // Save updated list back to GetStorage
-  //   await box.write(_notificationsKey, existingNotifications);
-  // }
-
-  // List<NotificationModel> getStoredNotifications() {
-  //   final storedData = box.read<List<dynamic>>(_notificationsKey) ?? [];
-  //   return storedData
-  //       .cast<Map<String, dynamic>>()
-  //       .map((json) => NotificationModel.fromJson(json))
-  //       .toList();
-  // }
-
-  // Future<void> clearNotifications() async {
-  //   await box.remove(_notificationsKey);
-  // }
-   Future<void> storeNotification(RemoteMessage message) async {
+  Future<void> storeNotification(RemoteMessage message) async {
     // Get the image URL from the notification payload
     String? imageUrl = message.notification?.android?.imageUrl;
 

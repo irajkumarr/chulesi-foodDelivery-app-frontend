@@ -114,7 +114,7 @@ class LoginRedirect extends StatelessWidget {
                   "It looks like you're not logged in.",
                   style: Theme.of(context).textTheme.labelSmall!.copyWith(
                         color: KColors.black,
-                        fontSize: 16.sp,
+                        fontSize: 14.sp,
                         // fontStyle: FontStyle.italic,
                       ),
                 ),
