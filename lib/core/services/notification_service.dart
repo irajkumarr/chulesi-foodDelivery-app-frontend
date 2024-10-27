@@ -239,8 +239,8 @@ class NotificationService {
 
     // Create a notification model including the image URL
     final notification = NotificationModel(
-      title: message.notification?.title ?? 'No Title',
-      body: message.notification?.body ?? 'No Body',
+      title: message.notification?.title ?? ' ',
+      body: message.notification?.body ?? ' ',
       date: DateTime.now(), // Save current date and time
       imageUrl: imageUrl, // Store the image URL
     );
