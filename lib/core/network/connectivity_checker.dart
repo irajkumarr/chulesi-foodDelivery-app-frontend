@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:provider/provider.dart';
+import '../../common/widgets/alert_box/alert_box.dart';
 import '../utils/constants/colors.dart';
 import '../utils/constants/image_strings.dart';
 import '../utils/constants/sizes.dart';
@@ -26,54 +27,60 @@ class ConnectivityChecker extends StatelessWidget {
             //  ==
             //     [ConnectivityResult.none]
             ) {
-          return SafeArea(
-            child: Scaffold(
-              backgroundColor: KColors.white,
-              body: Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    SizedBox(
-                        height: 200.h,
-                        width: 200.w,
-                        child: Image.asset(KImages.noConnection)),
-                    const SizedBox(height: KSizes.md),
-                    Text(
-                      'Ooops!',
-                      style: TextStyle(fontSize: 30.sp, color: Colors.black),
-                    ),
-                    SizedBox(height: KSizes.sm),
-                    Text(
-                      'No internet connection Found\n Check your Connection',
-                      style: TextStyle(fontSize: 12.sp, color: Colors.black),
-                      textAlign: TextAlign.center,
-                    ),
-                    SizedBox(height: KSizes.spaceBtwSections),
-                    GestureDetector(
-                      onTap: () async {
-                        try {
-                          showToast("You're not connected");
-                          // showCustomToast(context, "You're not connected");
-
-                          await connectivityProvider.checkConnectivity();
-                        } catch (e) {
-                          showToast("Server Error");
-                        }
-                      },
-                      child: Container(
-                        padding: EdgeInsets.all(KSizes.sm),
-                        decoration: const BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: KColors.primary,
-                        ),
-                        child: Icon(
-                          Icons.refresh_outlined,
-                          size: 35.sp,
-                          color: KColors.white,
-                        ),
+          // ignore: deprecated_member_use
+          return WillPopScope(
+            onWillPop: () async {
+              return await CustomAlertBox.alertCloseApp(context);
+            },
+            child: SafeArea(
+              child: Scaffold(
+                backgroundColor: KColors.white,
+                body: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SizedBox(
+                          height: 200.h,
+                          width: 200.w,
+                          child: Image.asset(KImages.noConnection)),
+                      const SizedBox(height: KSizes.md),
+                      Text(
+                        'Ooops!',
+                        style: TextStyle(fontSize: 30.sp, color: Colors.black),
                       ),
-                    )
-                  ],
+                      SizedBox(height: KSizes.sm),
+                      Text(
+                        'No internet connection Found\n Check your Connection',
+                        style: TextStyle(fontSize: 12.sp, color: Colors.black),
+                        textAlign: TextAlign.center,
+                      ),
+                      SizedBox(height: KSizes.spaceBtwSections),
+                      GestureDetector(
+                        onTap: () async {
+                          try {
+                            showToast("You're not connected");
+                            // showCustomToast(context, "You're not connected");
+
+                            await connectivityProvider.checkConnectivity();
+                          } catch (e) {
+                            showToast("Server Error");
+                          }
+                        },
+                        child: Container(
+                          padding: EdgeInsets.all(KSizes.sm),
+                          decoration: const BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: KColors.primary,
+                          ),
+                          child: Icon(
+                            Icons.refresh_outlined,
+                            size: 35.sp,
+                            color: KColors.white,
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
                 ),
               ),
             ),

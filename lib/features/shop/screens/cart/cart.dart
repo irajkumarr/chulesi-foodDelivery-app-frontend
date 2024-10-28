@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -50,6 +52,16 @@ class _CartScreenState extends State<CartScreen> {
     List<CartResponse>? cartList = hookResult.data;
     final isLoading = hookResult.isLoading;
 
+    final List<String> emptyCartMessages = [
+      "Your cart is looking lonely! Start adding some items.",
+      "Oops, nothing here! Explore and add some delicious treats.",
+      "Your cart is empty, but your appetite doesn’t have to be!",
+      "Hungry? Your cart is waiting for you to add something.",
+      "Add items to your cart and let the feast begin!"
+    ];
+// Randomly select a message from the list
+    final randomCartMessage =
+        emptyCartMessages[Random().nextInt(emptyCartMessages.length)];
     final refetch = hookResult.refetch;
     LoginResponse? user;
 
@@ -278,7 +290,8 @@ class _CartScreenState extends State<CartScreen> {
                                   ),
                                   SizedBox(height: KSizes.spaceBtwSections),
                                   Text(
-                                    "Looks like you haven't added anything yet.\nStart exploring our wide selection of products.",
+                                    randomCartMessage,
+                                    // "Looks like you haven't added anything yet.\nStart exploring our wide selection of products.",
                                     textAlign: TextAlign.center,
                                     style: Theme.of(context)
                                         .textTheme

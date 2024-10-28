@@ -39,7 +39,7 @@ class OrderList extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            order.paymentStatus,
+                            order.orderStatus,
                             style: Theme.of(context)
                                 .textTheme
                                 .bodyLarge!

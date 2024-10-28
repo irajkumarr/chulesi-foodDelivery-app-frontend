@@ -13,7 +13,6 @@ import 'package:chulesi/data/hooks/fetch_order.dart';
 import 'package:chulesi/data/models/order_model.dart';
 import 'package:chulesi/features/personalization/screens/order/widgets/order_list.dart';
 
-
 class OrderHistory extends HookWidget {
   const OrderHistory({super.key});
 
@@ -25,6 +24,8 @@ class OrderHistory extends HookWidget {
     final isLoading = hookResult.isLoading;
     // final apiError = hookResult.error;
     final refetch = hookResult.refetch;
+    // Reverse the order list
+    orderList = orderList.reversed.toList();
     List<String> emptyOrderMessages = [
       "Your order list is empty! Hungry? Start ordering now!",
       "Looks like you haven’t ordered anything yet. Explore our menu!",

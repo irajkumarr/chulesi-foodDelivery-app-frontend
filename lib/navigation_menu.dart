@@ -55,12 +55,14 @@ class NavigationMenu extends HookWidget {
     if (hasError) {
       return Scaffold(
         body: Center(
-          child: FullScreenErrorWidget(
-            message: "Server Error",
-            onRetry: () async {
-              await retryFetchData(
-                  context); // Ensure context is passed properly here
-            },
+          child: ConnectivityChecker(
+            child: FullScreenErrorWidget(
+              message: "Server Error",
+              onRetry: () async {
+                await retryFetchData(
+                    context); // Ensure context is passed properly here
+              },
+            ),
           ),
         ),
       );
@@ -153,4 +155,3 @@ class NavigationProvider with ChangeNotifier {
     notifyListeners();
   }
 }
-
