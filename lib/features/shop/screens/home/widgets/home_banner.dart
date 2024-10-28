@@ -20,23 +20,26 @@ class HomeBanner extends StatelessWidget {
           // height: 160.h,
           height: 150.h,
           width: KDeviceUtils.getScreenWidth(context),
-          child: CachedNetworkImage(
-            imageUrl:
-                "https://firebasestorage.googleapis.com/v0/b/chulesi-app.appspot.com/o/slider%2Ffirstorder%20banner.jpeg?alt=media&token=067bb4d1-0e71-485d-bfc3-2a8c3cc4bb1d",
-            placeholder: (context, url) => SizedBox(
-              // height: 150.h,
-              height: 140.h,
-              width: KDeviceUtils.getScreenWidth(context),
-              child: Image.asset(
-                KImages.banner_placeholder,
-                fit: BoxFit.cover,
-              ),
-            ),
-            errorWidget: (context, url, error) => Image.asset(
-              KImages.placeholder_image,
-            ),
+          child: Image.asset(
+            KImages.firstOrderBanner,
             fit: BoxFit.cover,
           ),
+          //  CachedNetworkImage(
+          //   imageUrl: KImages.firstOrderBanner,
+          //   placeholder: (context, url) => SizedBox(
+          //     // height: 150.h,
+          //     height: 140.h,
+          //     width: KDeviceUtils.getScreenWidth(context),
+          //     child: Image.asset(
+          //       KImages.banner_placeholder,
+          //       fit: BoxFit.cover,
+          //     ),
+          //   ),
+          //   errorWidget: (context, url, error) => Image.asset(
+          //     KImages.banner_placeholder,
+          //   ),
+          //   fit: BoxFit.cover,
+          // ),
         ),
       ),
     );

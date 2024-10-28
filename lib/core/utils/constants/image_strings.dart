@@ -49,8 +49,6 @@ class KImages {
 
   //Profile
   static const String user = "assets/images/content/user-icon.png";
-  static const String placeholder_image =
-      "assets/images/content/placeholder_no_image.jpg";
   static const String placeholder_default =
       "assets/images/content/placeholder_default.png";
   static const String banner_placeholder =
@@ -59,6 +57,8 @@ class KImages {
       "assets/images/content/food_placeholder.png";
   static const String chulesi_placeholder =
       "assets/images/content/chulesi_placeholder.png";
+  static const String firstOrderBanner =
+      "assets/images/content/first _order_banner.jpeg";
 
   // -- Payment Methods
   static const String esewa = "assets/icons/esewa.png";
