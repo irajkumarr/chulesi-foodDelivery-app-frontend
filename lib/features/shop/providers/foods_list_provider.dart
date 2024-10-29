@@ -34,7 +34,7 @@ class FoodsListProvider extends ChangeNotifier {
         _newFoodsList = foodsModelFromJson(response.body);
         _error = null; // No error
       } else {
-        _error = ApiError(status: false, message: "Failed to load categories.");
+        _error = ApiError(status: false, message: "Failed to load newest foods.");
         _newFoodsList = [];
       }
     } catch (e) {
@@ -69,7 +69,7 @@ class FoodsListProvider extends ChangeNotifier {
         _popularFoodsList = foodsModelFromJson(response.body);
         _error = null; // No error
       } else {
-        _error = ApiError(status: false, message: "Failed to load categories.");
+        _error = ApiError(status: false, message: "Failed to load popular foods.");
         _popularFoodsList = [];
       }
     } catch (e) {
@@ -104,7 +104,7 @@ class FoodsListProvider extends ChangeNotifier {
         _bestRatedFoodsList = foodsModelFromJson(response.body);
         _error = null; // No error
       } else {
-        _error = ApiError(status: false, message: "Failed to load categories.");
+        _error = ApiError(status: false, message: "Failed to load besr rated foods.");
         _bestRatedFoodsList = [];
       }
     } catch (e) {

@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:chulesi/core/utils/constants/colors.dart';
 import 'package:chulesi/data/models/foods_model.dart';
@@ -47,8 +48,9 @@ class SearchResults extends StatelessWidget {
                 padding: const EdgeInsets.only(bottom: KSizes.md),
                 child: ProductCardHorizontal(
                   food: food,
-                  
+
                 ),
+
               );
             }),
           ),
@@ -57,3 +59,4 @@ class SearchResults extends StatelessWidget {
     );
   }
 }
+

@@ -21,6 +21,20 @@ class ProductCardHorizontal extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // final bool hasOffer = food.offer != null && food.offer!.discountValue > 0;
+    // final double discountedPrice = food.price.toDouble();
+    // final double originalPrice = hasOffer
+    //     ? (food.offer!.discountType == "flat")
+    //         ? discountedPrice + food.offer!.discountValue
+    //         : discountedPrice * (1 + (food.offer!.discountValue / 100))
+    //     : discountedPrice;
+    final bool hasOffer = food.offer != null && food.offer!.discountValue > 0;
+    final double originalPrice = food.price.toDouble();
+    final double discountedPrice = hasOffer
+        ? (food.offer!.discountType == "flat")
+            ? originalPrice - food.offer!.discountValue
+            : originalPrice * (1 - (food.offer!.discountValue / 100))
+        : originalPrice;
     return GestureDetector(
       onTap: () {
         showFoodModalSheet(context, food);
@@ -121,9 +135,29 @@ class ProductCardHorizontal extends StatelessWidget {
                             SizedBox(
                               height: KSizes.spaceBtwItems / 2,
                             ),
-                            ProductPriceText(
-                              price: food.price.toStringAsFixed(1),
-                            ),
+                            if (hasOffer)
+                              Row(
+                                children: [
+                                  ProductPriceText(
+                                    price: discountedPrice.toStringAsFixed(1),
+                                    color: KColors.primary,
+                                  ),
+                                  SizedBox(width: KSizes.sm),
+                                  ProductPriceText(
+                                    price: originalPrice.toStringAsFixed(0),
+                                    color: KColors.black,
+                                    lineThrough: true,
+                                  )
+                                ],
+                              )
+                            else
+                              ProductPriceText(
+                                price: originalPrice.toStringAsFixed(1),
+                                color: KColors.black,
+                              ),
+                            // ProductPriceText(
+                            //   price: food.price.toStringAsFixed(1),
+                            // ),
                           ],
                         ),
                         // Spacer(),
@@ -148,6 +182,30 @@ class ProductCardHorizontal extends StatelessWidget {
                         // fontSize: KSizes.fontSizeMd,
                         fontWeight: FontWeight.w500,
                         color: KColors.white),
+                  ),
+                ),
+              ),
+            // Offer badge
+            if (hasOffer)
+              Positioned(
+                left: 7,
+                top: 5,
+                child: Container(
+                  padding: EdgeInsets.symmetric(
+                    vertical: KSizes.xs,
+                    horizontal: KSizes.sm,
+                  ),
+                  decoration: BoxDecoration(
+                    color: KColors.primary,
+                    borderRadius: BorderRadius.circular(KSizes.xs),
+                  ),
+                  child: Text(
+                    food.offer!.discountType == 'flat'
+                        ? "Rs.${food.offer!.discountValue} off"
+                        : "${food.offer!.discountValue}% off",
+                    style: Theme.of(context).textTheme.labelLarge!.copyWith(
+                          color: KColors.white,
+                        ),
                   ),
                 ),
               ),

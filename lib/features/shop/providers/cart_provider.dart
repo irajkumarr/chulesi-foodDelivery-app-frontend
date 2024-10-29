@@ -40,8 +40,6 @@ class CartProvider with ChangeNotifier {
       var response = await http.post(url, headers: headers, body: cart);
       if (response.statusCode == 201) {
         showToast("Product added to Cart");
-        // showCustomToast(context, "Product added to Cart");
-
         String userId = box.read("userId") ?? '';
         await fetchCartCount(userId);
         setLoading = false;

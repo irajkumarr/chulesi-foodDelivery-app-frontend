@@ -13,9 +13,8 @@ String foodsModelToJson(List<FoodsModel> data) =>
 class FoodsModel {
   final String id;
   final String title;
-
   final String? type;
-  final String category;
+  final String? category;
   final String code;
   final bool isAvailable;
   final int rating;
@@ -26,12 +25,13 @@ class FoodsModel {
   final String time;
   final DateTime createdAt;
   final DateTime updatedAt;
+  final Offer? offer;
 
   FoodsModel({
     required this.id,
     required this.title,
     this.type,
-    required this.category,
+    this.category,
     required this.code,
     required this.isAvailable,
     required this.rating,
@@ -42,6 +42,7 @@ class FoodsModel {
     required this.time,
     required this.createdAt,
     required this.updatedAt,
+    this.offer,
   });
 
   factory FoodsModel.fromJson(Map<String, dynamic> json) => FoodsModel(
@@ -59,6 +60,7 @@ class FoodsModel {
         time: json["time"],
         createdAt: DateTime.parse(json["createdAt"]),
         updatedAt: DateTime.parse(json["updatedAt"]),
+        offer: json["offer"] == null ? null : Offer.fromJson(json["offer"]),
       );
 
   Map<String, dynamic> toJson() => {
@@ -76,5 +78,44 @@ class FoodsModel {
         "time": time,
         "createdAt": createdAt.toIso8601String(),
         "updatedAt": updatedAt.toIso8601String(),
+        "offer": offer?.toJson(),
       };
 }
+
+class Offer {
+  final String discountType;
+  final int discountValue;
+  final String offerDescription;
+  final DateTime startDate;
+  final DateTime endDate;
+  final String id;
+
+  Offer({
+    required this.discountType,
+    required this.discountValue,
+    required this.offerDescription,
+    required this.startDate,
+    required this.endDate,
+    required this.id,
+  });
+
+  factory Offer.fromJson(Map<String, dynamic> json) => Offer(
+        discountType: json["discountType"],
+        discountValue: json["discountValue"],
+        offerDescription: json["offerDescription"],
+        startDate: DateTime.parse(json["startDate"]),
+        endDate: DateTime.parse(json["endDate"]),
+        id: json["_id"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "discountType": discountType,
+        "discountValue": discountValue,
+        "offerDescription": offerDescription,
+        "startDate": startDate.toIso8601String(),
+        "endDate": endDate.toIso8601String(),
+        "_id": id,
+      };
+}
+
+

@@ -1,16 +1,16 @@
+import 'package:chulesi/common/widgets/products/foods_card/food_tile_horizontal.dart';
 import 'package:chulesi/features/shop/providers/offers_food_list_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:chulesi/common/widgets/products/foods_card/food_offers_tile_horizontal.dart';
 import 'package:chulesi/core/network/connectivity_checker.dart';
 import 'package:chulesi/core/utils/shimmers/foodlist_shimmer.dart';
-import 'package:chulesi/data/models/foods_with_offers_model.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../common/widgets/products/carts/cart_counter_icon.dart';
 import '../../../../core/utils/constants/colors.dart';
 import '../../../../core/utils/constants/sizes.dart';
+import '../../../../data/models/foods_model.dart';
 
 class DealsAndOffersScreen extends StatelessWidget {
   const DealsAndOffersScreen({super.key});
@@ -76,7 +76,7 @@ class DealsAndOffersScreen extends StatelessWidget {
                       },
                       icon: Icon(
                         AntDesign.search1,
-                        size: KSizes.iconMd ,
+                        size: KSizes.iconMd,
                       )),
                   const CartCounterIcon(iconColor: KColors.black),
                 ],
@@ -110,13 +110,15 @@ class DealsAndOffersScreen extends StatelessWidget {
                                         .offersFoodsList?.length ??
                                     0,
                                 itemBuilder: (context, index) {
-                                  FoodsWithOffersModel food =
-                                      offerFoodsListProvider
-                                          .offersFoodsList![index];
+                                  FoodsModel food = offerFoodsListProvider
+                                      .offersFoodsList![index];
+                                  // FoodsWithOffersModel food =
+                                  //     offerFoodsListProvider
+                                  //         .offersFoodsList![index];
                                   return Padding(
                                     padding:
                                         const EdgeInsets.only(top: KSizes.md),
-                                    child: FoodOffersTileHorizontal(food: food),
+                                    child: ProductCardHorizontal(food: food),
                                   );
                                 },
                               ),

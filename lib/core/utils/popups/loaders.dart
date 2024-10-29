@@ -30,7 +30,9 @@ class KLoaders {
   }
 
   static snackbar(BuildContext context,
-      {required title, required onPressed, required buttonText}) {
+      {required String title,
+      required VoidCallback onPressed,
+      required String buttonText}) {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       behavior: SnackBarBehavior.floating,
       content: Row(
@@ -121,7 +123,7 @@ class KLoaders {
 
     Overlay.of(context).insert(overlayEntry);
 
-    Future.delayed(const Duration(seconds: 2), () {
+    Future.delayed(const Duration(seconds: 4), () {
       overlayEntry.remove();
     });
   }

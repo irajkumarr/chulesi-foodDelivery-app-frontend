@@ -7,6 +7,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
 
 FetchOrder useFetchOrder() {
+  final context = useContext();
   final box = GetStorage();
   // final order = useState<List<OrderModel>?>(null);
   final order = useState<List<OrderModel>?>(null);
@@ -14,6 +15,7 @@ FetchOrder useFetchOrder() {
   final error = useState<ApiError?>(null);
 
   Future<void> fetchData() async {
+     if (!context.mounted) return;
     String? token = box.read("token");
     if (token == null) {
       error.value = ApiError(status: false, message: "No token found");
@@ -30,16 +32,22 @@ FetchOrder useFetchOrder() {
       final response =
           await http.get(Uri.parse("$kAppBaseUrl/api/orders"), headers: headers);
       if (response.statusCode == 200) {
-        // order.value = orderModelFromJson(response.body);
-        order.value = orderModelFromJson(response.body);
+         if (context.mounted) {
+          order.value = orderModelFromJson(response.body);
+        }
+       error.value = null;
       } else {
         throw ApiError(status: false, message: "Failed to load data");
       }
     } catch (e) {
-      error.value =
-          e is ApiError ? e : ApiError(status: false, message: e.toString());
+      if (context.mounted) {
+        error.value =
+            e is ApiError ? e : ApiError(status: false, message: e.toString());
+      }
     } finally {
-      isLoading.value = false;
+      if (context.mounted) {
+        isLoading.value = false;
+      }
     }
   }
 
@@ -49,6 +57,8 @@ FetchOrder useFetchOrder() {
   }, const []);
 
   Future<void> refetch() async {
+      if (!context.mounted) return;
+       isLoading.value = true;
     await fetchData();
   }
 

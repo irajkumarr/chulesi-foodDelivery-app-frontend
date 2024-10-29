@@ -1,3 +1,4 @@
+import 'package:chulesi/common/widgets/success_screen/success.dart';
 import 'package:chulesi/features/shop/screens/more/help_and_support.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -61,6 +62,7 @@ class AppRoutes {
   static const String orderHistory = "/orderHistory";
   static const String checkout = "/checkout";
   static const String address = "/address";
+  static const String successScreen = "/successScreen";
   static const String addNewAddress = "/addNewAddress";
 
   static const String navigationMenu = "/navigationMenu";
@@ -94,6 +96,8 @@ class AppRoutes {
         return MaterialPageRoute(builder: (_) => const ProfileScreen());
       case address:
         return CupertinoPageRoute(builder: (_) => const AddressScreen());
+      case successScreen:
+        return MaterialPageRoute(builder: (_) => const SuccessScreen());
 
       case orderHistory:
         return CupertinoPageRoute(builder: (_) => const OrderHistory());

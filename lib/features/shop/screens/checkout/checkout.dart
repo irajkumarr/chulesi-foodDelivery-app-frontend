@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:chulesi/common/widgets/success_screen/success.dart';
 import 'package:chulesi/core/network/connectivity_checker.dart';
 import 'package:chulesi/core/utils/constants/api_constants.dart';
 import 'package:chulesi/core/utils/constants/colors.dart';
@@ -202,22 +201,27 @@ class CheckoutScreen extends HookWidget {
         bool success = await orderProvider.addOrder(context, data);
 
         if (success) {
-          Navigator.push(
+          // Navigator.pushReplacement(
+          //   context,
+          //   MaterialPageRoute(
+          //     builder: (context) => SuccessScreen(
+          //       imagePath: KImages.successfullyRegisterAnimation,
+          //       onPressed: () {
+          //         Navigator.pushNamedAndRemoveUntil(
+          //           context,
+          //           "/navigationMenu",
+          //           (route) => false,
+          //         );
+          //       },
+          //       title: "Order Placed",
+          //       subTitle: "Thank you for ordering!",
+          //     ),
+          //   ),
+          // );
+          Navigator.pushNamedAndRemoveUntil(
             context,
-            MaterialPageRoute(
-              builder: (context) => SuccessScreen(
-                imagePath: KImages.successfullyRegisterAnimation,
-                onPressed: () {
-                  Navigator.pushNamedAndRemoveUntil(
-                    context,
-                    "/navigationMenu",
-                    (route) => false,
-                  );
-                },
-                title: "Order Placed",
-                subTitle: "Thank you for ordering!",
-              ),
-            ),
+            "/successScreen",
+            (route) => route.isFirst,
           );
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
@@ -239,31 +243,126 @@ class CheckoutScreen extends HookWidget {
             ),
           ),
         ),
+        // bottomNavigationBar: PreferredSize(
+        //   preferredSize: Size.fromHeight(75.h),
+        //   child: Material(
+        //     elevation: 4,
+        //     child: BottomAppBar(
+        //       // height: 75.h,
+        //       color: Colors.white,
+        //       child: Padding(
+        //         padding:
+        //             const EdgeInsets.symmetric(horizontal: KSizes.defaultSpace),
+        //         child: ElevatedButton(
+        //           onPressed: () async {
+        //             await placeOrder();
+        //           },
+        //           style: ElevatedButton.styleFrom(
+        //             shape: RoundedRectangleBorder(
+        //                 borderRadius:
+        //                     BorderRadius.circular(KSizes.borderRadiusLg)),
+        //             padding: EdgeInsets.zero,
+        //             minimumSize:
+        //                 Size(double.infinity, 75.h), // Full width button
+        //           ),
+        //           child: const Text("CONFIRM ORDER"),
+        //         ),
+        //       ),
+        //     ),
+        //   ),
+        // ),
         bottomNavigationBar: PreferredSize(
           preferredSize: Size.fromHeight(75.h),
           child: Material(
-            elevation: 4,
-            child: BottomAppBar(
-              // height: 75.h,
-              color: Colors.white,
-              child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: KSizes.defaultSpace),
-                child: ElevatedButton(
-                  onPressed: () async {
-                    await placeOrder();
-                  },
-                  style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                        borderRadius:
-                            BorderRadius.circular(KSizes.borderRadiusLg)),
-                    padding: EdgeInsets.zero,
-                    minimumSize:
-                        Size(double.infinity, 75.h), // Full width button
+            elevation: 10,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // Free Delivery Progress Container
+                Container(
+                  padding: const EdgeInsets.all(KSizes.md),
+                  color: KColors.white,
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Expanded(
+                            child: Row(
+                              children: [
+                                Icon(
+                                  itemsTotal >= 2000
+                                      ? Icons.check_circle
+                                      : Icons.local_shipping,
+                                  color: itemsTotal >= 2000
+                                      ? KColors.success
+                                      : KColors.primary,
+                                ),
+                                SizedBox(width: KSizes.sm),
+                                Flexible(
+                                  child: itemsTotal >= 2000
+                                      ? Text(
+                                          "Free Delivery Applied!",
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodyLarge!
+                                              .copyWith(
+                                                color: KColors.success,
+                                              ),
+                                        )
+                                      : Text(
+                                          "Add Rs ${(2000 - itemsTotal).toStringAsFixed(0)} more for Free Delivery",
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodyLarge,
+                                        ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: KSizes.sm),
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(KSizes.xs),
+                        child: LinearProgressIndicator(
+                          value: (itemsTotal / 2000).clamp(0.0, 1.0),
+                          backgroundColor: KColors.grey,
+                          valueColor: AlwaysStoppedAnimation<Color>(
+                            itemsTotal >= 2000
+                                ? KColors.success
+                                : KColors.primary,
+                          ),
+                          minHeight: 4,
+                        ),
+                      ),
+                    ],
                   ),
-                  child: const Text("CONFIRM ORDER"),
                 ),
-              ),
+                // Confirm Order Button
+                Container(
+                  color: Colors.white,
+                  padding: EdgeInsets.symmetric(
+                    horizontal: KSizes.defaultSpace,
+                    vertical: KSizes.xs,
+                  ),
+                  child: ElevatedButton(
+                    onPressed: () async {
+                      await placeOrder();
+                    },
+                    style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                          borderRadius:
+                              BorderRadius.circular(KSizes.borderRadiusLg)),
+                      padding: EdgeInsets.zero,
+
+                      minimumSize:
+                          Size(double.infinity, 50.h), // Adjusted height
+                    ),
+                    child: const Text("CONFIRM ORDER"),
+                  ),
+                ),
+              ],
             ),
           ),
         ),
@@ -402,6 +501,58 @@ class CheckoutScreen extends HookWidget {
                   ],
                 ),
               ),
+              // Container(
+              //   padding: const EdgeInsets.all(KSizes.md),
+              //   margin: EdgeInsets.only(bottom: KSizes.xs),
+              //   color: KColors.white,
+              //   child: Column(
+              //     children: [
+              //       Row(
+              //         children: [
+              //           Icon(
+              //             itemsTotal >= 2000
+              //                 ? Icons.check_circle
+              //                 : Icons.local_shipping, // or Icons.shopping_bag
+              //             color: itemsTotal >= 2000
+              //                 ? KColors.success
+              //                 : KColors.primary,
+              //           ),
+              //           SizedBox(width: KSizes.sm),
+              //           Expanded(
+              //             child: itemsTotal >= 2000
+              //                 ? Text(
+              //                     "Free Delivery Applied!",
+              //                     style: Theme.of(context)
+              //                         .textTheme
+              //                         .bodyLarge!
+              //                         .copyWith(
+              //                           color: KColors.success,
+              //                         ),
+              //                   )
+              //                 : Text(
+              //                     "Add Rs ${(2000 - itemsTotal).toStringAsFixed(0)} more for Free Delivery",
+              //                     style: Theme.of(context).textTheme.bodyLarge,
+              //                   ),
+              //           ),
+              //         ],
+              //       ),
+              //       SizedBox(height: KSizes.sm),
+              //       ClipRRect(
+              //         borderRadius: BorderRadius.circular(KSizes.xs),
+              //         child: LinearProgressIndicator(
+              //           value: (itemsTotal / 2000).clamp(0.0, 1.0),
+              //           backgroundColor: KColors.grey,
+              //           valueColor: AlwaysStoppedAnimation<Color>(
+              //             itemsTotal >= 2000
+              //                 ? KColors.success
+              //                 : KColors.primary,
+              //           ),
+              //           minHeight: 4,
+              //         ),
+              //       ),
+              //     ],
+              //   ),
+              // ),
               Container(
                 padding: const EdgeInsets.all(KSizes.md),
                 margin: EdgeInsets.only(bottom: KSizes.xs),

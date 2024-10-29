@@ -14,9 +14,8 @@ class OrderList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    DateTime parsedDate = DateTime.parse(order.orderDate.toString());
-
-    String formattedDate = DateFormat('yyyy-MM-dd HH:mm ').format(parsedDate);
+    DateTime parsedDate = DateTime.parse(order.orderDate.toString()).toLocal();
+    String formattedDate = DateFormat('yyyy-MM-dd HH:mm').format(parsedDate);
     return RoundedContainer(
         width: double.infinity,
         showBorder: true,

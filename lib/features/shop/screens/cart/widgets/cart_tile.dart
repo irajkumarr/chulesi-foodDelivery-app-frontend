@@ -53,16 +53,16 @@ class CartTile extends StatelessWidget {
           //           width: 60.w,
           //           height: 60.h,
           //           child: Image.asset(
-          //             KImages.placeholder_image,
+          //             KImages.chulesi_placeholder,
           //             fit: BoxFit.cover,
           //           )),
           //       errorWidget: (context, url, error) =>
-          //           Image.asset(KImages.placeholder_image),
+          //           Image.asset(KImages.chulesi_placeholder),
           //       fit: BoxFit.cover,
           //     ),
           //   ),
           // ),
-          SizedBox(height: KSizes.sm),
+          // SizedBox(height: KSizes.sm),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -99,7 +99,6 @@ class CartTile extends StatelessWidget {
                         ? InkWell(
                             onTap: () {
                               cartProvider.removeFromCart(cart.id, refetch!);
-                            
                             },
                             child: const Icon(
                               MaterialCommunityIcons.trash_can_outline,

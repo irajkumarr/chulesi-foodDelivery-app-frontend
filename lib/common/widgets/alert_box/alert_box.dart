@@ -23,7 +23,8 @@ class CustomAlertBox {
               title: const Text("Login Alert"),
               // content: const Text("You need to login to add items to the cart."),
               content: const Text(
-                  "Please log in to add items to your cart and continue shopping."),
+                "Please log in to add items to your cart and continue shopping.",
+              ),
 
               actions: <Widget>[
                 TextButton(

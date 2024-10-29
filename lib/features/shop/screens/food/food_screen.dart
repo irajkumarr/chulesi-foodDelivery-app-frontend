@@ -18,6 +18,20 @@ void showFoodModalSheet(BuildContext context, FoodsModel food) {
   // foodsProvider
   //     .resetCount(food.id); // Reset the count for the selected food item
   final box = GetStorage();
+  // final bool hasOffer = food.offer != null && food.offer!.discountValue > 0;
+  // final double discountedPrice = food.price.toDouble();
+  // final double originalPrice = hasOffer
+  //     ? (food.offer!.discountType == "flat")
+  //         ? discountedPrice + food.offer!.discountValue
+  //         : discountedPrice * (1 + (food.offer!.discountValue / 100))
+  //     : discountedPrice;
+  final bool hasOffer = food.offer != null && food.offer!.discountValue > 0;
+  final double originalPrice = food.price.toDouble();
+  final double discountedPrice = hasOffer
+      ? (food.offer!.discountType == "flat")
+          ? originalPrice - food.offer!.discountValue
+          : originalPrice * (1 - (food.offer!.discountValue / 100))
+      : originalPrice;
 
   String? token = box.read("token");
 
@@ -68,6 +82,28 @@ void showFoodModalSheet(BuildContext context, FoodsModel food) {
                           smallSize: true,
                           maxlines: 1,
                         ),
+                        SizedBox(height: KSizes.spaceBtwItems / 2),
+                        if (hasOffer)
+                          Row(
+                            children: [
+                              ProductPriceText(
+                                price: discountedPrice.toStringAsFixed(0),
+                                color: KColors.primary,
+                              ),
+                              SizedBox(width: KSizes.sm),
+                              ProductPriceText(
+                                price: originalPrice.toStringAsFixed(0),
+                                color: KColors.black,
+                                lineThrough: true,
+                              )
+                            ],
+                          )
+                        else
+                          ProductPriceText(
+                            price: originalPrice.toStringAsFixed(0),
+                            color: KColors.black,
+                          ),
+
                         // SizedBox(height: KSizes.spaceBtwItems / 2),
                         // Row(
                         //   mainAxisAlignment: MainAxisAlignment.center,
@@ -95,11 +131,10 @@ void showFoodModalSheet(BuildContext context, FoodsModel food) {
                         //     ),
                         //   ],
                         // ),
-                        SizedBox(height: KSizes.spaceBtwItems / 2),
-                        ProductPriceText(
-                          price: food.price.toStringAsFixed(1),
-                          color: KColors.black,
-                        ),
+                        // ProductPriceText(
+                        //   price: food.price.toStringAsFixed(1),
+                        //   color: KColors.black,
+                        // ),
                       ],
                     )
                   ],
@@ -171,7 +206,7 @@ void showFoodModalSheet(BuildContext context, FoodsModel food) {
                 Consumer<CartProvider>(
                   builder: (context, cartProvider, child) {
                     final quantity = cartProvider.getItemQuantity(food.id);
-                    final totalPrice = food.price * quantity;
+                    final totalPrice = discountedPrice * quantity;
                     return ProductPriceText(
                       price: totalPrice.toStringAsFixed(0),
                       color: KColors.primary,
@@ -203,7 +238,7 @@ void showFoodModalSheet(BuildContext context, FoodsModel food) {
                               }
                             : food.isAvailable == false
                                 ? null
-                                : () {
+                                : () async {
                                     final quantity =
                                         cartProvider.getItemQuantity(food.id);
                                     final totalPrice = food.price * quantity;
@@ -214,7 +249,8 @@ void showFoodModalSheet(BuildContext context, FoodsModel food) {
                                     );
                                     String cart = cartRequestToJson(data);
 
-                                    cartProvider.addToCart(context, cart);
+                                    await cartProvider.addToCart(context, cart);
+                                    Navigator.pop(context);
                                   },
                         child: cartProvider.isLoading
                             ? Row(

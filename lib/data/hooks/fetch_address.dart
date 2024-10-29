@@ -7,6 +7,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
 
 FetchAddress useFetchAddress() {
+  final context = useContext();
   final box = GetStorage();
   final address = useState<List<AddressResponse>?>(null);
   final isLoading = useState(false);
@@ -29,15 +30,22 @@ FetchAddress useFetchAddress() {
       final response = await http.get(Uri.parse("$kAppBaseUrl/api/addresses"),
           headers: headers);
       if (response.statusCode == 200) {
-        address.value = addressResponseFromJson(response.body);
+        if (context.mounted) {
+          address.value = addressResponseFromJson(response.body);
+        }
+        error.value = null;
       } else {
         throw ApiError(status: false, message: "Failed to load data");
       }
     } catch (e) {
-      error.value =
-          e is ApiError ? e : ApiError(status: false, message: e.toString());
+      if (context.mounted) {
+        error.value =
+            e is ApiError ? e : ApiError(status: false, message: e.toString());
+      }
     } finally {
-      isLoading.value = false;
+      if (context.mounted) {
+        isLoading.value = false;
+      }
     }
   }
 
@@ -47,6 +55,8 @@ FetchAddress useFetchAddress() {
   }, const []);
 
   Future<void> refetch() async {
+    if (!context.mounted) return;
+    isLoading.value = true;
     await fetchData();
   }
 

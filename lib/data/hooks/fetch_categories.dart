@@ -21,7 +21,7 @@ FetchCategory useFetchCategories() {
         if (context.mounted) {
           categoryItems.value = categoriesModelFromJson(response.body);
         }
-         error.value = null;
+        error.value = null;
       } else {
         throw ApiError(status: false, message: "Failed to load data");
       }

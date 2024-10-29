@@ -3,22 +3,24 @@ import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 
 import '../../../core/utils/constants/colors.dart';
+import '../../../core/utils/constants/image_strings.dart';
 import '../../../core/utils/constants/sizes.dart';
 import '../../../core/utils/constants/text_strings.dart';
 import '../../../core/utils/helpers/helper_functions.dart';
 import '../../styles/spacing_style.dart';
 
 class SuccessScreen extends StatelessWidget {
-  final String imagePath;
-  final String title;
-  final String subTitle;
-  final VoidCallback onPressed;
-  const SuccessScreen(
-      {super.key,
-      required this.imagePath,
-      required this.title,
-      required this.subTitle,
-      required this.onPressed});
+  // final String imagePath;
+  // final String title;
+  // final String subTitle;
+  // final VoidCallback onPressed;
+  const SuccessScreen({
+    super.key,
+    // required this.imagePath,
+    // required this.title,
+    // required this.subTitle,
+    // required this.onPressed,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -27,13 +29,13 @@ class SuccessScreen extends StatelessWidget {
         padding: KSpacingStyle.paddingWithAppbar() * 2,
         child: Column(
           children: [
-            Lottie.asset(imagePath,
+            Lottie.asset(KImages.successfullyRegisterAnimation,
                 width: KHelperFunctions.screenWidth(context) * 0.6),
             SizedBox(
               height: KSizes.spaceBtwItems,
             ),
             Text(
-              title,
+              "Order Placed",
               style: Theme.of(context).textTheme.headlineMedium,
               textAlign: TextAlign.center,
             ),
@@ -41,7 +43,7 @@ class SuccessScreen extends StatelessWidget {
               height: KSizes.spaceBtwItems,
             ),
             Text(
-              subTitle,
+              "Thank you for ordering!",
               style: Theme.of(context).textTheme.labelMedium,
               textAlign: TextAlign.center,
             ),
@@ -54,7 +56,13 @@ class SuccessScreen extends StatelessWidget {
                 style: ElevatedButton.styleFrom(
                   backgroundColor: KColors.primary,
                 ),
-                onPressed: onPressed,
+                onPressed: () {
+                  Navigator.pushNamedAndRemoveUntil(
+                    context,
+                    "/navigationMenu",
+                    (route) => false,
+                  );
+                },
                 child: const Text(KTexts.done),
               ),
             ),

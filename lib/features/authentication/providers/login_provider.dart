@@ -62,14 +62,16 @@ class LoginProvider with ChangeNotifier {
       Navigator.of(context).pop();
     }
     setLoading = true;
-    // await Future.delayed(Duration(seconds: 2));
-    box.erase();
-
-    setLoading = false;
-    notifyListeners();
-    showToast("Logout Successfully");
-
-    Navigator.pushNamedAndRemoveUntil(context, "/splash", (route) => false);
+    try {
+      await box.erase();
+      showToast("Logout Successfully");
+      Navigator.pushNamedAndRemoveUntil(context, "/splash", (route) => false);
+    } catch (error) {
+      showToast("Error during logout: $error");
+    } finally {
+      setLoading = false;
+      notifyListeners();
+    }
   }
 
 //getting user data
