@@ -138,47 +138,4 @@ class AddressProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  // List<AddressResponse>? _allAddresses;
-  // ApiError? _error;
-  // String? get error => _error?.message;
-
-  // List<AddressResponse>? get allAddresses => _allAddresses;
-
-  // Future<void> fetchallAddresses() async {
-  //   _isLoading = true;
-  //   _error = null;
-  //   notifyListeners();
-  //   String? token = box.read("token");
-  //   if (token == null) {
-  //     _error = ApiError(status: false, message: "No token found");
-  //     return;
-  //   }
-  //   Map<String, String> headers = {
-  //     "Content-Type": "application/json",
-  //     "Authorization": "Bearer $token"
-  //   };
-  //   try {
-  //     final response = await http.get(Uri.parse("$kAppBaseUrl/api/addresses/"),
-  //         headers: headers);
-
-  //     if (response.statusCode == 200) {
-  //       _allAddresses = addressResponseFromJson(response.body);
-  //       _error = null; // No error
-  //     } else {
-  //       _error = ApiError(status: false, message: "Failed to load addresses.");
-  //       _allAddresses = [];
-  //     }
-  //   } catch (e) {
-  //     _error = ApiError(status: false, message: e.toString());
-  //     _allAddresses = [];
-  //   } finally {
-  //     _isLoading = false;
-  //     notifyListeners(); // Notify UI of state change
-  //   }
-  // }
-
-  // // Method to refresh categories if needed
-  // Future<void> refetchAllAddresses() async {
-  //   await fetchallAddresses();
-  // }
 }

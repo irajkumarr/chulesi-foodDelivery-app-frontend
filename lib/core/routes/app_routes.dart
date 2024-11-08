@@ -23,14 +23,8 @@ import 'package:chulesi/features/shop/screens/home/best_rated_foods.dart';
 import 'package:chulesi/features/shop/screens/home/home.dart';
 import 'package:chulesi/features/shop/screens/home/recommended_foods.dart';
 import 'package:chulesi/features/shop/screens/home/category_foods_list.dart';
-
-import 'package:chulesi/features/shop/screens/more/about_us.dart';
-import 'package:chulesi/features/shop/screens/more/faq.dart';
 import 'package:chulesi/features/shop/screens/more/notification.dart';
-import 'package:chulesi/features/shop/screens/more/privacy_policy.dart';
-import 'package:chulesi/features/shop/screens/more/terms_and_conditions.dart';
 import 'package:chulesi/features/shop/screens/search/search_screen.dart';
-
 import '../../navigation_menu.dart';
 
 class AppRoutes {
@@ -41,10 +35,6 @@ class AppRoutes {
   static const String cart = "/cart";
   static const String notification = "/notification";
   static const String helpAndSupport = "/helpAndSupport";
-  static const String faq = "/faq";
-  static const String aboutUs = "/aboutUs";
-  static const String termsAndConditions = "/termsAndConditions";
-  static const String privacyPolicy = "/privacyPolicy";
   static const String allPopularFoods = "/allPopularFoods";
   static const String recommendedFoods = "/recommendedFoods";
   static const String bestRatedFoods = "/bestRatedFoods";
@@ -77,7 +67,7 @@ class AppRoutes {
       case home:
         return CupertinoPageRoute(builder: (_) => const HomeScreen());
       case category:
-        return CupertinoPageRoute(builder: (_) => const AllCategoryScreen());
+        return MaterialPageRoute(builder: (_) => const AllCategoryScreen());
       case allPopularFoods:
         return MaterialPageRoute(builder: (_) => const AllPopularFoodsScreen());
       case recommendedFoods:
@@ -91,33 +81,20 @@ class AppRoutes {
         return CupertinoPageRoute(builder: (_) => const SearchScreen());
       case categoryFoodsScreen:
         return CupertinoPageRoute(builder: (_) => const CategoryFoodsList());
-
       case account:
         return MaterialPageRoute(builder: (_) => const ProfileScreen());
       case address:
         return CupertinoPageRoute(builder: (_) => const AddressScreen());
       case successScreen:
         return MaterialPageRoute(builder: (_) => const SuccessScreen());
-
       case orderHistory:
         return CupertinoPageRoute(builder: (_) => const OrderHistory());
-      // case checkout:
-      //   return CupertinoPageRoute(builder: (_) => CheckoutScreen());
       case cart:
         return CupertinoPageRoute(builder: (_) => const CartScreen());
       case notification:
         return MaterialPageRoute(builder: (_) => NotificationScreen());
       case helpAndSupport:
         return MaterialPageRoute(builder: (_) => const HelpAndSupportScreen());
-      case faq:
-        return MaterialPageRoute(builder: (_) => const FaqScreen());
-      case aboutUs:
-        return MaterialPageRoute(builder: (_) => const AboutUsScreen());
-      case termsAndConditions:
-        return MaterialPageRoute(
-            builder: (_) => const TermsAndConditionsScreen());
-      case privacyPolicy:
-        return MaterialPageRoute(builder: (_) => const PrivacyPolicyScreen());
       case login:
         return CupertinoPageRoute(builder: (_) => const LoginScreen());
       case loginRedirect:

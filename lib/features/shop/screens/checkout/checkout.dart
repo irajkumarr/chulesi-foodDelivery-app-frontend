@@ -1,5 +1,5 @@
 import 'dart:convert';
-
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -14,7 +14,6 @@ import 'package:chulesi/core/utils/shimmers/shimmer_widget.dart';
 import 'package:chulesi/data/hooks/fetch_default_address.dart';
 import 'package:chulesi/data/models/order_request.dart';
 import 'package:chulesi/features/personalization/providers/order_provider.dart';
-
 import 'package:chulesi/features/personalization/screens/address/add_new_address.dart';
 import 'package:chulesi/features/shop/providers/cart_provider.dart';
 import 'package:chulesi/features/shop/screens/checkout/widgets/checkout_address_tile.dart';
@@ -26,10 +25,24 @@ import 'package:iconsax/iconsax.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 
+// Function to calculate distance between two lat/long points (in kilometers) //haversine formula
+double calculateDistance(double lat1, double lon1, double lat2, double lon2) {
+  const pi = 3.1415926535897932;
+  const radius = 6371; // Radius of the Earth in km
+  double dLat = (lat2 - lat1) * pi / 180;
+  double dLon = (lon2 - lon1) * pi / 180;
+  double a = sin(dLat / 2) * sin(dLat / 2) +
+      cos(lat1 * pi / 180) *
+          cos(lat2 * pi / 180) *
+          sin(dLon / 2) *
+          sin(dLon / 2);
+  double c = 2 * atan2(sqrt(a), sqrt(1 - a));
+  return radius * c; // returns distance in km
+}
+
 class CheckoutScreen extends HookWidget {
   const CheckoutScreen({required this.item, super.key});
   final List<OrderItem>? item;
-  // final OrderRequest item;
 
   @override
   Widget build(BuildContext context) {
@@ -40,17 +53,42 @@ class CheckoutScreen extends HookWidget {
     final refetch = hookResult.refetch;
 
     final cartProvider = Provider.of<CartProvider>(context);
-    // const double deliveryCharge = 100; // Default delivery charge
     final double itemsTotal = cartProvider.totalPrice;
-    double deliveryCharge = itemsTotal >= 2000 ? 0.0 : 100.0;
+    // double deliveryCharge = itemsTotal >= 2000 ? 0.0 : 100.0;
     final promoCodeController = useTextEditingController();
 
     final discount = useState<double>(0);
     final appliedPromoCode = useState<String>("");
-    // print(appliedPromoCode);
+
+    double deliveryCharge = 0.0;
+
+    // If items total is greater than 2500, set delivery charge to 0
+    if (itemsTotal > 2500) {
+      deliveryCharge = 0.0;
+    } else {
+      // Calculate the delivery charge if items total is less than or equal to 2000
+      if (address != null &&
+          address.latitude != null &&
+          address.longitude != null) {
+        // Get the default coordinates // center location of hetauda buddha chowk
+        const double defaultLat = 27.430986970568913;
+        const double defaultLon = 85.03193736075626;
+
+        // Calculate distance from address to restaurant
+        double distance = calculateDistance(
+          address.latitude!, // user's address latitude
+          address.longitude!, // user's address longitude
+          defaultLat, // default latitude
+          defaultLon, // default longitude
+        );
+
+        // Delivery charge Rs 25 per km
+        deliveryCharge = distance * 25;
+      }
+    }
+    deliveryCharge = deliveryCharge < 100 ? 100.0 : deliveryCharge;
 
     // Grand total after applying discount
-
     final double grandTotal = itemsTotal + deliveryCharge;
     final box = GetStorage();
     final userId = box.read("userId");
@@ -58,8 +96,6 @@ class CheckoutScreen extends HookWidget {
     final selectedPaymentMethod = useState<String>("Cash On Delivery");
     final selectedPaymentMethodImage = useState<String>(KImages.paymentMethod);
     final orderNoteController = useTextEditingController();
-    // final totalWithDiscount =
-    //     itemsTotal.toStringAsFixed(0) - discount.value.toDouble();
 
     void applyPromoCode({bool isOrder = false}) async {
       final box = GetStorage();
@@ -201,23 +237,6 @@ class CheckoutScreen extends HookWidget {
         bool success = await orderProvider.addOrder(context, data);
 
         if (success) {
-          // Navigator.pushReplacement(
-          //   context,
-          //   MaterialPageRoute(
-          //     builder: (context) => SuccessScreen(
-          //       imagePath: KImages.successfullyRegisterAnimation,
-          //       onPressed: () {
-          //         Navigator.pushNamedAndRemoveUntil(
-          //           context,
-          //           "/navigationMenu",
-          //           (route) => false,
-          //         );
-          //       },
-          //       title: "Order Placed",
-          //       subTitle: "Thank you for ordering!",
-          //     ),
-          //   ),
-          // );
           Navigator.pushNamedAndRemoveUntil(
             context,
             "/successScreen",
@@ -243,34 +262,6 @@ class CheckoutScreen extends HookWidget {
             ),
           ),
         ),
-        // bottomNavigationBar: PreferredSize(
-        //   preferredSize: Size.fromHeight(75.h),
-        //   child: Material(
-        //     elevation: 4,
-        //     child: BottomAppBar(
-        //       // height: 75.h,
-        //       color: Colors.white,
-        //       child: Padding(
-        //         padding:
-        //             const EdgeInsets.symmetric(horizontal: KSizes.defaultSpace),
-        //         child: ElevatedButton(
-        //           onPressed: () async {
-        //             await placeOrder();
-        //           },
-        //           style: ElevatedButton.styleFrom(
-        //             shape: RoundedRectangleBorder(
-        //                 borderRadius:
-        //                     BorderRadius.circular(KSizes.borderRadiusLg)),
-        //             padding: EdgeInsets.zero,
-        //             minimumSize:
-        //                 Size(double.infinity, 75.h), // Full width button
-        //           ),
-        //           child: const Text("CONFIRM ORDER"),
-        //         ),
-        //       ),
-        //     ),
-        //   ),
-        // ),
         bottomNavigationBar: PreferredSize(
           preferredSize: Size.fromHeight(75.h),
           child: Material(

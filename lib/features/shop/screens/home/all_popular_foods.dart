@@ -93,9 +93,8 @@ class AllPopularFoodsScreen extends StatelessWidget {
                   await foodsListProvider.refetchPopularFoodsList();
                 },
                 child: Padding(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: KSizes.buttonHeight,
-                  ),
+                  padding:
+                      EdgeInsets.symmetric(horizontal: KSizes.buttonHeight),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -105,22 +104,25 @@ class AllPopularFoodsScreen extends StatelessWidget {
                                 padding: EdgeInsets.only(top: KSizes.md),
                                 child: FoodsListShimmer(),
                               )
-                            : ListView.builder(
-                                physics: const BouncingScrollPhysics(),
-                                itemCount: foodsListProvider
-                                        .popularFoodsList?.length ??
-                                    0,
-                                itemBuilder: (context, index) {
-                                  FoodsModel food = foodsListProvider
-                                      .popularFoodsList![index];
-                                  return Padding(
-                                    padding:
-                                        const EdgeInsets.only(top: KSizes.md),
-                                    child: ProductCardHorizontal(
-                                      food: food,
-                                    ),
-                                  );
-                                },
+                            : Padding(
+                                padding: EdgeInsets.only(bottom: KSizes.sm),
+                                child: ListView.builder(
+                                  physics: const BouncingScrollPhysics(),
+                                  itemCount: foodsListProvider
+                                          .popularFoodsList?.length ??
+                                      0,
+                                  itemBuilder: (context, index) {
+                                    FoodsModel food = foodsListProvider
+                                        .popularFoodsList![index];
+                                    return Padding(
+                                      padding:
+                                          const EdgeInsets.only(top: KSizes.md),
+                                      child: ProductCardHorizontal(
+                                        food: food,
+                                      ),
+                                    );
+                                  },
+                                ),
                               ),
                       )
                     ],

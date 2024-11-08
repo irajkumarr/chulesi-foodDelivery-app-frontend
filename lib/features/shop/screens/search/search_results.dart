@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:chulesi/core/utils/constants/colors.dart';
 import 'package:chulesi/data/models/foods_model.dart';
@@ -35,28 +34,27 @@ class SearchResults extends StatelessWidget {
             ),
           ],
         ),
-        SizedBox(height: KSizes.spaceBtwItems),
-        SizedBox(
-          height: MediaQuery.of(context).size.height * 0.91,
-          child: ListView(
-            physics: const BouncingScrollPhysics(),
-            // physics: NeverScrollableScrollPhysics(),
-            children:
-                List.generate(searchProvider.searchResults!.length, (index) {
-              FoodsModel food = searchProvider.searchResults![index];
-              return Padding(
-                padding: const EdgeInsets.only(bottom: KSizes.md),
-                child: ProductCardHorizontal(
-                  food: food,
-
-                ),
-
-              );
-            }),
+        Padding(
+          padding: EdgeInsets.only(top: KSizes.sm),
+          child: SizedBox(
+            height: MediaQuery.of(context).size.height * 0.83,
+            child: ListView(
+              physics: const BouncingScrollPhysics(),
+              // physics: NeverScrollableScrollPhysics(),
+              children:
+                  List.generate(searchProvider.searchResults!.length, (index) {
+                FoodsModel food = searchProvider.searchResults![index];
+                return Padding(
+                  padding: const EdgeInsets.only(bottom: KSizes.md),
+                  child: ProductCardHorizontal(
+                    food: food,
+                  ),
+                );
+              }),
+            ),
           ),
         ),
       ],
     );
   }
 }
-

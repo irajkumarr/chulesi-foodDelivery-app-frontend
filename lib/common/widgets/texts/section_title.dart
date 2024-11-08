@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 
-
 import '../../../core/utils/constants/colors.dart';
 import '../../../core/utils/constants/sizes.dart';
-
 
 class SectionTitle extends StatelessWidget {
   const SectionTitle({
@@ -36,12 +34,15 @@ class SectionTitle extends StatelessWidget {
           if (showButtonTitle)
             InkWell(
               onTap: onPressed,
-              child: Text(
-                buttonText,
-                style: Theme.of(context).textTheme.labelMedium!.copyWith(
-                      color: KColors.primary,
-                      fontWeight: FontWeight.w600,
-                    ),
+              child: Padding(
+                padding: EdgeInsets.all(KSizes.xs),
+                child: Text(
+                  buttonText,
+                  style: Theme.of(context).textTheme.labelMedium!.copyWith(
+                        color: KColors.primary,
+                        fontWeight: FontWeight.w600,
+                      ),
+                ),
               ),
             ),
           // GestureDetector(

@@ -73,25 +73,19 @@ class HomeScreen extends StatelessWidget {
             children: [
               const HomeSliderAndCategoryList(),
               const HomeFoodOffers(),
-              // SizedBox(height: KSizes.md),
               const SizedBox(height: KSizes.md),
               const HomeOfferSlider(),
-              SizedBox(height: KSizes.spaceBtwSections),
+              SizedBox(height: KSizes.defaultSpace),
               const HomeBestRatedFoods(),
-              const SizedBox(height: KSizes.md),
+              // const SizedBox(height: KSizes.md),
               const HomeAddAddressWidget(),
-
               const SizedBox(height: KSizes.md),
               const HomePopularFoods(),
               const HomeBanner(),
-
               const SizedBox(height: KSizes.md),
-
               const HomeRecommendedFoods(),
-
               const SizedBox(height: KSizes.md),
-              const ExploreCategoryScreen()
-              // SizedBox(height: KSizes.spaceBtwSections),
+              const ExploreCategoryScreen(),
             ],
           ),
         ),
@@ -99,4 +93,3 @@ class HomeScreen extends StatelessWidget {
     );
   }
 }
-

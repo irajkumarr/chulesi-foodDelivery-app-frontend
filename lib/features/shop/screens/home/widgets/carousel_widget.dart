@@ -26,23 +26,18 @@ class CarouselWidget extends StatelessWidget {
         itemCount: itemCount,
         itemBuilder: itemBuilder,
         options: CarouselOptions(
-          // aspectRatio: 16 / 13,
-
-          // viewportFraction: 0.50,
           height: height,
           aspectRatio: aspectRatio,
           viewportFraction: viewportFraction,
-
           initialPage: 0,
-
           autoPlay: true,
           // scrollPhysics: BouncingScrollPhysics(),
           autoPlayInterval: const Duration(seconds: 4),
           autoPlayAnimationDuration: const Duration(milliseconds: 1000),
           autoPlayCurve: Curves.ease,
+
           enlargeCenterPage: true,
           enlargeFactor: 0.25,
-
           onPageChanged: pageChanged,
           // scrollDirection: Axis.horizontal,
         ),

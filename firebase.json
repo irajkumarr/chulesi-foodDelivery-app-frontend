@@ -1,1 +1,23 @@
-{"flutter":{"platforms":{"android":{"default":{"projectId":"chulesi-fooddelivery","appId":"1:802878070287:android:895024f7c60960edb74d7a","fileOutput":"android/app/google-services.json"}},"dart":{"lib/firebase_options.dart":{"projectId":"chulesi-fooddelivery","configurations":{"android":"1:802878070287:android:895024f7c60960edb74d7a","ios":"1:802878070287:ios:8d17d98f8a960254b74d7a","web":"1:802878070287:web:5ba82838319a4b88b74d7a"}}}}}}
+{
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "chulesi-fooddelivery",
+          "appId": "1:802878070287:android:895024f7c60960edb74d7a",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "chulesi-fooddelivery",
+          "configurations": {
+            "android": "1:802878070287:android:895024f7c60960edb74d7a",
+            "ios": "1:802878070287:ios:8d17d98f8a960254b74d7a",
+            "web": "1:802878070287:web:5ba82838319a4b88b74d7a"
+          }
+        }
+      }
+    }
+  }
+}

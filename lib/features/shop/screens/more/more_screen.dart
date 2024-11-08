@@ -53,7 +53,6 @@ class MoreScreen extends StatelessWidget {
                         icon: Iconsax.support,
                         title: "Help and Support",
                         onPressed: () {
-                          // Navigator.pushNamed(context, "/feedback");
                           // launchUrlString("https://timalsinarajkumar.com.np");
                           Navigator.pushNamed(context, "/helpAndSupport");
                         },
@@ -63,7 +62,6 @@ class MoreScreen extends StatelessWidget {
                         icon: Iconsax.message_question,
                         title: "FAQs",
                         onPressed: () {
-                          // Navigator.pushNamed(context, "/faq");
                           UrlLaunch.launchUrl(
                               "https://www.timalsinarajkumar.com.np");
                           // launchUrlString("https://timalsinarajkumar.com.np");
@@ -74,7 +72,6 @@ class MoreScreen extends StatelessWidget {
                         icon: Iconsax.direct,
                         title: "About Us",
                         onPressed: () {
-                          // Navigator.pushNamed(context, "/aboutUs");
                           UrlLaunch.launchUrl(
                               "https://www.timalsinarajkumar.com.np");
                         },
@@ -84,8 +81,8 @@ class MoreScreen extends StatelessWidget {
                         icon: Iconsax.star,
                         title: "Rate Us",
                         onPressed: () {
-                          UrlLaunch.launchUrl(
-                              "https://play.google.com/store/apps/details?id=com.google.android.youtube");
+                          // UrlLaunch.launchUrl(
+                          //     "https://play.google.com/store/apps/details?id=com.google.android.youtube");
                         },
                       ),
                       const ProfileDivider(),
@@ -93,7 +90,6 @@ class MoreScreen extends StatelessWidget {
                         icon: Iconsax.book,
                         title: "Terms and Conditions",
                         onPressed: () {
-                          // Navigator.pushNamed(context, "/termsAndConditions");
                           UrlLaunch.launchUrl(
                               "https://www.timalsinarajkumar.com.np");
                         },

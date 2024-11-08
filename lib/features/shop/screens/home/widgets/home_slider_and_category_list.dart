@@ -12,9 +12,8 @@ class HomeSliderAndCategoryList extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        // SizedBox(height: KSizes.spaceBtwItems),
         const HomePromoSlider(),
-        SizedBox(height: KSizes.spaceBtwSections),
+        SizedBox(height: KSizes.defaultSpace),
         const CategoryList(),
       ],
     );

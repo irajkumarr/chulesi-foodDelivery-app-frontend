@@ -1,9 +1,7 @@
 import 'package:chulesi/core/routes/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
 import 'package:provider/provider.dart';
-
 import 'core/providers/app_providers.dart';
 import 'core/utils/theme/theme.dart';
 

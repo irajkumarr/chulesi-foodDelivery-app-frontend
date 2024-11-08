@@ -104,23 +104,26 @@ class DealsAndOffersScreen extends StatelessWidget {
                                 padding: EdgeInsets.only(top: KSizes.md),
                                 child: FoodsListShimmer(),
                               )
-                            : ListView.builder(
-                                physics: const BouncingScrollPhysics(),
-                                itemCount: offerFoodsListProvider
-                                        .offersFoodsList?.length ??
-                                    0,
-                                itemBuilder: (context, index) {
-                                  FoodsModel food = offerFoodsListProvider
-                                      .offersFoodsList![index];
-                                  // FoodsWithOffersModel food =
-                                  //     offerFoodsListProvider
-                                  //         .offersFoodsList![index];
-                                  return Padding(
-                                    padding:
-                                        const EdgeInsets.only(top: KSizes.md),
-                                    child: ProductCardHorizontal(food: food),
-                                  );
-                                },
+                            : Padding(
+                                padding: EdgeInsets.only(bottom: KSizes.sm),
+                                child: ListView.builder(
+                                  physics: const BouncingScrollPhysics(),
+                                  itemCount: offerFoodsListProvider
+                                          .offersFoodsList?.length ??
+                                      0,
+                                  itemBuilder: (context, index) {
+                                    FoodsModel food = offerFoodsListProvider
+                                        .offersFoodsList![index];
+                                    // FoodsWithOffersModel food =
+                                    //     offerFoodsListProvider
+                                    //         .offersFoodsList![index];
+                                    return Padding(
+                                      padding:
+                                          const EdgeInsets.only(top: KSizes.md),
+                                      child: ProductCardHorizontal(food: food),
+                                    );
+                                  },
+                                ),
                               ),
                       )
                     ],
