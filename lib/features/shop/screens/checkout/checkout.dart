@@ -47,6 +47,9 @@ class CheckoutScreen extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final orderProvider = Provider.of<OrderProvider>(context);
+    final box = GetStorage();
+    final userId = box.read("userId");
+    final deliveryAddress = box.read("defaultAddressId");
     final hookResult = useFetchDefaultAddress();
     final address = hookResult.data;
     final isLoading = hookResult.isLoading;
@@ -54,7 +57,7 @@ class CheckoutScreen extends HookWidget {
 
     final cartProvider = Provider.of<CartProvider>(context);
     final double itemsTotal = cartProvider.totalPrice;
-    // double deliveryCharge = itemsTotal >= 2000 ? 0.0 : 100.0;
+    // double deliveryCharge = itemsTotal >= 2500 ? 0.0 : 100.0;
     final promoCodeController = useTextEditingController();
 
     final discount = useState<double>(0);
@@ -63,10 +66,10 @@ class CheckoutScreen extends HookWidget {
     double deliveryCharge = 0.0;
 
     // If items total is greater than 2500, set delivery charge to 0
-    if (itemsTotal > 2500) {
+    if (itemsTotal >= 2500) {
       deliveryCharge = 0.0;
     } else {
-      // Calculate the delivery charge if items total is less than or equal to 2000
+      // Calculate the delivery charge if items total is less than or equal to 2500
       if (address != null &&
           address.latitude != null &&
           address.longitude != null) {
@@ -84,15 +87,17 @@ class CheckoutScreen extends HookWidget {
 
         // Delivery charge Rs 25 per km
         deliveryCharge = distance * 25;
+        // Ensure minimum delivery charge of Rs 100 if total is below Rs 2500
+        if (deliveryCharge < 100 || deliveryAddress == null) {
+          deliveryCharge = 100.0;
+        }
       }
     }
-    deliveryCharge = deliveryCharge < 100 ? 100.0 : deliveryCharge;
+    // // deliveryCharge = deliveryCharge < 100 ? 100.0 : deliveryCharge;
 
-    // Grand total after applying discount
+    // // Grand total after applying discount
     final double grandTotal = itemsTotal + deliveryCharge;
-    final box = GetStorage();
-    final userId = box.read("userId");
-    final deliveryAddress = box.read("defaultAddressId");
+
     final selectedPaymentMethod = useState<String>("Cash On Delivery");
     final selectedPaymentMethodImage = useState<String>(KImages.paymentMethod);
     final orderNoteController = useTextEditingController();
@@ -282,16 +287,16 @@ class CheckoutScreen extends HookWidget {
                             child: Row(
                               children: [
                                 Icon(
-                                  itemsTotal >= 2000
+                                  itemsTotal >= 2500
                                       ? Icons.check_circle
                                       : Icons.local_shipping,
-                                  color: itemsTotal >= 2000
+                                  color: itemsTotal >= 2500
                                       ? KColors.success
                                       : KColors.primary,
                                 ),
                                 SizedBox(width: KSizes.sm),
                                 Flexible(
-                                  child: itemsTotal >= 2000
+                                  child: itemsTotal >= 2500
                                       ? Text(
                                           "Free Delivery Applied!",
                                           style: Theme.of(context)
@@ -302,7 +307,7 @@ class CheckoutScreen extends HookWidget {
                                               ),
                                         )
                                       : Text(
-                                          "Add Rs ${(2000 - itemsTotal).toStringAsFixed(0)} more for Free Delivery",
+                                          "Add Rs ${(2500 - itemsTotal).toStringAsFixed(0)} more for Free Delivery",
                                           style: Theme.of(context)
                                               .textTheme
                                               .bodyLarge,
@@ -317,10 +322,10 @@ class CheckoutScreen extends HookWidget {
                       ClipRRect(
                         borderRadius: BorderRadius.circular(KSizes.xs),
                         child: LinearProgressIndicator(
-                          value: (itemsTotal / 2000).clamp(0.0, 1.0),
+                          value: (itemsTotal / 2500).clamp(0.0, 1.0),
                           backgroundColor: KColors.grey,
                           valueColor: AlwaysStoppedAnimation<Color>(
-                            itemsTotal >= 2000
+                            itemsTotal >= 2500
                                 ? KColors.success
                                 : KColors.primary,
                           ),
@@ -501,16 +506,16 @@ class CheckoutScreen extends HookWidget {
               //       Row(
               //         children: [
               //           Icon(
-              //             itemsTotal >= 2000
+              //             itemsTotal >= 2500
               //                 ? Icons.check_circle
               //                 : Icons.local_shipping, // or Icons.shopping_bag
-              //             color: itemsTotal >= 2000
+              //             color: itemsTotal >= 2500
               //                 ? KColors.success
               //                 : KColors.primary,
               //           ),
               //           SizedBox(width: KSizes.sm),
               //           Expanded(
-              //             child: itemsTotal >= 2000
+              //             child: itemsTotal >= 2500
               //                 ? Text(
               //                     "Free Delivery Applied!",
               //                     style: Theme.of(context)
@@ -521,7 +526,7 @@ class CheckoutScreen extends HookWidget {
               //                         ),
               //                   )
               //                 : Text(
-              //                     "Add Rs ${(2000 - itemsTotal).toStringAsFixed(0)} more for Free Delivery",
+              //                     "Add Rs ${(2500 - itemsTotal).toStringAsFixed(0)} more for Free Delivery",
               //                     style: Theme.of(context).textTheme.bodyLarge,
               //                   ),
               //           ),
@@ -531,10 +536,10 @@ class CheckoutScreen extends HookWidget {
               //       ClipRRect(
               //         borderRadius: BorderRadius.circular(KSizes.xs),
               //         child: LinearProgressIndicator(
-              //           value: (itemsTotal / 2000).clamp(0.0, 1.0),
+              //           value: (itemsTotal / 2500).clamp(0.0, 1.0),
               //           backgroundColor: KColors.grey,
               //           valueColor: AlwaysStoppedAnimation<Color>(
-              //             itemsTotal >= 2000
+              //             itemsTotal >= 2500
               //                 ? KColors.success
               //                 : KColors.primary,
               //           ),

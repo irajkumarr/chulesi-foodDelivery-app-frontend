@@ -7,26 +7,25 @@ String orderModelToJson(List<OrderModel> data) =>
     json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
 class OrderModel {
-  final String paymentMethod;
   final String id;
   final String userId;
   final List<OrderItem> orderItems;
   final int orderTotal;
-  final int deliveryFee;
-  final int grandTotal;
+  final double deliveryFee;
+  final double grandTotal;
   final DeliveryAddress deliveryAddress;
+  final String paymentMethod;
   final String paymentStatus;
   final String orderStatus;
-
   final DateTime orderDate;
   final int rating;
   final String feedback;
   final String orderNote;
   final int discountAmount;
+  final String promoCode;
   final int v;
 
   OrderModel({
-    required this.paymentMethod,
     required this.id,
     required this.userId,
     required this.orderItems,
@@ -34,6 +33,7 @@ class OrderModel {
     required this.deliveryFee,
     required this.grandTotal,
     required this.deliveryAddress,
+    required this.paymentMethod,
     required this.paymentStatus,
     required this.orderStatus,
     required this.orderDate,
@@ -41,19 +41,20 @@ class OrderModel {
     required this.feedback,
     required this.orderNote,
     required this.discountAmount,
+    required this.promoCode,
     required this.v,
   });
 
   factory OrderModel.fromJson(Map<String, dynamic> json) => OrderModel(
-        paymentMethod: json["paymentMethod"],
         id: json["_id"],
         userId: json["userId"],
         orderItems: List<OrderItem>.from(
             json["orderItems"].map((x) => OrderItem.fromJson(x))),
         orderTotal: json["orderTotal"],
-        deliveryFee: json["deliveryFee"],
-        grandTotal: json["grandTotal"],
+        deliveryFee: json["deliveryFee"]?.toDouble(),
+        grandTotal: json["grandTotal"]?.toDouble(),
         deliveryAddress: DeliveryAddress.fromJson(json["deliveryAddress"]),
+        paymentMethod: json["paymentMethod"],
         paymentStatus: json["paymentStatus"],
         orderStatus: json["orderStatus"],
         orderDate: DateTime.parse(json["orderDate"]),
@@ -61,11 +62,11 @@ class OrderModel {
         feedback: json["feedback"],
         orderNote: json["orderNote"],
         discountAmount: json["discountAmount"],
+        promoCode: json["promoCode"],
         v: json["__v"],
       );
 
   Map<String, dynamic> toJson() => {
-        "paymentMethod": paymentMethod,
         "_id": id,
         "userId": userId,
         "orderItems": List<dynamic>.from(orderItems.map((x) => x.toJson())),
@@ -73,6 +74,7 @@ class OrderModel {
         "deliveryFee": deliveryFee,
         "grandTotal": grandTotal,
         "deliveryAddress": deliveryAddress.toJson(),
+        "paymentMethod": paymentMethod,
         "paymentStatus": paymentStatus,
         "orderStatus": orderStatus,
         "orderDate": orderDate.toIso8601String(),
@@ -80,6 +82,7 @@ class OrderModel {
         "feedback": feedback,
         "orderNote": orderNote,
         "discountAmount": discountAmount,
+        "promoCode": promoCode,
         "__v": v,
       };
 }
@@ -160,4 +163,3 @@ class OrderItem {
         "_id": id,
       };
 }
-

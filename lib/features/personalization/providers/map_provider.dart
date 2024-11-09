@@ -34,6 +34,7 @@ class MapProvider with ChangeNotifier {
 
   Future<void> getCurrentLocation() async {
     Position position = await Geolocator.getCurrentPosition(
+        // ignore: deprecated_member_use
         desiredAccuracy: LocationAccuracy.high);
     // Position? position =
     //     Provider.of<LocationProvider>(context, listen: false).currentPosition;

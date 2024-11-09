@@ -15,7 +15,7 @@ FetchOrder useFetchOrder() {
   final error = useState<ApiError?>(null);
 
   Future<void> fetchData() async {
-     if (!context.mounted) return;
+    if (!context.mounted) return;
     String? token = box.read("token");
     if (token == null) {
       error.value = ApiError(status: false, message: "No token found");
@@ -29,13 +29,13 @@ FetchOrder useFetchOrder() {
 
     isLoading.value = true;
     try {
-      final response =
-          await http.get(Uri.parse("$kAppBaseUrl/api/orders"), headers: headers);
+      final response = await http.get(Uri.parse("$kAppBaseUrl/api/orders"),
+          headers: headers);
       if (response.statusCode == 200) {
-         if (context.mounted) {
+        if (context.mounted) {
           order.value = orderModelFromJson(response.body);
         }
-       error.value = null;
+        error.value = null;
       } else {
         throw ApiError(status: false, message: "Failed to load data");
       }
@@ -57,8 +57,8 @@ FetchOrder useFetchOrder() {
   }, const []);
 
   Future<void> refetch() async {
-      if (!context.mounted) return;
-       isLoading.value = true;
+    if (!context.mounted) return;
+    isLoading.value = true;
     await fetchData();
   }
 
