@@ -361,6 +361,7 @@ class CheckoutScreen extends HookWidget {
                     ],
                   ),
                 ),
+
                 // Confirm Order Button
                 Container(
                   color: Colors.white,
@@ -523,58 +524,6 @@ class CheckoutScreen extends HookWidget {
                   ],
                 ),
               ),
-              // Container(
-              //   padding: const EdgeInsets.all(KSizes.md),
-              //   margin: EdgeInsets.only(bottom: KSizes.xs),
-              //   color: KColors.white,
-              //   child: Column(
-              //     children: [
-              //       Row(
-              //         children: [
-              //           Icon(
-              //             itemsTotal >= 2500
-              //                 ? Icons.check_circle
-              //                 : Icons.local_shipping, // or Icons.shopping_bag
-              //             color: itemsTotal >= 2500
-              //                 ? KColors.success
-              //                 : KColors.primary,
-              //           ),
-              //           SizedBox(width: KSizes.sm),
-              //           Expanded(
-              //             child: itemsTotal >= 2500
-              //                 ? Text(
-              //                     "Free Delivery Applied!",
-              //                     style: Theme.of(context)
-              //                         .textTheme
-              //                         .bodyLarge!
-              //                         .copyWith(
-              //                           color: KColors.success,
-              //                         ),
-              //                   )
-              //                 : Text(
-              //                     "Add Rs ${(2500 - itemsTotal).toStringAsFixed(0)} more for Free Delivery",
-              //                     style: Theme.of(context).textTheme.bodyLarge,
-              //                   ),
-              //           ),
-              //         ],
-              //       ),
-              //       SizedBox(height: KSizes.sm),
-              //       ClipRRect(
-              //         borderRadius: BorderRadius.circular(KSizes.xs),
-              //         child: LinearProgressIndicator(
-              //           value: (itemsTotal / 2500).clamp(0.0, 1.0),
-              //           backgroundColor: KColors.grey,
-              //           valueColor: AlwaysStoppedAnimation<Color>(
-              //             itemsTotal >= 2500
-              //                 ? KColors.success
-              //                 : KColors.primary,
-              //           ),
-              //           minHeight: 4,
-              //         ),
-              //       ),
-              //     ],
-              //   ),
-              // ),
               Container(
                 padding: const EdgeInsets.all(KSizes.md),
                 margin: EdgeInsets.only(bottom: KSizes.xs),

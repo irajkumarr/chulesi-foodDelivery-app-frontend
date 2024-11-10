@@ -61,9 +61,9 @@ class CategoryWidget extends StatelessWidget {
                     placeholder: (context, url) => SizedBox(
                         // height: 70.h,
                         // width: 70.w,
-                        child: Image.asset(KImages.placeholder_default)),
+                        child: Image.asset(KImages.category_placeholder)),
                     errorWidget: (context, url, error) =>
-                        Image.asset(KImages.placeholder_default),
+                        Image.asset(KImages.category_placeholder),
                     fit: BoxFit.cover,
                     height: 70.h,
                     width: 70.w,

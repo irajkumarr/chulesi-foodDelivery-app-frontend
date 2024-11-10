@@ -22,6 +22,7 @@ class KImages {
 
   // --  Icons
   static const String location = "assets/icons/location.svg";
+  // static const String logoTry = "assets/icons/logo_try.png";
   static const String address = "assets/icons/address.svg";
   static const String order = "assets/icons/order.svg";
   static const String noNotification = "assets/icons/noNotification.svg";
@@ -49,8 +50,8 @@ class KImages {
 
   //Profile
   static const String user = "assets/images/content/user-icon.png";
-  static const String placeholder_default =
-      "assets/images/content/placeholder_default.png";
+  static const String category_placeholder =
+      "assets/images/content/category_placeholder.png";
   static const String banner_placeholder =
       "assets/images/content/banner_placeholder.png";
   static const String food_placeholder =
