@@ -68,11 +68,11 @@ class CategoryTile extends StatelessWidget {
                           height: 60.h,
                           width: 60.w,
                           child: Image.asset(
-                            KImages.food_placeholder,
+                            KImages.category_placeholder,
                             fit: BoxFit.cover,
                           )),
                       errorWidget: (context, url, error) =>
-                          Image.asset(KImages.food_placeholder),
+                          Image.asset(KImages.category_placeholder),
                       fit: BoxFit.cover,
                     ),
                   ),

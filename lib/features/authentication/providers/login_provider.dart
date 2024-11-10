@@ -117,7 +117,7 @@ class LoginProvider with ChangeNotifier {
 
       if (response.statusCode == 200) {
         await box.remove("token");
-
+        await box.erase();
         // Clear user data
         await clearUserData();
         showToast("Account deleted successfully");

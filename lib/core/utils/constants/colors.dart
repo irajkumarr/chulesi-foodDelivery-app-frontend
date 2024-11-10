@@ -6,6 +6,7 @@ class KColors {
   // static const Color primary = Color(0xFFfe0000);
   // static const Color primary = Color(0xFFDC143C);
   static const Color primary = Color(0xff9b1e29);
+  // static const Color primary = Color(0xffff0013);
   // static const Color secondary = Color(0xFFf6dde0);
   // static const Color secondary = Color.fromARGB(255, 248, 195, 201);
   static const Color secondary = Color(0xFFF4869C);

@@ -68,6 +68,8 @@ class CheckoutScreen extends HookWidget {
     // If items total is greater than 2500, set delivery charge to 0
     if (itemsTotal >= 2500) {
       deliveryCharge = 0.0;
+    } else if (deliveryAddress == null) {
+      deliveryCharge = 75.0;
     } else {
       // Calculate the delivery charge if items total is less than or equal to 2500
       if (address != null &&
@@ -86,10 +88,10 @@ class CheckoutScreen extends HookWidget {
         );
 
         // Delivery charge Rs 25 per km
-        deliveryCharge = distance * 25;
+        deliveryCharge = distance * 20;
         // Ensure minimum delivery charge of Rs 100 if total is below Rs 2500
-        if (deliveryCharge < 100 || deliveryAddress == null) {
-          deliveryCharge = 100.0;
+        if (deliveryCharge < 75) {
+          deliveryCharge = 75.0;
         }
       }
     }
@@ -306,11 +308,29 @@ class CheckoutScreen extends HookWidget {
                                                 color: KColors.success,
                                               ),
                                         )
-                                      : Text(
-                                          "Add Rs ${(2500 - itemsTotal).toStringAsFixed(0)} more for Free Delivery",
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodyLarge,
+                                      : Text.rich(
+                                          TextSpan(
+                                            text: "Add ",
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodyLarge,
+                                            children: [
+                                              TextSpan(
+                                                text:
+                                                    "Rs ${(2500 - itemsTotal).toStringAsFixed(0)}",
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .bodyLarge!
+                                                    .copyWith(
+                                                      color: KColors
+                                                          .primary, // Set the color to red
+                                                    ),
+                                              ),
+                                              TextSpan(
+                                                  text:
+                                                      " more for Free Delivery"),
+                                            ],
+                                          ),
                                         ),
                                 ),
                               ],
@@ -335,6 +355,7 @@ class CheckoutScreen extends HookWidget {
                     ],
                   ),
                 ),
+
                 // Confirm Order Button
                 Container(
                   color: Colors.white,
@@ -497,58 +518,6 @@ class CheckoutScreen extends HookWidget {
                   ],
                 ),
               ),
-              // Container(
-              //   padding: const EdgeInsets.all(KSizes.md),
-              //   margin: EdgeInsets.only(bottom: KSizes.xs),
-              //   color: KColors.white,
-              //   child: Column(
-              //     children: [
-              //       Row(
-              //         children: [
-              //           Icon(
-              //             itemsTotal >= 2500
-              //                 ? Icons.check_circle
-              //                 : Icons.local_shipping, // or Icons.shopping_bag
-              //             color: itemsTotal >= 2500
-              //                 ? KColors.success
-              //                 : KColors.primary,
-              //           ),
-              //           SizedBox(width: KSizes.sm),
-              //           Expanded(
-              //             child: itemsTotal >= 2500
-              //                 ? Text(
-              //                     "Free Delivery Applied!",
-              //                     style: Theme.of(context)
-              //                         .textTheme
-              //                         .bodyLarge!
-              //                         .copyWith(
-              //                           color: KColors.success,
-              //                         ),
-              //                   )
-              //                 : Text(
-              //                     "Add Rs ${(2500 - itemsTotal).toStringAsFixed(0)} more for Free Delivery",
-              //                     style: Theme.of(context).textTheme.bodyLarge,
-              //                   ),
-              //           ),
-              //         ],
-              //       ),
-              //       SizedBox(height: KSizes.sm),
-              //       ClipRRect(
-              //         borderRadius: BorderRadius.circular(KSizes.xs),
-              //         child: LinearProgressIndicator(
-              //           value: (itemsTotal / 2500).clamp(0.0, 1.0),
-              //           backgroundColor: KColors.grey,
-              //           valueColor: AlwaysStoppedAnimation<Color>(
-              //             itemsTotal >= 2500
-              //                 ? KColors.success
-              //                 : KColors.primary,
-              //           ),
-              //           minHeight: 4,
-              //         ),
-              //       ),
-              //     ],
-              //   ),
-              // ),
               Container(
                 padding: const EdgeInsets.all(KSizes.md),
                 margin: EdgeInsets.only(bottom: KSizes.xs),
