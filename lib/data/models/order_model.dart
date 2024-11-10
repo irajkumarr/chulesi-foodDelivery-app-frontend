@@ -21,7 +21,7 @@ class OrderModel {
   final int rating;
   final String feedback;
   final String orderNote;
-  final int discountAmount;
+  final double discountAmount;
   final String promoCode;
   final int v;
 
@@ -61,7 +61,7 @@ class OrderModel {
         rating: json["rating"],
         feedback: json["feedback"],
         orderNote: json["orderNote"],
-        discountAmount: json["discountAmount"],
+        discountAmount: json["discountAmount"]?.toDouble(),
         promoCode: json["promoCode"],
         v: json["__v"],
       );

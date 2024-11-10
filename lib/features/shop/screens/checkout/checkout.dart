@@ -68,6 +68,8 @@ class CheckoutScreen extends HookWidget {
     // If items total is greater than 2500, set delivery charge to 0
     if (itemsTotal >= 2500) {
       deliveryCharge = 0.0;
+    } else if (deliveryAddress == null) {
+      deliveryCharge = 75.0;
     } else {
       // Calculate the delivery charge if items total is less than or equal to 2500
       if (address != null &&
@@ -77,7 +79,7 @@ class CheckoutScreen extends HookWidget {
         const double defaultLat = 27.430986970568913;
         const double defaultLon = 85.03193736075626;
 
-        // Calculate distance from address to restaurant
+        // Calculate distance from user address to default center location
         double distance = calculateDistance(
           address.latitude!, // user's address latitude
           address.longitude!, // user's address longitude
@@ -86,10 +88,10 @@ class CheckoutScreen extends HookWidget {
         );
 
         // Delivery charge Rs 25 per km
-        deliveryCharge = distance * 25;
+        deliveryCharge = distance * 20;
         // Ensure minimum delivery charge of Rs 100 if total is below Rs 2500
-        if (deliveryCharge < 100 || deliveryAddress == null) {
-          deliveryCharge = 100.0;
+        if (deliveryCharge < 75) {
+          deliveryCharge = 75.0;
         }
       }
     }
@@ -306,11 +308,35 @@ class CheckoutScreen extends HookWidget {
                                                 color: KColors.success,
                                               ),
                                         )
-                                      : Text(
-                                          "Add Rs ${(2500 - itemsTotal).toStringAsFixed(0)} more for Free Delivery",
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodyLarge,
+                                      // : Text(
+                                      //     "Add Rs ${(2500 - itemsTotal).toStringAsFixed(0)} more for Free Delivery",
+                                      //     style: Theme.of(context)
+                                      //         .textTheme
+                                      //         .bodyLarge,
+                                      //   ),
+                                      : Text.rich(
+                                          TextSpan(
+                                            text: "Add ",
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodyLarge,
+                                            children: [
+                                              TextSpan(
+                                                text:
+                                                    "Rs ${(2500 - itemsTotal).toStringAsFixed(0)}",
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .bodyLarge!
+                                                    .copyWith(
+                                                      color: KColors
+                                                          .primary, // Set the color to red
+                                                    ),
+                                              ),
+                                              TextSpan(
+                                                  text:
+                                                      " more for Free Delivery"),
+                                            ],
+                                          ),
                                         ),
                                 ),
                               ],
