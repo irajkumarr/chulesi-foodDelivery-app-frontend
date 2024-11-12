@@ -26,6 +26,8 @@ class AddressScreen extends HookWidget {
     List<AddressResponse> addresses = hookResult.data ?? [];
     final isLoading = hookResult.isLoading;
     final refetch = hookResult.refetch;
+    // Reverse the address
+    addresses = addresses.reversed.toList();
     List<String> emptyMessages = [
       "Where are we delivering today? Add your address to begin.",
       "Let's get you set up! Add a delivery address to start.",

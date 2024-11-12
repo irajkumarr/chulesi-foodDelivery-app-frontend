@@ -302,7 +302,7 @@ class ProductCardVertical extends StatelessWidget {
                   ),
                   child: Center(
                     child: Text(
-                      'Not Available',
+                      'Not Available for this time',
                       style: Theme.of(context).textTheme.labelLarge!.copyWith(
                             fontWeight: FontWeight.w600,
                             color: KColors.white,

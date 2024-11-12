@@ -1,5 +1,6 @@
 import 'dart:convert';
-import 'dart:math';
+// import 'dart:math';
+import 'package:chulesi/core/utils/circular_progress_indicator/circlular_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -25,19 +26,21 @@ import 'package:iconsax/iconsax.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 
-// Function to calculate distance between two lat/long points (in kilometers) //haversine formula
-double calculateDistance(double lat1, double lon1, double lat2, double lon2) {
-  const pi = 3.1415926535897932;
-  const radius = 6371; // Radius of the Earth in km
-  double dLat = (lat2 - lat1) * pi / 180;
-  double dLon = (lon2 - lon1) * pi / 180;
-  double a = sin(dLat / 2) * sin(dLat / 2) +
-      cos(lat1 * pi / 180) *
-          cos(lat2 * pi / 180) *
-          sin(dLon / 2) *
-          sin(dLon / 2);
-  double c = 2 * atan2(sqrt(a), sqrt(1 - a));
-  return radius * c; // returns distance in km
+Future<double> getDrivingDistance(
+    double lat1, double lon1, double lat2, double lon2, String apiKey) async {
+  final response = await http.get(
+    Uri.parse(
+        'https://maps.googleapis.com/maps/api/directions/json?origin=$lat1,$lon1&destination=$lat2,$lon2&key=$apiKey'),
+  );
+
+  if (response.statusCode == 200) {
+    final data = jsonDecode(response.body);
+    print(data);
+    final distanceInMeters = data['routes'][0]['legs'][0]['distance']['value'];
+    return distanceInMeters / 1000; // Convert to kilometers
+  } else {
+    throw Exception('Failed to load directions');
+  }
 }
 
 class CheckoutScreen extends HookWidget {
@@ -52,53 +55,67 @@ class CheckoutScreen extends HookWidget {
     final deliveryAddress = box.read("defaultAddressId");
     final hookResult = useFetchDefaultAddress();
     final address = hookResult.data;
-    final isLoading = hookResult.isLoading;
+    final isLoading = hookResult.isLoading; // Is the address being loaded
     final refetch = hookResult.refetch;
 
     final cartProvider = Provider.of<CartProvider>(context);
     final double itemsTotal = cartProvider.totalPrice;
-    // double deliveryCharge = itemsTotal >= 2500 ? 0.0 : 100.0;
     final promoCodeController = useTextEditingController();
-
     final discount = useState<double>(0);
     final appliedPromoCode = useState<String>("");
 
-    double deliveryCharge = 0.0;
+    // State for delivery charge and loading state
+    final deliveryCharge = useState<double>(0.0);
+    final isDeliveryChargeLoading =
+        useState<bool>(true); // State for loading delivery charge
 
-    // If items total is greater than 2500, set delivery charge to 0
-    if (itemsTotal >= 2500) {
-      deliveryCharge = 0.0;
-    } else if (deliveryAddress == null) {
-      deliveryCharge = 75.0;
-    } else {
-      // Calculate the delivery charge if items total is less than or equal to 2500
-      if (address != null &&
+    // Asynchronous function to fetch the delivery charge
+    Future<void> fetchDeliveryCharge() async {
+      if (itemsTotal >= 2500) {
+        deliveryCharge.value = 0.0;
+        isDeliveryChargeLoading.value = false;
+      } else if (deliveryAddress == null) {
+        deliveryCharge.value = 75.0;
+        isDeliveryChargeLoading.value = false;
+      } else if (address != null &&
           address.latitude != null &&
           address.longitude != null) {
-        // Get the default coordinates // center location of hetauda buddha chowk
-        const double defaultLat = 27.430986970568913;
-        const double defaultLon = 85.03193736075626;
+        const double defaultLat =
+            27.430986970568913; // Center location latitude
+        const double defaultLon =
+            85.03193736075626; // Center location longitude
 
-        // Calculate distance from user address to default center location
-        double distance = calculateDistance(
-          address.latitude!, // user's address latitude
-          address.longitude!, // user's address longitude
-          defaultLat, // default latitude
-          defaultLon, // default longitude
-        );
+        try {
+          // Fetch the driving distance using Google Maps API
+          double distance = await getDrivingDistance(
+            address.latitude!,
+            address.longitude!,
+            defaultLat,
+            defaultLon,
+            kGoogleMapAPIKey,
+          );
 
-        // Delivery charge Rs 25 per km
-        deliveryCharge = distance * 20;
-        // Ensure minimum delivery charge of Rs 100 if total is below Rs 2500
-        if (deliveryCharge < 75) {
-          deliveryCharge = 75.0;
+          // Set delivery charge based on distance with a minimum of Rs 75
+          double calculatedCharge = distance * 20;
+          deliveryCharge.value =
+              calculatedCharge < 75 ? 75.0 : calculatedCharge;
+        } catch (error) {
+          // Default delivery charge if error occurs
+          deliveryCharge.value = 75.0;
+        } finally {
+          isDeliveryChargeLoading.value =
+              false; // Set loading to false when done
         }
       }
     }
-    // // deliveryCharge = deliveryCharge < 100 ? 100.0 : deliveryCharge;
 
-    // // Grand total after applying discount
-    final double grandTotal = itemsTotal + deliveryCharge;
+    // Call fetchDeliveryCharge when the screen is first built
+    useEffect(() {
+      fetchDeliveryCharge();
+      return null;
+    }, [address]);
+
+    final double grandTotal = itemsTotal + deliveryCharge.value;
 
     final selectedPaymentMethod = useState<String>("Cash On Delivery");
     final selectedPaymentMethodImage = useState<String>(KImages.paymentMethod);
@@ -225,7 +242,8 @@ class CheckoutScreen extends HookWidget {
           userId: userId!,
           orderItems: item!,
           orderTotal: itemsTotal,
-          deliveryFee: deliveryCharge,
+          deliveryFee: deliveryCharge.value,
+          // deliveryFee: deliveryCharge,
           grandTotal: grandTotal,
           deliveryAddress: deliveryAddress,
           paymentMethod: selectedPaymentMethod.value,
@@ -269,446 +287,465 @@ class CheckoutScreen extends HookWidget {
             ),
           ),
         ),
-        bottomNavigationBar: PreferredSize(
-          preferredSize: Size.fromHeight(75.h),
-          child: Material(
-            elevation: 10,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                // Free Delivery Progress Container
-                Container(
-                  padding: const EdgeInsets.all(KSizes.md),
-                  color: KColors.white,
+        bottomNavigationBar: isLoading || isDeliveryChargeLoading.value
+            ? SizedBox()
+            : PreferredSize(
+                preferredSize: Size.fromHeight(75.h),
+                child: Material(
+                  elevation: 10,
                   child: Column(
+                    mainAxisSize: MainAxisSize.min,
                     children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Expanded(
-                            child: Row(
+                      // Free Delivery Progress Container
+                      Container(
+                        padding: const EdgeInsets.all(KSizes.md),
+                        color: KColors.white,
+                        child: Column(
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Icon(
-                                  itemsTotal >= 2500
-                                      ? Icons.check_circle
-                                      : Icons.local_shipping,
-                                  color: itemsTotal >= 2500
-                                      ? KColors.success
-                                      : KColors.primary,
-                                ),
-                                SizedBox(width: KSizes.sm),
-                                Flexible(
-                                  child: itemsTotal >= 2500
-                                      ? Text(
-                                          "Free Delivery Applied!",
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodyLarge!
-                                              .copyWith(
-                                                color: KColors.success,
-                                              ),
-                                        )
-                                      // : Text(
-                                      //     "Add Rs ${(2500 - itemsTotal).toStringAsFixed(0)} more for Free Delivery",
-                                      //     style: Theme.of(context)
-                                      //         .textTheme
-                                      //         .bodyLarge,
-                                      //   ),
-                                      : Text.rich(
-                                          TextSpan(
-                                            text: "Add ",
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .bodyLarge,
-                                            children: [
-                                              TextSpan(
-                                                text:
-                                                    "Rs ${(2500 - itemsTotal).toStringAsFixed(0)}",
+                                Expanded(
+                                  child: Row(
+                                    children: [
+                                      Icon(
+                                        itemsTotal >= 2500
+                                            ? Icons.check_circle
+                                            : Icons.local_shipping,
+                                        color: itemsTotal >= 2500
+                                            ? KColors.success
+                                            : KColors.primary,
+                                      ),
+                                      SizedBox(width: KSizes.sm),
+                                      Flexible(
+                                        child: itemsTotal >= 2500
+                                            ? Text(
+                                                "Free Delivery Applied!",
                                                 style: Theme.of(context)
                                                     .textTheme
                                                     .bodyLarge!
                                                     .copyWith(
-                                                      color: KColors
-                                                          .primary, // Set the color to red
+                                                      color: KColors.success,
                                                     ),
+                                              )
+                                            // : Text(
+                                            //     "Add Rs ${(2500 - itemsTotal).toStringAsFixed(0)} more for Free Delivery",
+                                            //     style: Theme.of(context)
+                                            //         .textTheme
+                                            //         .bodyLarge,
+                                            //   ),
+                                            : Text.rich(
+                                                TextSpan(
+                                                  text: "Add ",
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .bodyLarge,
+                                                  children: [
+                                                    TextSpan(
+                                                      text:
+                                                          "Rs ${(2500 - itemsTotal).toStringAsFixed(0)}",
+                                                      style: Theme.of(context)
+                                                          .textTheme
+                                                          .bodyLarge!
+                                                          .copyWith(
+                                                            color: KColors
+                                                                .primary, // Set the color to red
+                                                          ),
+                                                    ),
+                                                    TextSpan(
+                                                        text:
+                                                            " more for Free Delivery"),
+                                                  ],
+                                                ),
                                               ),
-                                              TextSpan(
-                                                  text:
-                                                      " more for Free Delivery"),
-                                            ],
-                                          ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: KSizes.sm),
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(KSizes.xs),
+                              child: LinearProgressIndicator(
+                                value: (itemsTotal / 2500).clamp(0.0, 1.0),
+                                backgroundColor: KColors.grey,
+                                valueColor: AlwaysStoppedAnimation<Color>(
+                                  itemsTotal >= 2500
+                                      ? KColors.success
+                                      : KColors.primary,
+                                ),
+                                minHeight: 4,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+
+                      // Confirm Order Button
+                      Container(
+                        color: Colors.white,
+                        padding: EdgeInsets.symmetric(
+                          horizontal: KSizes.defaultSpace,
+                          vertical: KSizes.xs,
+                        ),
+                        child: ElevatedButton(
+                          onPressed: isLoading || isDeliveryChargeLoading.value
+                              ? null
+                              : () async {
+                                  await placeOrder();
+                                },
+                          style: ElevatedButton.styleFrom(
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(
+                                    KSizes.borderRadiusLg)),
+                            padding: EdgeInsets.zero,
+
+                            minimumSize:
+                                Size(double.infinity, 50.h), // Adjusted height
+                          ),
+                          child: const Text("CONFIRM ORDER"),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+        body: isLoading || isDeliveryChargeLoading.value
+            ? Center(child: KIndicator.circularIndicator())
+            : SingleChildScrollView(
+                child: Column(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(KSizes.md),
+                      margin: EdgeInsets.only(bottom: KSizes.xs),
+                      color: KColors.white,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Payment Details",
+                            style: Theme.of(context).textTheme.titleLarge,
+                          ),
+                          SizedBox(height: KSizes.spaceBtwItems),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                "Items Total",
+                                style: Theme.of(context).textTheme.bodyLarge,
+                              ),
+                              Text(
+                                "Rs ${itemsTotal.toStringAsFixed(0)}",
+                                style: Theme.of(context).textTheme.titleMedium,
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: KSizes.md),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                "Delivery Charge",
+                                style: Theme.of(context).textTheme.bodyLarge,
+                              ),
+                              Text(
+                                deliveryCharge.value == 0
+                                    ? 'Free Delivery'
+                                    : "Rs ${deliveryCharge.value.toStringAsFixed(0)}",
+                                // : "Rs ${deliveryCharge.toStringAsFixed(0)}",
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .titleMedium!
+                                    .copyWith(
+                                        color: deliveryCharge.value == 0
+                                            ? KColors.primary
+                                            : Colors.black),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: KSizes.md),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                "Grand Total",
+                                style: Theme.of(context).textTheme.titleLarge,
+                              ),
+                              (appliedPromoCode.value.isNotEmpty)
+                                  ? Row(
+                                      children: [
+                                        Text(
+                                          "Rs ${grandTotal.toStringAsFixed(0)}",
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .titleMedium!
+                                              .copyWith(
+                                                decoration:
+                                                    TextDecoration.lineThrough,
+                                              ),
                                         ),
+                                        SizedBox(width: KSizes.xs),
+                                        Text(
+                                          "Rs ${(grandTotal - discount.value).toStringAsFixed(0)}",
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .titleMedium,
+                                        ),
+                                      ],
+                                    )
+                                  : Text(
+                                      "Rs ${grandTotal.toStringAsFixed(0)}",
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .titleLarge,
+                                    ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                    Container(
+                      padding: const EdgeInsets.all(KSizes.md),
+                      margin: EdgeInsets.only(bottom: KSizes.xs),
+                      color: KColors.white,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Delivery Address",
+                            style: Theme.of(context).textTheme.titleLarge,
+                          ),
+                          SizedBox(height: KSizes.sm),
+                          isLoading
+                              ? ShimmerWidget(
+                                  shimmerWidth: double.infinity,
+                                  shimmerHeight: 60.h,
+                                  shimmerRadius: KSizes.sm)
+                              : deliveryAddress == null || address == null
+                                  ? Text("No Address found",
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .titleMedium)
+                                  : CheckoutAddressTile(
+                                      addressTitle:
+                                          address!.addressTitle ?? "No title",
+                                      addressLocation:
+                                          address!.location ?? "No location",
+                                      isSelected: true,
+                                      onSelect: () {},
+                                    ),
+                          const SizedBox(height: KSizes.md),
+                          InkWell(
+                            onTap: () {
+                              showAddressModal(context, refetch);
+                            },
+                            child: Row(
+                              children: [
+                                const Icon(Icons.add_location_alt_outlined),
+                                SizedBox(width: KSizes.sm),
+                                Text(
+                                  "Add Delivery Address",
+                                  style: Theme.of(context).textTheme.titleLarge,
                                 ),
                               ],
                             ),
                           ),
                         ],
                       ),
-                      SizedBox(height: KSizes.sm),
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(KSizes.xs),
-                        child: LinearProgressIndicator(
-                          value: (itemsTotal / 2500).clamp(0.0, 1.0),
-                          backgroundColor: KColors.grey,
-                          valueColor: AlwaysStoppedAnimation<Color>(
-                            itemsTotal >= 2500
-                                ? KColors.success
-                                : KColors.primary,
-                          ),
-                          minHeight: 4,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-
-                // Confirm Order Button
-                Container(
-                  color: Colors.white,
-                  padding: EdgeInsets.symmetric(
-                    horizontal: KSizes.defaultSpace,
-                    vertical: KSizes.xs,
-                  ),
-                  child: ElevatedButton(
-                    onPressed: () async {
-                      await placeOrder();
-                    },
-                    style: ElevatedButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                          borderRadius:
-                              BorderRadius.circular(KSizes.borderRadiusLg)),
-                      padding: EdgeInsets.zero,
-
-                      minimumSize:
-                          Size(double.infinity, 50.h), // Adjusted height
                     ),
-                    child: const Text("CONFIRM ORDER"),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-        body: SingleChildScrollView(
-          child: Column(
-            children: [
-              Container(
-                padding: const EdgeInsets.all(KSizes.md),
-                margin: EdgeInsets.only(bottom: KSizes.xs),
-                color: KColors.white,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "Payment Details",
-                      style: Theme.of(context).textTheme.titleLarge,
-                    ),
-                    SizedBox(height: KSizes.spaceBtwItems),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          "Items Total",
-                          style: Theme.of(context).textTheme.bodyLarge,
-                        ),
-                        Text(
-                          "Rs ${itemsTotal.toStringAsFixed(0)}",
-                          style: Theme.of(context).textTheme.titleMedium,
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: KSizes.md),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          "Delivery Charge",
-                          style: Theme.of(context).textTheme.bodyLarge,
-                        ),
-                        Text(
-                          deliveryCharge == 0
-                              ? 'Free Delivery'
-                              : "Rs ${deliveryCharge.toStringAsFixed(0)}",
-                          style: Theme.of(context)
-                              .textTheme
-                              .titleMedium!
-                              .copyWith(
-                                  color: deliveryCharge == 0
-                                      ? KColors.primary
-                                      : Colors.black),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: KSizes.md),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          "Grand Total",
-                          style: Theme.of(context).textTheme.titleLarge,
-                        ),
-                        (appliedPromoCode.value.isNotEmpty)
-                            ? Row(
-                                children: [
-                                  Text(
-                                    "Rs ${grandTotal.toStringAsFixed(0)}",
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .titleMedium!
-                                        .copyWith(
-                                          decoration:
-                                              TextDecoration.lineThrough,
-                                        ),
-                                  ),
-                                  SizedBox(width: KSizes.xs),
-                                  Text(
-                                    "Rs ${(grandTotal - discount.value).toStringAsFixed(0)}",
-                                    style:
-                                        Theme.of(context).textTheme.titleMedium,
-                                  ),
-                                ],
-                              )
-                            : Text(
-                                "Rs ${grandTotal.toStringAsFixed(0)}",
-                                style: Theme.of(context).textTheme.titleLarge,
-                              ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-              Container(
-                padding: const EdgeInsets.all(KSizes.md),
-                margin: EdgeInsets.only(bottom: KSizes.xs),
-                color: KColors.white,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "Delivery Address",
-                      style: Theme.of(context).textTheme.titleLarge,
-                    ),
-                    SizedBox(height: KSizes.sm),
-                    isLoading
-                        ? ShimmerWidget(
-                            shimmerWidth: double.infinity,
-                            shimmerHeight: 60.h,
-                            shimmerRadius: KSizes.sm)
-                        : deliveryAddress == null || address == null
-                            ? Text("No Address found",
-                                style: Theme.of(context).textTheme.titleMedium)
-                            : CheckoutAddressTile(
-                                addressTitle:
-                                    address!.addressTitle ?? "No title",
-                                addressLocation:
-                                    address!.location ?? "No location",
-                                isSelected: true,
-                                onSelect: () {},
-                              ),
-                    const SizedBox(height: KSizes.md),
-                    InkWell(
-                      onTap: () {
-                        showAddressModal(context, refetch);
-                      },
-                      child: Row(
+                    Container(
+                      padding: const EdgeInsets.all(KSizes.md),
+                      margin: EdgeInsets.only(bottom: KSizes.xs),
+                      color: KColors.white,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Icon(Icons.add_location_alt_outlined),
-                          SizedBox(width: KSizes.sm),
                           Text(
-                            "Add Delivery Address",
+                            "Payment Method",
                             style: Theme.of(context).textTheme.titleLarge,
+                          ),
+                          const SizedBox(height: KSizes.md),
+                          InkWell(
+                            onTap: () {
+                              showModalBottomSheet(
+                                context: context,
+                                backgroundColor: KColors.white,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(
+                                          KSizes.borderRadiusLg),
+                                      topRight: Radius.circular(
+                                          KSizes.borderRadiusLg)),
+                                ),
+                                isScrollControlled: true,
+                                builder: (context) => PaymentMethodBottomSheet(
+                                  onSelect: (paymentMethod, imagePath) {
+                                    selectedPaymentMethod.value = paymentMethod;
+                                    selectedPaymentMethodImage.value =
+                                        imagePath;
+                                  },
+                                  selectedPaymentMethod:
+                                      selectedPaymentMethod.value,
+                                ),
+                              );
+                            },
+                            child: Row(
+                              children: [
+                                Image.asset(
+                                  selectedPaymentMethodImage.value,
+                                  width: 30.w,
+                                  height: 30.h,
+                                ),
+                                SizedBox(width: KSizes.sm),
+                                Text(
+                                  selectedPaymentMethod.value,
+                                  style: Theme.of(context).textTheme.titleLarge,
+                                ),
+                                const Spacer(),
+                                Icon(
+                                  Icons.arrow_forward_ios,
+                                  color: KColors.darkGrey,
+                                  size: KSizes.iconSm,
+                                ),
+                              ],
+                            ),
                           ),
                         ],
                       ),
                     ),
-                  ],
-                ),
-              ),
-              Container(
-                padding: const EdgeInsets.all(KSizes.md),
-                margin: EdgeInsets.only(bottom: KSizes.xs),
-                color: KColors.white,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "Payment Method",
-                      style: Theme.of(context).textTheme.titleLarge,
-                    ),
-                    const SizedBox(height: KSizes.md),
                     InkWell(
                       onTap: () {
+                        Provider.of<OrderProvider>(context, listen: false)
+                            .getPromoCodes();
                         showModalBottomSheet(
                           context: context,
                           backgroundColor: KColors.white,
+                          isScrollControlled: true,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.only(
                                 topLeft: Radius.circular(KSizes.borderRadiusLg),
                                 topRight:
                                     Radius.circular(KSizes.borderRadiusLg)),
                           ),
-                          isScrollControlled: true,
-                          builder: (context) => PaymentMethodBottomSheet(
-                            onSelect: (paymentMethod, imagePath) {
-                              selectedPaymentMethod.value = paymentMethod;
-                              selectedPaymentMethodImage.value = imagePath;
-                            },
-                            selectedPaymentMethod: selectedPaymentMethod.value,
+                          builder: (context) => PromoCodeBottomSheet(
+                            promoCodeController: promoCodeController,
+                            onApply: applyPromoCode,
                           ),
                         );
                       },
-                      child: Row(
-                        children: [
-                          Image.asset(
-                            selectedPaymentMethodImage.value,
-                            width: 30.w,
-                            height: 30.h,
-                          ),
-                          SizedBox(width: KSizes.sm),
-                          Text(
-                            selectedPaymentMethod.value,
-                            style: Theme.of(context).textTheme.titleLarge,
-                          ),
-                          const Spacer(),
-                          Icon(
-                            Icons.arrow_forward_ios,
-                            color: KColors.darkGrey,
-                            size: KSizes.iconSm,
-                          ),
-                        ],
+                      child: Container(
+                        padding: const EdgeInsets.all(KSizes.md),
+                        margin: EdgeInsets.only(bottom: KSizes.xs),
+                        color: KColors.white,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                const Icon(
+                                  Iconsax.discount_circle,
+                                  color: KColors.primary,
+                                ),
+                                SizedBox(width: KSizes.sm),
+                                Text(
+                                  "Add a Promo Code",
+                                  style: Theme.of(context).textTheme.titleLarge,
+                                ),
+                              ],
+                            ),
+                            if (appliedPromoCode.value.isNotEmpty)
+                              Text(
+                                "Promo Code Applied: ${appliedPromoCode.value} ",
+                                style: Theme.of(context).textTheme.bodyMedium,
+                              ),
+                            if (discount.value > 0)
+                              Text(
+                                "Discount Applied: Rs ${discount.value.toStringAsFixed(0)}",
+                                style: Theme.of(context).textTheme.bodyMedium,
+                              ),
+                            // const SizedBox(height: KSizes.md),
+                          ],
+                        ),
                       ),
                     ),
-                  ],
-                ),
-              ),
-              InkWell(
-                onTap: () {
-                  Provider.of<OrderProvider>(context, listen: false)
-                      .getPromoCodes();
-                  showModalBottomSheet(
-                    context: context,
-                    backgroundColor: KColors.white,
-                    isScrollControlled: true,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(KSizes.borderRadiusLg),
-                          topRight: Radius.circular(KSizes.borderRadiusLg)),
-                    ),
-                    builder: (context) => PromoCodeBottomSheet(
-                      promoCodeController: promoCodeController,
-                      onApply: applyPromoCode,
-                    ),
-                  );
-                },
-                child: Container(
-                  padding: const EdgeInsets.all(KSizes.md),
-                  margin: EdgeInsets.only(bottom: KSizes.xs),
-                  color: KColors.white,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const Icon(
-                            Iconsax.discount_circle,
-                            color: KColors.primary,
+                    InkWell(
+                      onTap: () {
+                        showModalBottomSheet(
+                          context: context,
+                          backgroundColor: KColors.white,
+                          isScrollControlled: true,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(KSizes.borderRadiusLg),
+                                topRight:
+                                    Radius.circular(KSizes.borderRadiusLg)),
                           ),
-                          SizedBox(width: KSizes.sm),
-                          Text(
-                            "Add a Promo Code",
-                            style: Theme.of(context).textTheme.titleLarge,
+                          builder: (context) => OrderNoteBottomSheet(
+                            orderNoteController: orderNoteController,
+                            onSave: (note) {
+                              // Optionally handle any additional actions here
+                            },
                           ),
-                        ],
-                      ),
-                      if (appliedPromoCode.value.isNotEmpty)
-                        Text(
-                          "Promo Code Applied: ${appliedPromoCode.value} ",
-                          style: Theme.of(context).textTheme.bodyMedium,
-                        ),
-                      if (discount.value > 0)
-                        Text(
-                          "Discount Applied: Rs ${discount.value.toStringAsFixed(0)}",
-                          style: Theme.of(context).textTheme.bodyMedium,
-                        ),
-                      // const SizedBox(height: KSizes.md),
-                    ],
-                  ),
-                ),
-              ),
-              InkWell(
-                onTap: () {
-                  showModalBottomSheet(
-                    context: context,
-                    backgroundColor: KColors.white,
-                    isScrollControlled: true,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(KSizes.borderRadiusLg),
-                          topRight: Radius.circular(KSizes.borderRadiusLg)),
-                    ),
-                    builder: (context) => OrderNoteBottomSheet(
-                      orderNoteController: orderNoteController,
-                      onSave: (note) {
-                        // Optionally handle any additional actions here
+                        );
+                        // updateOrderNote();
                       },
+                      child: Container(
+                        padding: const EdgeInsets.all(KSizes.md),
+                        margin: EdgeInsets.only(bottom: KSizes.xs),
+                        color: KColors.white,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                const Icon(
+                                  Iconsax.note,
+                                  color: KColors.primary,
+                                ),
+                                SizedBox(width: KSizes.sm),
+                                Text(
+                                  "Add an Order Note",
+                                  style: Theme.of(context).textTheme.titleLarge,
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
-                  );
-                  // updateOrderNote();
-                },
-                child: Container(
-                  padding: const EdgeInsets.all(KSizes.md),
-                  margin: EdgeInsets.only(bottom: KSizes.xs),
-                  color: KColors.white,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    Container(
+                      padding: const EdgeInsets.all(KSizes.md),
+                      margin: EdgeInsets.only(bottom: KSizes.xs),
+                      color: KColors.white,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Icon(
-                            Iconsax.note,
-                            color: KColors.primary,
-                          ),
-                          SizedBox(width: KSizes.sm),
                           Text(
-                            "Add an Order Note",
+                            "Order Summary",
                             style: Theme.of(context).textTheme.titleLarge,
                           ),
+                          const SizedBox(height: KSizes.md),
+                          ...item!.map((order) => Padding(
+                                padding: EdgeInsets.only(bottom: KSizes.sm),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(order.title),
+                                    Text(
+                                        "Rs ${order.price.toStringAsFixed(0)}"),
+                                  ],
+                                ),
+                              )),
                         ],
                       ),
-                    ],
-                  ),
-                ),
-              ),
-              Container(
-                padding: const EdgeInsets.all(KSizes.md),
-                margin: EdgeInsets.only(bottom: KSizes.xs),
-                color: KColors.white,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "Order Summary",
-                      style: Theme.of(context).textTheme.titleLarge,
                     ),
-                    const SizedBox(height: KSizes.md),
-                    ...item!.map((order) => Padding(
-                          padding: EdgeInsets.only(bottom: KSizes.sm),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(order.title),
-                              Text("Rs ${order.price.toStringAsFixed(0)}"),
-                            ],
-                          ),
-                        )),
                   ],
                 ),
               ),
-            ],
-          ),
-        ),
       ),
     );
   }

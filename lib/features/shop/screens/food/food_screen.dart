@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:chulesi/core/utils/helpers/time_checker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:chulesi/common/widgets/alert_box/alert_box.dart';
@@ -34,6 +35,39 @@ void showFoodModalSheet(BuildContext context, FoodsModel food) {
       : originalPrice;
 
   String? token = box.read("token");
+
+  // bool _isServiceAvailable() {
+  //   final currentTime = DateTime.now();
+  //   final hour = currentTime.hour;
+  //   return !(hour >= 0 &&
+  //       hour < 8); // Service is unavailable between 12 AM and 8 AM
+  // }
+
+  // if (!TimeChecker.isServiceAvailable()) {
+  //   // Show a message indicating that the service is unavailable
+  //   showDialog(
+  //     context: context,
+  //     builder: (context) => SizedBox(
+  //       width: 400.w,
+  //       child: AlertDialog(
+  //         backgroundColor: KColors.white,
+  //         shape: RoundedRectangleBorder(
+  //           borderRadius: BorderRadius.circular(KSizes.xs),
+  //         ),
+  //         title: Text("Service Unavailable"),
+  //         content: Text(
+  //             "We’re currently closed for the night. Orders will resume at 8 AM tomorrow."),
+  //         actions: [
+  //           TextButton(
+  //             onPressed: () => Navigator.pop(context),
+  //             child: Text("OK"),
+  //           ),
+  //         ],
+  //       ),
+  //     ),
+  //   );
+  //   return; // Prevent showing the modal sheet
+  // }
 
   showModalBottomSheet<void>(
     context: context,
@@ -149,7 +183,7 @@ void showFoodModalSheet(BuildContext context, FoodsModel food) {
                     ),
                     child: Center(
                       child: Text(
-                        'Not Available',
+                        'Not Available for this time',
                         style: Theme.of(context).textTheme.labelLarge!.copyWith(
                             // fontSize: KSizes.fontSizeMd,
                             fontWeight: FontWeight.w500,
@@ -176,7 +210,7 @@ void showFoodModalSheet(BuildContext context, FoodsModel food) {
                 ),
                 (food.description).isEmpty
                     ? Text(
-                        "No description available yet",
+                        "Description not provided yet",
                         style: Theme.of(context).textTheme.bodySmall,
                       )
                     : Text(
@@ -186,7 +220,16 @@ void showFoodModalSheet(BuildContext context, FoodsModel food) {
               ],
             ),
             SizedBox(height: KSizes.spaceBtwItems),
+            // Note about item images
+            Text(
+              "*Note- Item images can be different from real ones",
+              style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                    color: KColors.grey,
+                    fontStyle: FontStyle.italic,
+                  ),
+            ),
 
+            SizedBox(height: KSizes.spaceBtwItems),
             //total amount and price
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -227,64 +270,71 @@ void showFoodModalSheet(BuildContext context, FoodsModel food) {
                   child: Consumer<CartProvider>(
                       builder: (context, cartProvider, child) {
                     return ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                            padding: EdgeInsets.zero,
-                            shape: RoundedRectangleBorder(
-                                borderRadius:
-                                    BorderRadius.circular(KSizes.sm))),
-                        onPressed: token == null
-                            ? () async {
-                                await CustomAlertBox.loginAlert(context);
-                              }
-                            : food.isAvailable == false
-                                ? null
-                                : () async {
-                                    final quantity =
-                                        cartProvider.getItemQuantity(food.id);
-                                    final totalPrice = food.price * quantity;
-                                    var data = CartRequest(
-                                      productId: food.id,
-                                      totalPrice: totalPrice,
-                                      quantity: quantity,
-                                    );
-                                    String cart = cartRequestToJson(data);
+                      style: ElevatedButton.styleFrom(
+                          padding: EdgeInsets.zero,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(KSizes.sm))),
+                      onPressed: token == null
+                          ? () async {
+                              await CustomAlertBox.loginAlert(context);
+                            }
+                          : food.isAvailable == false
+                              ? null
+                              : () async {
+                                  final quantity =
+                                      cartProvider.getItemQuantity(food.id);
+                                  final totalPrice = food.price * quantity;
+                                  var data = CartRequest(
+                                    productId: food.id,
+                                    totalPrice: totalPrice,
+                                    quantity: quantity,
+                                  );
+                                  String cart = cartRequestToJson(data);
 
-                                    await cartProvider.addToCart(context, cart);
-                                    Navigator.pop(context);
-                                  },
-                        child: cartProvider.isLoading
-                            ? Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
+                                  await cartProvider.addToCart(context, cart);
+                                  Navigator.pop(context);
+                                },
+                      child: cartProvider.isLoading
+                          ? Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  "Add to Cart",
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .titleMedium!
+                                      .copyWith(
+                                          // fontWeight: FontWeight.w600,
+                                          color: KColors.white),
+                                ),
+                                const SizedBox(width: KSizes.md),
+                                SizedBox(
+                                  height: 12.h,
+                                  width: 12.w,
+                                  child: const CircularProgressIndicator(
+                                    color: KColors.white,
+                                    strokeWidth: 1,
+                                  ),
+                                ),
+                              ],
+                            )
+                          : food.isAvailable
+                              ? Text("Add to Cart",
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .titleMedium!
+                                      .copyWith(color: KColors.white))
+                              : Tooltip(
+                                  message: 'This item is unavailable',
+                                  child: Text(
                                     "Add to Cart",
                                     style: Theme.of(context)
                                         .textTheme
                                         .titleMedium!
-                                        .copyWith(
-                                            // fontWeight: FontWeight.w600,
-                                            color: KColors.white),
+                                        .copyWith(color: KColors.grey),
                                   ),
-                                  const SizedBox(width: KSizes.md),
-                                  SizedBox(
-                                    height: 12.h,
-                                    width: 12.w,
-                                    child: const CircularProgressIndicator(
-                                      color: KColors.white,
-                                      strokeWidth: 1,
-                                    ),
-                                  ),
-                                ],
-                              )
-                            : Text(
-                                "Add to Cart",
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .titleMedium!
-                                    .copyWith(
-                                        // fontWeight: FontWeight.w600,
-                                        color: KColors.white),
-                              ));
+                                ),
+                    );
                   }),
                 ),
               ],

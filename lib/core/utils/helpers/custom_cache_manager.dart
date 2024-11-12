@@ -15,7 +15,7 @@ class MyCustomCacheManager extends CacheManager {
           Config(
             key,
             stalePeriod: const Duration(days: 7), // Keep cache for 7 days
-            maxNrOfCacheObjects: 200, // Max number of cached items
+            maxNrOfCacheObjects: 100, // Max number of cached items
           ),
         );
 

@@ -141,31 +141,31 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               Navigator.pushNamed(context, "/changePassword");
                             },
                           ),
-                          Padding(
-                            padding: EdgeInsets.only(left: 40.0.h),
-                            child: const ProfileDivider(),
-                          ),
-                          ProfileMenu(
-                              title: "Delete Account",
-                              subTitle: "Delete My Account",
-                              icon: Iconsax.trash,
-                              onPressed: () async {
-                                // Show confirmation dialog
-                                CustomAlertBox.showAlert(
-                                  context,
-                                  "Are you sure you want to delete your account permanently?",
-                                  () async {
-                                    await loginProvider.delete(context);
-                                    // profileProvider.clearUserData();
+                          // Padding(
+                          //   padding: EdgeInsets.only(left: 40.0.h),
+                          //   child: const ProfileDivider(),
+                          // ),
+                          // ProfileMenu(
+                          //     title: "Delete Account",
+                          //     subTitle: "Delete My Account",
+                          //     icon: Iconsax.trash,
+                          //     onPressed: () async {
+                          //       // Show confirmation dialog
+                          //       CustomAlertBox.showAlert(
+                          //         context,
+                          //         "Are you sure you want to delete your account permanently?",
+                          //         () async {
+                          //           await loginProvider.delete(context);
+                          //           // profileProvider.clearUserData();
 
-                                    // WidgetsBinding.instance
-                                    //     .addPostFrameCallback((_) {
-                                    //   Navigator.pushNamedAndRemoveUntil(
-                                    //       context, "/splash", (route) => false);
-                                    // });
-                                  },
-                                );
-                              }),
+                          //           // WidgetsBinding.instance
+                          //           //     .addPostFrameCallback((_) {
+                          //           //   Navigator.pushNamedAndRemoveUntil(
+                          //           //       context, "/splash", (route) => false);
+                          //           // });
+                          //         },
+                          //       );
+                          //     }),
                         ],
                       ),
                     ),

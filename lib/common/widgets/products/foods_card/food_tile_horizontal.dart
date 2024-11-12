@@ -177,7 +177,7 @@ class ProductCardHorizontal extends StatelessWidget {
                 ),
                 child: Center(
                   child: Text(
-                    'Not Available',
+                    'Not Available for this time',
                     style: Theme.of(context).textTheme.labelLarge!.copyWith(
                         // fontSize: KSizes.fontSizeMd,
                         fontWeight: FontWeight.w500,
