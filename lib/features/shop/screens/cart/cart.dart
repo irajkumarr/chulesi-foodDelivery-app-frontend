@@ -21,7 +21,6 @@ import 'package:chulesi/features/shop/screens/checkout/checkout.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:provider/provider.dart';
 
-import '../../../../core/utils/helpers/time_checker.dart';
 
 class CartScreen extends StatefulHookWidget {
   const CartScreen({super.key});
