@@ -6,12 +6,13 @@ class KImages {
   // static const String darkAppLogo =
   //     "assets/logos/t-store-splash-logo-black.png";
   // static const String darkAppLogo = "assets/logos/appLogoDarkk.png";
-  static const String darkAppLogo = "assets/logos/logoDark.png";
+  static const String darkAppLogo = "assets/logos/logoDark.jpeg";
+  static const String logo = "assets/logos/logo.png";
   // static const String lightAppLogo =
   //     "assets/logos/t-store-splash-logo-white.png";
-  static const String lightAppLogo = "assets/logos/appLogoLight.png";
+  // static const String lightAppLogo = "assets/logos/appLogoLight.png";
   static const String logoOnly = "assets/logos/logoonly.png";
-  static const String logoGif = "assets/logos/logogifff.gif";
+  // static const String logoGif = "assets/logos/logogifff.gif";
 
   // -- Social Logos
   static const String facebook = "assets/logos/facebook-icon.png";
@@ -22,6 +23,7 @@ class KImages {
 
   // --  Icons
   static const String location = "assets/icons/location.svg";
+  static const String lightIcon = "assets/icons/light_icon.png";
   // static const String logoTry = "assets/icons/logo_try.png";
   static const String address = "assets/icons/address.svg";
   static const String order = "assets/icons/order.svg";
@@ -59,7 +61,7 @@ class KImages {
   static const String chulesi_placeholder =
       "assets/images/content/chulesi_placeholder.png";
   static const String firstOrderBanner =
-      "assets/images/content/first _order_banner.jpeg";
+      "assets/images/content/first _order_banner.png";
 
   // -- Payment Methods
   static const String esewa = "assets/icons/esewa.png";

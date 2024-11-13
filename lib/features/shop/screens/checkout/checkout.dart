@@ -180,10 +180,10 @@ class CheckoutScreen extends HookWidget {
     }
 
     Future<void> placeOrder() async {
-      if (itemsTotal <= 500) {
+      if (itemsTotal <= 250) {
         KLoaders.showSnackbarTop(
             context,
-            "The total amount should be at least Rs 500 to place an order.",
+            "The total amount should be at least Rs 250 to place an order.",
             "Continue Shopping", () {
           Navigator.pushNamedAndRemoveUntil(
               context, "/navigationMenu", (route) => false);

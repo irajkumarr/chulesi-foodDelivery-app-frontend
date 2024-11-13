@@ -1,4 +1,3 @@
-import 'package:chulesi/core/utils/helpers/custom_cache_manager.dart';
 import 'package:chulesi/features/shop/providers/slider_provider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -52,8 +51,8 @@ class HomePromoSlider extends StatelessWidget {
                           borderRadius: BorderRadius.circular(KSizes.sm),
                           child: CachedNetworkImage(
                             imageUrl: slider.imageUrl,
-                            cacheKey: slider.id,
-                            cacheManager: MyCustomCacheManager.instance,
+                            // cacheKey: slider.id,
+                            // cacheManager: MyCustomCacheManager.instance,
                             // cacheManager: customCacheManager,
                             placeholder: (context, url) => SizedBox(
                                 height: 175.h,

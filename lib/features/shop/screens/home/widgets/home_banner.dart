@@ -17,7 +17,7 @@ class HomeBanner extends StatelessWidget {
         borderRadius: BorderRadius.circular(KSizes.sm),
         child: SizedBox(
           // height: 160.h,
-          height: 150.h,
+          height: 160.h,
           width: KDeviceUtils.getScreenWidth(context),
           child: Image.asset(
             KImages.firstOrderBanner,

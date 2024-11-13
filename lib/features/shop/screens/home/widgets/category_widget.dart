@@ -1,4 +1,3 @@
-import 'package:chulesi/core/utils/helpers/custom_cache_manager.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -9,6 +8,7 @@ import 'package:provider/provider.dart';
 
 import '../../../../../core/utils/constants/colors.dart';
 import '../../../../../core/utils/constants/sizes.dart';
+import '../../../../../core/utils/helpers/custom_cache_manager.dart';
 
 class CategoryWidget extends StatelessWidget {
   const CategoryWidget({

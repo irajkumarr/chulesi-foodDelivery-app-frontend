@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:chulesi/core/utils/constants/image_strings.dart';
 import 'package:chulesi/core/utils/constants/text_strings.dart';
 
 class LoginHeader extends StatelessWidget {
@@ -13,11 +12,11 @@ class LoginHeader extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Image(
+        SizedBox(
           // width: 300.w,
-          height: 200.h,
-          image: const AssetImage(KImages.darkAppLogo),
-          fit: BoxFit.cover,
+          height: 100.h,
+          // image: const AssetImage(KImages.logo),
+          // fit: BoxFit.cover,
         ),
         Text(
           KTexts.loginTitle,

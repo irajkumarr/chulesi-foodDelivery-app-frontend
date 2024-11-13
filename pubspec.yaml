@@ -49,18 +49,18 @@ dev_dependencies:
   flutter_lints: ^5.0.0
   flutter_launcher_icons: ^0.14.1
 
-# flutter_launcher_icons:
-#   android: true
-#   ios: true
-#   image_path: "assets/icons/logo_try.png"
-#   adaptive_icon_background: "#ffffff"
-#   adaptive_icon_foreground: "assets/icons/logo_fore.png"
 flutter_launcher_icons:
   android: true
   ios: true
-  image_path: "assets/icons/icon2.png"
-  adaptive_icon_background: "#9b1e29"
-  adaptive_icon_foreground: "assets/icons/icon2.png"
+  image_path: "assets/icons/app_icon.jpeg"
+  adaptive_icon_background: "#ffffff"
+  adaptive_icon_foreground: "assets/icons/app_icon_fore.png"
+# flutter_launcher_icons:
+#   android: true
+#   ios: true
+#   image_path: "assets/icons/icon2.png"
+#   adaptive_icon_background: "#9b1e29"
+#   adaptive_icon_foreground: "assets/icons/icon2.png"
 
 flutter:
   # The following line ensures that the Material Icons font is

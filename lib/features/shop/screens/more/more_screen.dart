@@ -62,8 +62,7 @@ class MoreScreen extends StatelessWidget {
                         icon: Iconsax.message_question,
                         title: "FAQs",
                         onPressed: () {
-                          UrlLaunch.launchUrl(
-                              "https://www.timalsinarajkumar.com.np");
+                          UrlLaunch.launchUrl("https://chulesi.com/faqs-page");
                           // launchUrlString("https://timalsinarajkumar.com.np");
                         },
                       ),
@@ -72,8 +71,7 @@ class MoreScreen extends StatelessWidget {
                         icon: Iconsax.direct,
                         title: "About Us",
                         onPressed: () {
-                          UrlLaunch.launchUrl(
-                              "https://www.timalsinarajkumar.com.np");
+                          UrlLaunch.launchUrl("https://chulesi.com/about-us");
                         },
                       ),
                       const ProfileDivider(),
@@ -91,7 +89,7 @@ class MoreScreen extends StatelessWidget {
                         title: "Terms and Conditions",
                         onPressed: () {
                           UrlLaunch.launchUrl(
-                              "https://www.timalsinarajkumar.com.np");
+                              "https://chulesi.com/terms-and-conditions");
                         },
                       ),
                       const ProfileDivider(),
@@ -101,7 +99,7 @@ class MoreScreen extends StatelessWidget {
                         onPressed: () {
                           // Navigator.pushNamed(context, "/privacyPolicy");
                           UrlLaunch.launchUrl(
-                              "https://www.timalsinarajkumar.com.np");
+                              "https://chulesi.com/privacy-policy");
                         },
                       ),
                       const ProfileDivider(),
