@@ -36,7 +36,7 @@ class TermsConditionsCheckbox extends StatelessWidget {
               text: KTexts.termsOfUse,
               recognizer: TapGestureRecognizer()
                 ..onTap = () => UrlLaunch.launchUrl(
-                    "https://chulesi.com/terms-and-conditions"),
+                    "https://chulesi.com/terms-and-condition"),
               style: Theme.of(context).textTheme.bodyMedium!.apply(
                     color: KColors.primary,
                     decoration: TextDecoration.underline,

@@ -96,7 +96,7 @@ void showAddressModal(BuildContext context, Function? refetch,
                   controller: phoneNumber,
                   validator: (value) => KValidator.validatePhoneNumber(value),
                   decoration: const InputDecoration(
-                    labelText: 'Phone Number',
+                    labelText: 'Enter valid Phone Number',
                     border: OutlineInputBorder(),
                   ),
                   keyboardType: TextInputType.phone,

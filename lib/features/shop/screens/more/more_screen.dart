@@ -62,7 +62,7 @@ class MoreScreen extends StatelessWidget {
                         icon: Iconsax.message_question,
                         title: "FAQs",
                         onPressed: () {
-                          UrlLaunch.launchUrl("https://chulesi.com/faqs-page");
+                          UrlLaunch.launchUrl("https://chulesi.com/faq-page");
                           // launchUrlString("https://timalsinarajkumar.com.np");
                         },
                       ),
@@ -89,7 +89,7 @@ class MoreScreen extends StatelessWidget {
                         title: "Terms and Conditions",
                         onPressed: () {
                           UrlLaunch.launchUrl(
-                              "https://chulesi.com/terms-and-conditions");
+                              "https://chulesi.com/terms-and-condition");
                         },
                       ),
                       const ProfileDivider(),

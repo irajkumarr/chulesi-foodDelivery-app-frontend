@@ -61,7 +61,7 @@ class KImages {
   static const String chulesi_placeholder =
       "assets/images/content/chulesi_placeholder.png";
   static const String firstOrderBanner =
-      "assets/images/content/first _order_banner.png";
+      "assets/images/content/first _order_banner.jpeg";
 
   // -- Payment Methods
   static const String esewa = "assets/icons/esewa.png";

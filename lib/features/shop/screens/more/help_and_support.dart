@@ -53,7 +53,7 @@ class HelpAndSupportScreen extends StatelessWidget {
                 image: KImages.messenger,
                 text: "Messenger",
                 onPressed: () {
-                  launchUrlString("https://www.messenger.com/");
+                  // launchUrlString("https://www.messenger.com/");
                 },
               ),
               SizedBox(height: KSizes.spaceBtwItems),
@@ -61,8 +61,8 @@ class HelpAndSupportScreen extends StatelessWidget {
                 image: KImages.facebook,
                 text: "facebook",
                 onPressed: () {
-                  launchUrlString(
-                      "https://www.facebook.com/p/Pathao-on-hetauda-100082625476980/");
+                  // launchUrlString(
+                  //     "https://www.facebook.com/p/Pathao-on-hetauda-100082625476980/");
                 },
               )
             ],
