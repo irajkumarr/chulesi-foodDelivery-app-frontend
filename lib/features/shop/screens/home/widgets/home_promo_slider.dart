@@ -83,9 +83,12 @@ class HomePromoSlider extends StatelessWidget {
                               ? KColors.primary
                               : KColors.grey,
                           width: homeProvider.carouselPromoCurrentIndex == i
-                              ? 13.w
+                              ? 11.w
                               : 7.w,
-                          height: 7.h,
+                          // height: 7.h,
+                          height: homeProvider.carouselPromoCurrentIndex == i
+                              ? 5.w
+                              : 7.w,
                           margin: EdgeInsets.only(right: 5.w),
                         )
                     ],

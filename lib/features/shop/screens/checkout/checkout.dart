@@ -35,7 +35,7 @@ Future<double> getDrivingDistance(
 
   if (response.statusCode == 200) {
     final data = jsonDecode(response.body);
-    print(data);
+    // print(data);
     final distanceInMeters = data['routes'][0]['legs'][0]['distance']['value'];
     return distanceInMeters / 1000; // Convert to kilometers
   } else {

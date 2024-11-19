@@ -137,37 +137,6 @@ void showFoodModalSheet(BuildContext context, FoodsModel food) {
                             color: KColors.black,
                           ),
 
-                        // SizedBox(height: KSizes.spaceBtwItems / 2),
-                        // Row(
-                        //   mainAxisAlignment: MainAxisAlignment.center,
-                        //   children: [
-                        //     RatingBarIndicator(
-                        //       rating: food.rating.toDouble(),
-                        //       itemSize: 15.sp,
-                        //       unratedColor: KColors.grey,
-                        //       itemBuilder: (_, __) {
-                        //         return const Icon(
-                        //           Iconsax.star1,
-                        //           color: KColors.primary,
-                        //         );
-                        //       },
-                        //     ),
-                        //     SizedBox(
-                        //       width: KSizes.sm,
-                        //     ),
-                        //     Text(
-                        //       "(${food.ratingCount})",
-                        //       style: Theme.of(context)
-                        //           .textTheme
-                        //           .labelSmall!
-                        //           .copyWith(color: KColors.textGrey),
-                        //     ),
-                        //   ],
-                        // ),
-                        // ProductPriceText(
-                        //   price: food.price.toStringAsFixed(1),
-                        //   color: KColors.black,
-                        // ),
                       ],
                     )
                   ],

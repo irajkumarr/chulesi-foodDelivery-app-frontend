@@ -1,13 +1,11 @@
-import 'package:chulesi/features/authentication/providers/timer_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:chulesi/core/utils/constants/colors.dart';
-import 'package:chulesi/core/utils/constants/image_strings.dart';
 import 'package:chulesi/core/utils/constants/sizes.dart';
 import 'package:chulesi/core/utils/constants/text_strings.dart';
 import 'package:chulesi/core/utils/validators/validation.dart';
 import 'package:chulesi/features/authentication/providers/login_provider.dart';
-
+import 'package:chulesi/features/authentication/providers/timer_provider.dart';
 import 'package:provider/provider.dart';
 
 class ForgetPasswordScreen extends StatefulWidget {
@@ -19,13 +17,11 @@ class ForgetPasswordScreen extends StatefulWidget {
 
 class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
   final _formKey = GlobalKey<FormState>();
-
   final TextEditingController _emailController = TextEditingController();
 
   @override
   void dispose() {
     _emailController.dispose();
-
     super.dispose();
   }
 
@@ -34,41 +30,53 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
     final loginProvider = Provider.of<LoginProvider>(context);
     final timerProvider =
         Provider.of<ResendTimerProvider>(context, listen: false);
+
     return Scaffold(
       backgroundColor: KColors.white,
       appBar: AppBar(
+        elevation: 0,
+        backgroundColor: KColors.white,
         leading: IconButton(
             onPressed: () {
               Navigator.pushNamedAndRemoveUntil(
                   context, "/login", (route) => false);
             },
             icon: const Icon(Icons.arrow_back)),
-        backgroundColor: KColors.white,
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: EdgeInsets.symmetric(
-              horizontal: KSizes.defaultSpace,
-              vertical: KSizes.spaceBtwSections),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            // mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Image(
-                // width: 200.w,
-                height: 200.h,
-                image: const AssetImage(KImages.darkAppLogo),
-                fit: BoxFit.cover,
-              ),
-              // SizedBox(
-              //   height: KSizes.spaceBtwItems,
-              // ),
-              Text(
-                "Enter email address",
-                style: Theme.of(context).textTheme.headlineSmall,
-              ),
-              SizedBox(height: KSizes.spaceBtwSections),
-              Form(
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: EdgeInsets.all(KSizes.defaultSpace),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                // Header Section
+                SizedBox(height: 40.h),
+                Icon(
+                  Icons.lock_reset_rounded,
+                  size: 80.h,
+                  color: KColors.primary,
+                ),
+                SizedBox(height: KSizes.spaceBtwItems),
+                Text(
+                  "Forgot Password?",
+                  style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                      ),
+                ),
+                SizedBox(height: 8.h),
+                Text(
+                  "Don't worry! It happens. Enter your email address to receive\na verification code",
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        color: Colors.grey[600],
+                      ),
+                ),
+                SizedBox(height: 40.h),
+
+                // Form Section
+                Form(
                   key: _formKey,
                   child: Column(
                     children: [
@@ -87,7 +95,6 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                         child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
                             backgroundColor: KColors.primary,
-                            // padding: const EdgeInsets.all(KSizes.md),
                           ),
                           onPressed: loginProvider.isLoading
                               ? null
@@ -122,8 +129,10 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                         ),
                       ),
                     ],
-                  )),
-            ],
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),

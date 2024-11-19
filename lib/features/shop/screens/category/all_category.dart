@@ -50,7 +50,8 @@ class AllCategoryScreen extends StatelessWidget {
                       child: CategoriesVerticalShimmer(),
                     )
                   : SingleChildScrollView(
-                      physics: const AlwaysScrollableScrollPhysics(),
+                      physics: const BouncingScrollPhysics(),
+                      // physics: const AlwaysScrollableScrollPhysics(),
                       child: Padding(
                         padding: const EdgeInsets.only(top: KSizes.md),
                         child: GridLayout(

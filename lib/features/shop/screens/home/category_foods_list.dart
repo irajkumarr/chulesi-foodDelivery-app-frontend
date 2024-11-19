@@ -11,6 +11,7 @@ import 'package:chulesi/data/hooks/fetch_category_nonveg_foods.dart';
 import 'package:chulesi/data/hooks/fetch_category_veg_foods.dart';
 import 'package:chulesi/data/models/foods_model.dart';
 import 'package:chulesi/features/shop/providers/category_provider.dart';
+import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:provider/provider.dart';
 
 class CategoryFoodsList extends HookWidget {
@@ -67,13 +68,13 @@ class CategoryFoodsList extends HookWidget {
             centerTitle: true,
             actions: [
               IconButton(
+                tooltip: "Search",
                 onPressed: () {
                   Navigator.pushNamed(context, "/search");
                 },
                 icon: Icon(
-                  Icons.search,
-                  color: KColors.black,
-                  size: KSizes.iconMd + 3,
+                  AntDesign.search1,
+                  size: KSizes.iconMd,
                 ),
               ),
               const CartCounterIcon(iconColor: KColors.black),

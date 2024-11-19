@@ -31,7 +31,13 @@ class AppProviders {
     ChangeNotifierProvider(create: (_) => MapProvider()),
     ChangeNotifierProvider(create: (_) => AddressProvider()),
     ChangeNotifierProvider(create: (_) => PermissionProvider()),
-    ChangeNotifierProvider(create: (_) => CartProvider()),
+    ChangeNotifierProvider(create: (_) {
+      final provider = CartProvider();
+      provider.initializeCart(); // Initialize cart state
+      return provider;
+    }
+        //  => CartProvider()
+        ),
     ChangeNotifierProvider(create: (_) => OrderProvider()),
     ChangeNotifierProvider(create: (_) => CategoryProvider()),
     ChangeNotifierProvider(create: (_) => SliderProvider()),

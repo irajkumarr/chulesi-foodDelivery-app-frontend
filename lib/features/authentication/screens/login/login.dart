@@ -27,7 +27,10 @@ class LoginScreen extends StatelessWidget {
                         Navigator.pushNamedAndRemoveUntil(
                             context, "/navigationMenu", (route) => false);
                       },
-                      icon: const Icon(Icons.arrow_back))),
+                      icon: Icon(
+                        Icons.arrow_back,
+                        size: 26.sp,
+                      ))),
               Positioned(
                   top: 10,
                   right: -30,
