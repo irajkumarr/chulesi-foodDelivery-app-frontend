@@ -1,3 +1,4 @@
+import 'package:chulesi/features/shop/screens/home/widgets/empty_food_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:chulesi/common/widgets/products/carts/cart_counter_icon.dart';
@@ -24,34 +25,16 @@ class CategoryFoodsList extends HookWidget {
         useFetchAllCategoryFoods(categoryProvider.categoryValue);
     List<FoodsModel>? allFoodsList = hookResultAll.data;
     final isLoadingAll = hookResultAll.isLoading;
-    // final errorAll = hookResultAll.error;
 
     final hookResultVeg =
         useFetchCategoryVegFoods(categoryProvider.categoryValue);
     List<FoodsModel>? vegFoodsList = hookResultVeg.data;
     final isLoadingVeg = hookResultVeg.isLoading;
-    // final errorVeg = hookResultVeg.error;
 
     final hookResultNonveg =
         useFetchCategoryNonvegFoods(categoryProvider.categoryValue);
     List<FoodsModel>? nonvegFoodsList = hookResultNonveg.data;
     final isLoadingNonveg = hookResultNonveg.isLoading;
-    // final errorNonveg = hookResultNonveg.error;
-
-    // if (errorAll != null) {
-    //   return Scaffold(
-    //     body: Center(
-    //       child: FullScreenErrorWidget(
-    //         message: errorAll.message,
-    //         onRetry: () {
-    //           hookResultAll.refetch();
-    //           hookResultVeg.refetch();
-    //           hookResultNonveg.refetch();
-    //         },
-    //       ),
-    //     ),
-    //   );
-    // }
 
     return ConnectivityChecker(
       child: DefaultTabController(
@@ -112,14 +95,19 @@ class CategoryFoodsList extends HookWidget {
                             child: FoodsListShimmer(),
                           )
                         : (allFoodsList == null || allFoodsList.isEmpty)
-                            ? Center(
-                                child: Text(
-                                "No Food Items Found",
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .titleMedium!
-                                    .copyWith(fontWeight: FontWeight.w600),
-                              ))
+                            ? EmptyFoodList(
+                                onRefresh: () => hookResultAll.refetch(),
+                                onBrowseCategories: () {
+                                  Navigator.pushNamed(context, "/category")
+                                      .then((_) {
+                                    Navigator.pushNamedAndRemoveUntil(
+                                      context,
+                                      "/navigationMenu",
+                                      (route) => false,
+                                    );
+                                  });
+                                },
+                              )
                             : ListView(
                                 physics: const BouncingScrollPhysics(),
                                 children:
@@ -136,7 +124,8 @@ class CategoryFoodsList extends HookWidget {
                               ),
                   ),
                 ),
-                // Veg foods
+
+// For Veg Foods tab:
                 RefreshIndicator(
                   onRefresh: () async {
                     await hookResultVeg.refetch();
@@ -150,14 +139,11 @@ class CategoryFoodsList extends HookWidget {
                             child: FoodsListShimmer(),
                           )
                         : (vegFoodsList == null || vegFoodsList.isEmpty)
-                            ? Center(
-                                child: Text(
-                                "No Items Found",
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .titleMedium!
-                                    .copyWith(fontWeight: FontWeight.w600),
-                              ))
+                            ? EmptyFoodList(
+                                onRefresh: () => hookResultVeg.refetch(),
+                                onBrowseCategories: () =>
+                                    Navigator.pop(context),
+                              )
                             : ListView(
                                 physics: const BouncingScrollPhysics(),
                                 children:
@@ -174,6 +160,7 @@ class CategoryFoodsList extends HookWidget {
                               ),
                   ),
                 ),
+
                 // Non-veg foods
                 RefreshIndicator(
                   onRefresh: () async {
@@ -188,14 +175,18 @@ class CategoryFoodsList extends HookWidget {
                             child: FoodsListShimmer(),
                           )
                         : (nonvegFoodsList == null || nonvegFoodsList.isEmpty)
-                            ? Center(
-                                child: Text(
-                                "No Items Found",
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .titleMedium!
-                                    .copyWith(fontWeight: FontWeight.w600),
-                              ))
+                            ? EmptyFoodList(
+                                onRefresh: () => hookResultNonveg.refetch(),
+                                onBrowseCategories: () {
+                                  Navigator.pushNamed(context, "/category")
+                                      .then((_) {
+                                    Navigator.pushNamedAndRemoveUntil(
+                                      context,
+                                      "/navigationMenu",
+                                      (route) => false,
+                                    );
+                                  });
+                                })
                             : ListView(
                                 physics: const BouncingScrollPhysics(),
                                 children: List.generate(nonvegFoodsList.length,

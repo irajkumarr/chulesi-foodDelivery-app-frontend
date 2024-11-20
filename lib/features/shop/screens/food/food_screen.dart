@@ -136,7 +136,6 @@ void showFoodModalSheet(BuildContext context, FoodsModel food) {
                             price: originalPrice.toStringAsFixed(0),
                             color: KColors.black,
                           ),
-
                       ],
                     )
                   ],
@@ -152,6 +151,7 @@ void showFoodModalSheet(BuildContext context, FoodsModel food) {
                     child: Center(
                       child: Text(
                         'Not Available for this time',
+                        textAlign: TextAlign.center,
                         style: Theme.of(context).textTheme.labelLarge!.copyWith(
                             // fontSize: KSizes.fontSizeMd,
                             fontWeight: FontWeight.w500,
@@ -299,7 +299,7 @@ void showFoodModalSheet(BuildContext context, FoodsModel food) {
                                     style: Theme.of(context)
                                         .textTheme
                                         .titleMedium!
-                                        .copyWith(color: KColors.grey),
+                                        .copyWith(color: KColors.primary),
                                   ),
                                 ),
                     );

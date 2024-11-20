@@ -710,7 +710,7 @@ class CartProvider with ChangeNotifier {
       } else {
         // Revert on failure
         // _itemQuantities[foodId] = currentQuantity;
-        var error = json.decode(response.body);
+        // var error = json.decode(response.body);
         // print(error);
       }
     } catch (e) {
@@ -719,52 +719,6 @@ class CartProvider with ChangeNotifier {
       showToast(e.toString());
     }
   }
-
-  // Future<void> decrement(String foodId) async {
-  //   // if (_isLoading) return;
-  //   // setLoading = true;
-
-  //   int currentQuantity = _itemQuantities[foodId] ?? 1;
-  //   if (currentQuantity <= 1) {
-  //     setLoading = false;
-  //     return;
-  //   }
-
-  //   String? token = box.read("token") ?? '';
-  //   Uri url = Uri.parse("$kAppBaseUrl/api/carts/decrement");
-  //   Map<String, String> headers = {
-  //     "Content-Type": "application/json",
-  //     "Authorization": "Bearer $token",
-  //   };
-  //   Map<String, dynamic> body = {
-  //     "productId": foodId,
-  //   };
-
-  //   try {
-  //     // Update local state immediately
-  //     _itemQuantities[foodId] = currentQuantity - 1;
-  //     notifyListeners();
-
-  //     var response =
-  //         await http.post(url, headers: headers, body: json.encode(body));
-
-  //     if (response.statusCode == 200) {
-  //       String userId = box.read("userId") ?? '';
-  //       await fetchCartCount(userId);
-  //       await fetchTotalCartPrice(userId);
-  //       await syncCartState();
-  //     } else {
-  //       // Revert on failure
-  //       _itemQuantities[foodId] = currentQuantity;
-  //       var error = json.decode(response.body);
-  //       print(error);
-  //     }
-  //   } catch (e) {
-  //     // Revert on error
-  //     _itemQuantities[foodId] = currentQuantity;
-  //     showToast(e.toString());
-  //   }
-  // }
 
   Future<void> decrement(String foodId) async {
     int currentQuantity = _itemQuantities[foodId] ?? 1;
@@ -800,7 +754,7 @@ class CartProvider with ChangeNotifier {
         // Revert on failure
         // _itemQuantities[foodId] = currentQuantity;
         // notifyListeners();
-        var error = json.decode(response.body);
+        // var error = json.decode(response.body);
         // print(error);
         // showToast(error['message'] ?? 'Failed to update quantity');
       }
