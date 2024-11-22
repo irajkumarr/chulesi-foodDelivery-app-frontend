@@ -23,6 +23,7 @@ class KImages {
 
   // --  Icons
   static const String location = "assets/icons/location.svg";
+  static const String appIcon = "assets/icons/app_icon.jpeg";
   static const String lightIcon = "assets/icons/light_icon.png";
   // static const String logoTry = "assets/icons/logo_try.png";
   static const String address = "assets/icons/address.svg";

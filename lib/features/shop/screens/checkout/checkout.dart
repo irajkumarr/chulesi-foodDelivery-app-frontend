@@ -71,7 +71,7 @@ class CheckoutScreen extends HookWidget {
 
     // Asynchronous function to fetch the delivery charge
     Future<void> fetchDeliveryCharge() async {
-      if (itemsTotal >= 2500) {
+      if (itemsTotal >= 2499) {
         deliveryCharge.value = 0.0;
         isDeliveryChargeLoading.value = false;
       } else if (deliveryAddress == null) {
@@ -180,7 +180,7 @@ class CheckoutScreen extends HookWidget {
     }
 
     Future<void> placeOrder() async {
-      if (itemsTotal <= 250) {
+      if (itemsTotal <= 249) {
         KLoaders.showSnackbarTop(
             context,
             "The total amount should be at least Rs 250 to place an order.",

@@ -520,34 +520,66 @@ class CartProvider with ChangeNotifier {
     }
   }
 
+  // Future<void> addToCart(BuildContext context, String cart) async {
+  //   setLoading = true;
+
+  //   String? token = box.read("token");
+  //   Uri url = Uri.parse("$kAppBaseUrl/api/carts/");
+  //   Map<String, String> headers = {
+  //     "Content-Type": "application/json",
+  //     if (token != null) "Authorization": "Bearer $token"
+  //   };
+
+  //   try {
+  //     var response = await http.post(url, headers: headers, body: cart);
+  //     if (response.statusCode == 201) {
+  //       showToast("Product added to Cart");
+  //       String userId = box.read("userId") ?? '';
+  //       await syncCartState();
+  //       await fetchCartCount(userId);
+  //       await fetchTotalCartPrice(userId);
+  //     } else {
+  //       var error = apiErrorFromJson(response.body);
+  //       showToast(error.message);
+  //     }
+  //   } catch (e) {
+  //     showToast(e.toString());
+  //   } finally {
+  //     setLoading = false;
+  //   }
+  // }
+
   Future<void> addToCart(BuildContext context, String cart) async {
-    setLoading = true;
+  if (isLoading) return; // Prevent multiple calls
 
-    String? token = box.read("token");
-    Uri url = Uri.parse("$kAppBaseUrl/api/carts/");
-    Map<String, String> headers = {
-      "Content-Type": "application/json",
-      if (token != null) "Authorization": "Bearer $token"
-    };
+  setLoading = true;
 
-    try {
-      var response = await http.post(url, headers: headers, body: cart);
-      if (response.statusCode == 201) {
-        showToast("Product added to Cart");
-        String userId = box.read("userId") ?? '';
-        await syncCartState();
-        await fetchCartCount(userId);
-        await fetchTotalCartPrice(userId);
-      } else {
-        var error = apiErrorFromJson(response.body);
-        showToast(error.message);
-      }
-    } catch (e) {
-      showToast(e.toString());
-    } finally {
-      setLoading = false;
+  String? token = box.read("token");
+  Uri url = Uri.parse("$kAppBaseUrl/api/carts/");
+  Map<String, String> headers = {
+    "Content-Type": "application/json",
+    if (token != null) "Authorization": "Bearer $token"
+  };
+
+  try {
+    var response = await http.post(url, headers: headers, body: cart);
+    if (response.statusCode == 201) {
+      showToast("Product added to Cart");
+      String userId = box.read("userId") ?? '';
+      await syncCartState();
+      await fetchCartCount(userId);
+      await fetchTotalCartPrice(userId);
+    } else {
+      var error = apiErrorFromJson(response.body);
+      showToast(error.message);
     }
+  } catch (e) {
+    showToast(e.toString());
+  } finally {
+    setLoading = false;
   }
+}
+
 
   Future<void> removeFromCart(String productId, Function refetch) async {
     if (_isLoading) return;

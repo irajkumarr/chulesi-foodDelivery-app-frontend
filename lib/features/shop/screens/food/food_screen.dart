@@ -15,16 +15,8 @@ import 'package:get_storage/get_storage.dart';
 import 'package:provider/provider.dart';
 
 void showFoodModalSheet(BuildContext context, FoodsModel food) {
-  // foodsProvider
-  //     .resetCount(food.id); // Reset the count for the selected food item
   final box = GetStorage();
-  // final bool hasOffer = food.offer != null && food.offer!.discountValue > 0;
-  // final double discountedPrice = food.price.toDouble();
-  // final double originalPrice = hasOffer
-  //     ? (food.offer!.discountType == "flat")
-  //         ? discountedPrice + food.offer!.discountValue
-  //         : discountedPrice * (1 + (food.offer!.discountValue / 100))
-  //     : discountedPrice;
+
   final bool hasOffer = food.offer != null && food.offer!.discountValue > 0;
   final double originalPrice = food.price.toDouble();
   final double discountedPrice = hasOffer
@@ -34,39 +26,6 @@ void showFoodModalSheet(BuildContext context, FoodsModel food) {
       : originalPrice;
 
   String? token = box.read("token");
-
-  // bool _isServiceAvailable() {
-  //   final currentTime = DateTime.now();
-  //   final hour = currentTime.hour;
-  //   return !(hour >= 0 &&
-  //       hour < 8); // Service is unavailable between 12 AM and 8 AM
-  // }
-
-  // if (!TimeChecker.isServiceAvailable()) {
-  //   // Show a message indicating that the service is unavailable
-  //   showDialog(
-  //     context: context,
-  //     builder: (context) => SizedBox(
-  //       width: 400.w,
-  //       child: AlertDialog(
-  //         backgroundColor: KColors.white,
-  //         shape: RoundedRectangleBorder(
-  //           borderRadius: BorderRadius.circular(KSizes.xs),
-  //         ),
-  //         title: Text("Service Unavailable"),
-  //         content: Text(
-  //             "We’re currently closed for the night. Orders will resume at 8 AM tomorrow."),
-  //         actions: [
-  //           TextButton(
-  //             onPressed: () => Navigator.pop(context),
-  //             child: Text("OK"),
-  //           ),
-  //         ],
-  //       ),
-  //     ),
-  //   );
-  //   return; // Prevent showing the modal sheet
-  // }
 
   showModalBottomSheet<void>(
     context: context,
@@ -205,15 +164,7 @@ void showFoodModalSheet(BuildContext context, FoodsModel food) {
                 Text("Total Price:",
                     style: Theme.of(context).textTheme.titleMedium!.copyWith(
                         color: KColors.primary, fontWeight: FontWeight.w600)),
-                // Consumer<FoodsProvider>(builder: (context, value, child) {
-                //   return Consumer<FoodsProvider>(
-                //       builder: (context, foodsProvider, child) {
-                //     return ProductPriceText(
-                //       // price: "",
-                //       price: "${food.price * value.getCount(food.id)}",
-                //       color: KColors.primary,
-                //     );
-                //   });
+
                 Consumer<CartProvider>(
                   builder: (context, cartProvider, child) {
                     final quantity = cartProvider.getItemQuantity(food.id);
@@ -237,6 +188,23 @@ void showFoodModalSheet(BuildContext context, FoodsModel food) {
                 Expanded(
                   child: Consumer<CartProvider>(
                       builder: (context, cartProvider, child) {
+                    // final isAlreadyInCart =
+                    //     cartProvider.getItemQuantity(food.id) > 1;
+
+                    // if (isAlreadyInCart) {
+                    //   return ElevatedButton(
+                    //     onPressed: null,
+                    //     style: ElevatedButton.styleFrom(
+                    //         backgroundColor: Colors.grey),
+                    //     child: Text(
+                    //       "Already in Cart",
+                    //       style: Theme.of(context)
+                    //           .textTheme
+                    //           .titleMedium!
+                    //           .copyWith(color: KColors.white),
+                    //     ),
+                    //   );
+                    // }
                     return ElevatedButton(
                       style: ElevatedButton.styleFrom(
                           padding: EdgeInsets.zero,
@@ -246,7 +214,9 @@ void showFoodModalSheet(BuildContext context, FoodsModel food) {
                           ? () async {
                               await CustomAlertBox.loginAlert(context);
                             }
-                          : food.isAvailable == false
+                          : cartProvider.isLoading ||
+                                  food.isAvailable == false ||
+                                  !food.isAvailable
                               ? null
                               : () async {
                                   final quantity =
@@ -267,7 +237,7 @@ void showFoodModalSheet(BuildContext context, FoodsModel food) {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Text(
-                                  "Add to Cart",
+                                  "Adding to Cart",
                                   style: Theme.of(context)
                                       .textTheme
                                       .titleMedium!
@@ -280,7 +250,7 @@ void showFoodModalSheet(BuildContext context, FoodsModel food) {
                                   height: 12.h,
                                   width: 12.w,
                                   child: const CircularProgressIndicator(
-                                    color: KColors.white,
+                                    color: KColors.primary,
                                     strokeWidth: 1,
                                   ),
                                 ),

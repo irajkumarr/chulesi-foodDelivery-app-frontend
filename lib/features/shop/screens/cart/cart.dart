@@ -1,7 +1,5 @@
 import 'dart:math';
-
 import 'package:flutter/material.dart';
-
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:chulesi/core/network/connectivity_checker.dart';
@@ -21,6 +19,7 @@ import 'package:chulesi/features/shop/screens/checkout/checkout.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:provider/provider.dart';
 
+import '../../../../core/utils/helpers/time_checker.dart';
 
 class CartScreen extends StatefulHookWidget {
   const CartScreen({super.key});
@@ -44,6 +43,74 @@ class _CartScreenState extends State<CartScreen> {
 
     final cartProvider = Provider.of<CartProvider>(context, listen: false);
     cartProvider.fetchTotalCartPrice(userId);
+  }
+
+  bool get _isCloseToClosingTime {
+    final currentTime = DateTime.now();
+    final hour = currentTime.hour;
+    final minute = currentTime.minute;
+    // Return true if it's 10:30 PM or later but before 11 PM
+    return hour == 22 && minute >= 30;
+  }
+
+  Widget _buildClosingNotice() {
+    if (!_isCloseToClosingTime) return const SizedBox();
+
+    return Container(
+      width: double.infinity,
+      color: Colors.orange.shade100,
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      child: Row(
+        children: [
+          Expanded(
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children: [
+                  // Add extra space at the start for better scrolling effect
+                  const SizedBox(width: 20),
+                  Row(
+                    children: [
+                      const Icon(
+                        Icons.access_time,
+                        size: 16,
+                        color: Colors.orange,
+                      ),
+                      const SizedBox(width: 8),
+                      Text(
+                        "Delivery service ending soon! Place your order before 11:00 PM • ",
+                        style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                              color: Colors.orange.shade900,
+                              fontWeight: FontWeight.w500,
+                            ),
+                      ),
+                    ],
+                  ),
+                  // Repeat the message for continuous scrolling effect
+                  Row(
+                    children: [
+                      const Icon(
+                        Icons.access_time,
+                        size: 16,
+                        color: Colors.orange,
+                      ),
+                      const SizedBox(width: 8),
+                      Text(
+                        "Delivery service ending soon! Place your order before 11:00 PM • ",
+                        style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                              color: Colors.orange.shade900,
+                              fontWeight: FontWeight.w500,
+                            ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   @override
@@ -114,11 +181,12 @@ class _CartScreenState extends State<CartScreen> {
                         padding: const EdgeInsets.symmetric(
                             horizontal: KSizes.defaultSpace),
                         child: ElevatedButton(
-                          onPressed:
-                              //  !TimeChecker.isServiceAvailable()
-                              //     ? null
-                              //     :
-                              () {
+                          onPressed: () {
+                            if (!TimeChecker.isServiceAvailable()) {
+                              TimeChecker.showServiceUnavailableDialog(context);
+                              return;
+                            }
+
                             if (cartList.isNotEmpty) {
                               // Prepare the order items
                               List<OrderItem> orderItems =
@@ -227,112 +295,131 @@ class _CartScreenState extends State<CartScreen> {
                     ),
                   ),
                 ),
-          body: RefreshIndicator(
-            onRefresh: () async {
-              return await refetch();
-            },
-            child: Column(
-              children: [
-                (cartList == null || cartList.isEmpty)
-                    ? const SizedBox()
-                    : Container(
-                        padding:
-                            const EdgeInsets.symmetric(horizontal: KSizes.md),
-                        margin: EdgeInsets.only(top: KSizes.spaceBtwItems),
-                        decoration: const BoxDecoration(
-                          color: KColors.grey,
-                        ),
-                        child: Consumer<CartProvider>(
-                            builder: (context, cartProvider, child) {
-                          return Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text("Items (${cartProvider.cartCount})"),
-                              TextButton(
-                                  onPressed: () async {
-                                    await cartProvider.clearCart(
-                                        user!.id, refetch);
-                                  },
-                                  child: Text(
-                                    "Clear All",
-                                    style:
-                                        Theme.of(context).textTheme.bodySmall,
-                                  )),
-                            ],
-                          );
-                        }),
-                      ),
-                Container(
-                  padding: const EdgeInsets.only(
-                    top: KSizes.md,
-                    left: KSizes.md,
-                    right: KSizes.md,
-                  ),
-                  width: KDeviceUtils.getScreenWidth(context),
-                  height: KDeviceUtils.getScreenHeight(context) * 0.71,
-                  child: isLoading
-                      // ? const FoodsListShimmer()
-                      ? KIndicator.circularIndicator()
-                      : (cartList == null || cartList.isEmpty)
-                          ? Center(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  const Icon(
-                                    Icons.shopping_bag_outlined,
-                                    size: 80,
-                                    color: KColors.primary,
-                                  ),
-                                  SizedBox(height: KSizes.spaceBtwItems),
-                                  Text(
-                                    "Your cart is empty!",
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .titleLarge!
-                                        .copyWith(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 22),
-                                  ),
-                                  SizedBox(height: KSizes.spaceBtwSections),
-                                  Text(
-                                    randomCartMessage,
-                                    // "Looks like you haven't added anything yet.\nStart exploring our wide selection of products.",
-                                    textAlign: TextAlign.center,
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .bodyMedium!
-                                        .copyWith(
-                                          color: KColors.darkGrey,
-                                        ),
-                                  ),
-                                  SizedBox(height: KSizes.spaceBtwSections),
-                                  ElevatedButton(
-                                    style: ElevatedButton.styleFrom(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: KSizes.md),
-                                    ),
-                                    onPressed: () {
-                                      Navigator.pushNamedAndRemoveUntil(context,
-                                          "/navigationMenu", (route) => false);
-                                    },
-                                    child: const Text("Start Shopping"),
-                                  ),
-                                ],
+          body: Column(
+            children: [
+              // Add the closing notice at the top
+              _buildClosingNotice(),
+              Expanded(
+                child: RefreshIndicator(
+                  onRefresh: () async {
+                    return await refetch();
+                  },
+                  child: Column(
+                    children: [
+                      (cartList == null || cartList.isEmpty)
+                          ? const SizedBox()
+                          : Container(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: KSizes.md),
+                              margin:
+                                  EdgeInsets.only(top: KSizes.spaceBtwItems),
+                              decoration: const BoxDecoration(
+                                color: KColors.grey,
                               ),
-                            )
-                          : ListView.builder(
-                              itemCount: cartList.length,
-                              itemBuilder: (context, index) {
-                                CartResponse cart = cartList[index];
-
-                                return CartTile(
-                                  cart: cart,
-                                  refetch: refetch,
+                              child: Consumer<CartProvider>(
+                                  builder: (context, cartProvider, child) {
+                                return Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text("Items (${cartProvider.cartCount})"),
+                                    TextButton(
+                                        onPressed: () async {
+                                          await cartProvider.clearCart(
+                                              user!.id, refetch);
+                                        },
+                                        child: Text(
+                                          "Clear All",
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodySmall,
+                                        )),
+                                  ],
                                 );
                               }),
-                )
-              ],
-            ),
+                            ),
+                      Container(
+                        padding: const EdgeInsets.only(
+                          top: KSizes.md,
+                          left: KSizes.md,
+                          right: KSizes.md,
+                        ),
+                        width: KDeviceUtils.getScreenWidth(context),
+                        // height: KDeviceUtils.getScreenHeight(context) * 0.698,
+                        height: !_isCloseToClosingTime
+                            ? KDeviceUtils.getScreenHeight(context) * 0.71
+                            : KDeviceUtils.getScreenHeight(context) * 0.698,
+                        child: isLoading
+                            // ? const FoodsListShimmer()
+                            ? KIndicator.circularIndicator()
+                            : (cartList == null || cartList.isEmpty)
+                                ? Center(
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        const Icon(
+                                          Icons.shopping_bag_outlined,
+                                          size: 80,
+                                          color: KColors.primary,
+                                        ),
+                                        SizedBox(height: KSizes.spaceBtwItems),
+                                        Text(
+                                          "Your cart is empty!",
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .titleLarge!
+                                              .copyWith(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 22),
+                                        ),
+                                        SizedBox(
+                                            height: KSizes.spaceBtwSections),
+                                        Text(
+                                          randomCartMessage,
+                                          // "Looks like you haven't added anything yet.\nStart exploring our wide selection of products.",
+                                          textAlign: TextAlign.center,
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodyMedium!
+                                              .copyWith(
+                                                color: KColors.darkGrey,
+                                              ),
+                                        ),
+                                        SizedBox(
+                                            height: KSizes.spaceBtwSections),
+                                        ElevatedButton(
+                                          style: ElevatedButton.styleFrom(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: KSizes.md),
+                                          ),
+                                          onPressed: () {
+                                            Navigator.pushNamedAndRemoveUntil(
+                                                context,
+                                                "/navigationMenu",
+                                                (route) => false);
+                                          },
+                                          child: const Text("Start Shopping"),
+                                        ),
+                                      ],
+                                    ),
+                                  )
+                                : ListView.builder(
+                                    itemCount: cartList.length,
+                                    itemBuilder: (context, index) {
+                                      CartResponse cart = cartList[index];
+
+                                      return CartTile(
+                                        cart: cart,
+                                        refetch: refetch,
+                                      );
+                                    }),
+                      )
+                    ],
+                  ),
+                ),
+              ),
+            ],
           )),
     );
   }
