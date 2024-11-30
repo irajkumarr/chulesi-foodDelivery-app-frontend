@@ -208,6 +208,8 @@ void showFoodModalSheet(BuildContext context, FoodsModel food) {
                     return ElevatedButton(
                       style: ElevatedButton.styleFrom(
                           padding: EdgeInsets.zero,
+                          disabledBackgroundColor: KColors.primary,
+                          disabledForegroundColor: KColors.white,
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(KSizes.sm))),
                       onPressed: token == null
@@ -250,7 +252,7 @@ void showFoodModalSheet(BuildContext context, FoodsModel food) {
                                   height: 12.h,
                                   width: 12.w,
                                   child: const CircularProgressIndicator(
-                                    color: KColors.primary,
+                                    color: KColors.white,
                                     strokeWidth: 1,
                                   ),
                                 ),

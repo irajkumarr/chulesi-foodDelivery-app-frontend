@@ -542,11 +542,19 @@ class CheckoutScreen extends HookWidget {
                             },
                             child: Row(
                               children: [
-                                const Icon(Icons.add_location_alt_outlined),
+                                const Icon(
+                                  Icons.add_location_alt_outlined,
+                                  color: KColors.primary,
+                                ),
                                 SizedBox(width: KSizes.sm),
                                 Text(
                                   "Add Delivery Address",
-                                  style: Theme.of(context).textTheme.titleLarge,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .titleLarge!
+                                      .copyWith(
+                                        color: KColors.primary,
+                                      ),
                                 ),
                               ],
                             ),

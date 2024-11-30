@@ -60,7 +60,7 @@ class HomeScreen extends StatelessWidget {
       child: Scaffold(
         backgroundColor: KColors.secondaryBackground,
         appBar: PreferredSize(
-          preferredSize: Size.fromHeight(60.h),
+          preferredSize: Size.fromHeight(56.h),
           child: const HomeAppBar(),
         ),
         body: RefreshIndicator(

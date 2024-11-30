@@ -442,12 +442,15 @@
 
 import 'dart:convert';
 
+import 'package:chulesi/app.dart';
 import 'package:flutter/material.dart';
 import 'package:chulesi/core/utils/constants/api_constants.dart';
 import 'package:chulesi/core/utils/popups/toast.dart';
 import 'package:chulesi/data/models/api_error.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
+
+import '../../../core/utils/constants/colors.dart';
 
 class CartProvider with ChangeNotifier {
   final box = GetStorage();
@@ -550,36 +553,72 @@ class CartProvider with ChangeNotifier {
   // }
 
   Future<void> addToCart(BuildContext context, String cart) async {
-  if (isLoading) return; // Prevent multiple calls
+    if (isLoading) return; // Prevent multiple calls
 
-  setLoading = true;
+    setLoading = true;
 
-  String? token = box.read("token");
-  Uri url = Uri.parse("$kAppBaseUrl/api/carts/");
-  Map<String, String> headers = {
-    "Content-Type": "application/json",
-    if (token != null) "Authorization": "Bearer $token"
-  };
+    String? token = box.read("token");
+    Uri url = Uri.parse("$kAppBaseUrl/api/carts/");
+    Map<String, String> headers = {
+      "Content-Type": "application/json",
+      if (token != null) "Authorization": "Bearer $token"
+    };
 
-  try {
-    var response = await http.post(url, headers: headers, body: cart);
-    if (response.statusCode == 201) {
-      showToast("Product added to Cart");
-      String userId = box.read("userId") ?? '';
-      await syncCartState();
-      await fetchCartCount(userId);
-      await fetchTotalCartPrice(userId);
-    } else {
-      var error = apiErrorFromJson(response.body);
-      showToast(error.message);
+    try {
+      var response = await http.post(url, headers: headers, body: cart);
+      if (response.statusCode == 201) {
+        String userId = box.read("userId") ?? '';
+        await syncCartState();
+        await fetchCartCount(userId);
+        await fetchTotalCartPrice(userId);
+        // showToast("Product added to Cart");
+
+        ScaffoldMessenger.of(navigatorKey.currentContext!).showSnackBar(
+          SnackBar(
+            content: Row(
+              children: [
+                Icon(Icons.shopping_cart, color: Colors.white),
+                SizedBox(width: 12),
+                Expanded(
+                  child: Text(
+                    'Product added to Cart',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            backgroundColor: KColors.primary,
+            behavior: SnackBarBehavior.floating,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+            margin: EdgeInsets.all(16),
+            elevation: 6,
+            duration: Duration(seconds: 3),
+            action: SnackBarAction(
+              label: 'View Cart',
+              textColor: Colors.white,
+              onPressed: () {
+                // Use the global navigatorKey to navigate
+                navigatorKey.currentState?.pushNamed('/cart');
+              },
+              disabledTextColor: Colors.grey,
+            ),
+          ),
+        );
+      } else {
+        var error = apiErrorFromJson(response.body);
+        showToast(error.message);
+      }
+    } catch (e) {
+      showToast(e.toString());
+    } finally {
+      setLoading = false;
     }
-  } catch (e) {
-    showToast(e.toString());
-  } finally {
-    setLoading = false;
   }
-}
-
 
   Future<void> removeFromCart(String productId, Function refetch) async {
     if (_isLoading) return;
