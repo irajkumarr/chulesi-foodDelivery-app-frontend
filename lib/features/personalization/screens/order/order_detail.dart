@@ -62,24 +62,53 @@
 //   }
 // }
 
+import 'package:chulesi/features/personalization/providers/rating_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:chulesi/common/widgets/products/products_text/product_price_text.dart';
 import 'package:chulesi/common/widgets/products/products_text/product_title_text.dart';
 import 'package:chulesi/core/utils/constants/colors.dart';
 import 'package:chulesi/core/utils/constants/sizes.dart';
 import 'package:chulesi/data/models/order_model.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 import '../../../../core/utils/device/device_utility.dart';
 
-class OrderDetail extends StatelessWidget {
-  const OrderDetail({super.key, required this.order});
+class OrderDetail extends StatefulWidget {
   final OrderModel order;
+  OrderDetail({super.key, required this.order});
+
+  @override
+  State<OrderDetail> createState() => _OrderDetailState();
+}
+
+class _OrderDetailState extends State<OrderDetail> {
+  final TextEditingController _feedbackController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final ratingProvider =
+          Provider.of<RatingProvider>(context, listen: false);
+      ratingProvider.initializeRating(widget.order);
+      _feedbackController.text = widget.order.feedback ?? '';
+    });
+  }
+
+  @override
+  void dispose() {
+    _feedbackController.dispose(); // Clean up the controller
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    List<OrderItem> orderItems = order.orderItems;
-    DateTime parsedDate = DateTime.parse(order.orderDate.toString()).toLocal();
+    List<OrderItem> orderItems = widget.order.orderItems;
+    DateTime parsedDate =
+        DateTime.parse(widget.order.orderDate.toString()).toLocal();
     String formattedDate = DateFormat('yyyy-MM-dd HH:mm').format(parsedDate);
     return Scaffold(
       appBar: PreferredSize(
@@ -117,27 +146,30 @@ class OrderDetail extends StatelessWidget {
                         style: Theme.of(context).textTheme.titleMedium,
                       ),
                       SizedBox(height: KSizes.sm),
-                      _buildOrderInfoRow('Order ID', order.id),
+                      _buildOrderInfoRow('Order ID', widget.order.id),
                       _buildOrderInfoRow('Order Date', formattedDate),
                       _buildOrderInfoRow(
                           'Total Items', orderItems.length.toString()),
                       _buildOrderInfoRow(
                           'Delivery fee',
-                          (order.deliveryFee == 0)
+                          (widget.order.deliveryFee == 0)
                               ? "Free Delivery"
-                              : order.deliveryFee.toStringAsFixed(0)),
+                              : "Rs. ${widget.order.deliveryFee.toStringAsFixed(0)}"),
                       _buildOrderInfoRow('Discount Amount',
-                          order.discountAmount.toStringAsFixed(0)),
+                          "Rs. ${widget.order.discountAmount.toStringAsFixed(0)}"),
                       _buildOrderInfoRow('Total Amount',
-                          "Rs. ${order.grandTotal.toStringAsFixed(0)}"),
-                      _buildOrderInfoRow('Status', order.orderStatus),
+                          "Rs. ${widget.order.grandTotal.toStringAsFixed(0)}"),
+                      _buildOrderInfoRow('Status', widget.order.orderStatus),
                     ],
                   ),
                 ),
               ),
 
               const SizedBox(height: KSizes.md),
+// Order Rating Section
+              _buildRatingSection(context),
 
+              const SizedBox(height: KSizes.md),
               // Order Items Section
               Text(
                 'Order Items',
@@ -172,7 +204,7 @@ class OrderDetail extends StatelessWidget {
     ];
 
     // Check if the order is cancelled
-    bool isCancelled = order.orderStatus.toLowerCase() == 'cancelled';
+    bool isCancelled = widget.order.orderStatus.toLowerCase() == 'cancelled';
 
     // Add "Cancelled" step only if the order is cancelled
     if (isCancelled) {
@@ -180,7 +212,8 @@ class OrderDetail extends StatelessWidget {
     }
 
     // Determine the current step index
-    int currentStep = _getCurrentStepIndex(order.orderStatus, orderSteps);
+    int currentStep =
+        _getCurrentStepIndex(widget.order.orderStatus, orderSteps);
 
     return Card(
       elevation: 1,
@@ -262,100 +295,6 @@ class OrderDetail extends StatelessWidget {
   }
 
 //   Widget _buildOrderStatusStepper(BuildContext context) {
-//     // Define all possible order status steps
-//     final List<String> orderSteps = [
-//       "Placed",
-//       "Preparing",
-//       "Out for Delivery",
-//       "Delivered",
-//       // "Completed",
-//       "Cancelled",
-//     ];
-// // Exclude "Cancelled" if the order is delivered
-//     if (order.orderStatus.toLowerCase() == 'delivered') {
-//       orderSteps.remove("Cancelled");
-//     }
-//     // Determine current step based on order status
-//     int currentStep = _getCurrentStepIndex(order.orderStatus, orderSteps);
-
-//     // Check if the order is cancelled
-//     bool isCancelled = order.orderStatus.toLowerCase() == 'cancelled';
-
-//     return Card(
-//       elevation: 1,
-//       color: KColors.white,
-//       child: Padding(
-//         padding: const EdgeInsets.all(KSizes.md),
-//         child: Column(
-//           crossAxisAlignment: CrossAxisAlignment.start,
-//           children: [
-//             Text(
-//               'Order Tracking',
-//               style: Theme.of(context).textTheme.titleMedium,
-//             ),
-//             SizedBox(height: KSizes.sm),
-//             Stepper(
-//               physics: NeverScrollableScrollPhysics(),
-//               currentStep: currentStep,
-//               controlsBuilder: (context, details) => Container(),
-//               steps: orderSteps.map((status) {
-//                 return Step(
-//                   title: Text(
-//                     status,
-//                     style: TextStyle(
-//                       fontWeight: FontWeight.w600,
-//                       color: isCancelled && status == 'Cancelled'
-//                           ? Colors.red // Highlight cancelled status in red
-//                           : (orderSteps.indexOf(status) <= currentStep
-//                               ? KColors.primary
-//                               : Colors.grey),
-//                       // Add strikethrough for cancelled steps
-//                       decoration: isCancelled &&
-//                               orderSteps.indexOf(status) < currentStep
-//                           ? TextDecoration.lineThrough
-//                           : null,
-//                     ),
-//                   ),
-//                   state: isCancelled
-//                       ? (status == 'Cancelled'
-//                           ? StepState.error // Show error state for cancelled
-//                           : StepState.disabled) // Disable other steps
-//                       : (orderSteps.indexOf(status) < currentStep
-//                           ? StepState.complete
-//                           : (orderSteps.indexOf(status) == currentStep
-//                               ? StepState.complete
-//                               : StepState.disabled)),
-//                   content: Container(),
-//                 );
-//               }).toList(),
-//             ),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-
-//   // Helper method to get current step index
-//   int _getCurrentStepIndex(String currentStatus, List<String> orderSteps) {
-//     switch (currentStatus.toLowerCase()) {
-//       case 'placed':
-//         return 0;
-//       case 'preparing':
-//         return 1;
-//       case 'out for delivery':
-//         return 2;
-//       case 'delivered':
-//         return 3;
-//       // case 'completed':
-//       //   return 4;
-//       case 'cancelled':
-//         return 4;
-//       default:
-//         return 0;
-//     }
-//   }
-
-  // Helper method to build order information rows
   Widget _buildOrderInfoRow(String label, String value) {
     return Padding(
       padding: EdgeInsets.symmetric(vertical: KSizes.xs),
@@ -424,6 +363,156 @@ class OrderDetail extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildRatingSection(BuildContext context) {
+    // Only show rating section for delivered orders
+    if (widget.order.orderStatus.toLowerCase() != 'delivered') {
+      return SizedBox.shrink();
+    }
+
+    return Card(
+      elevation: 1,
+      color: KColors.white,
+      child: Padding(
+        padding: const EdgeInsets.all(KSizes.md),
+        child: Consumer<RatingProvider>(
+          builder: (context, ratingProvider, child) {
+            // Initialize feedback controller if needed
+            if (_feedbackController.text.isEmpty) {
+              _feedbackController.text = ratingProvider.feedback;
+            }
+
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Rate Your Order',
+                  style: Theme.of(context).textTheme.titleMedium,
+                ),
+                SizedBox(height: KSizes.sm),
+
+                // Conditional Rating Display
+                ratingProvider.isRatingSubmitted
+                    ? _buildSubmittedRatingView(context, ratingProvider)
+                    : _buildRatingInputView(context, ratingProvider),
+              ],
+            );
+          },
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSubmittedRatingView(
+      BuildContext context, RatingProvider ratingProvider) {
+    return Column(
+      children: [
+        RatingBar.builder(
+          initialRating: ratingProvider.currentRating,
+          minRating: 1,
+          direction: Axis.horizontal,
+          allowHalfRating: true,
+          itemCount: 5,
+          itemSize: 30,
+          ignoreGestures: true,
+          itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
+          itemBuilder: (context, _) => Icon(
+            Icons.star,
+            color: Colors.amber,
+          ),
+          onRatingUpdate: (rating) {},
+        ),
+        SizedBox(height: KSizes.sm),
+        Text(
+          'Your feedback has been received. Thank you!',
+          style: Theme.of(context).textTheme.bodySmall,
+        ),
+        if (ratingProvider.feedback.isNotEmpty)
+          Padding(
+            padding: EdgeInsets.only(top: KSizes.sm),
+            child: Text(
+              'Your Feedback: ${ratingProvider.feedback}',
+              style: Theme.of(context).textTheme.bodySmall,
+            ),
+          ),
+      ],
+    );
+  }
+
+  Widget _buildRatingInputView(
+      BuildContext context, RatingProvider ratingProvider) {
+    return Column(
+      children: [
+        RatingBar.builder(
+          initialRating: 0,
+          minRating: 1,
+          direction: Axis.horizontal,
+          allowHalfRating: true,
+          itemCount: 5,
+          itemSize: 40,
+          itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
+          itemBuilder: (context, _) => Icon(
+            Icons.star,
+            color: Colors.amber,
+          ),
+          onRatingUpdate: (rating) {
+            ratingProvider.updateRating(rating);
+          },
+        ),
+        SizedBox(height: KSizes.sm),
+        TextField(
+          controller: _feedbackController,
+          decoration: InputDecoration(
+            labelText: 'Share your feedback (optional)',
+            border: OutlineInputBorder(),
+          ),
+          maxLines: 3,
+          onChanged: (value) {
+            ratingProvider.updateFeedback(value);
+          },
+        ),
+        SizedBox(height: KSizes.sm),
+        ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            padding: const EdgeInsets.all(KSizes.md),
+            backgroundColor: KColors.primary,
+          ),
+          onPressed:
+              ratingProvider.currentRating > 0 && !ratingProvider.isLoading
+                  ? () async {
+                      // final success =
+                      //     await ratingProvider.submitRating(widget.order.id);
+                      // if (success) {
+                      //   // setState(() {});
+                      //   ScaffoldMessenger.of(context).showSnackBar(
+                      //     SnackBar(content: Text('Rating submitted successfully!')),
+                      //   );
+                      // }
+                      await ratingProvider.submitRating(widget.order.id);
+                    }
+                  : null,
+          child: ratingProvider.isLoading
+              ? Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Text("Submit Rating"),
+                    const SizedBox(width: KSizes.md),
+                    SizedBox(
+                      height: 12.h,
+                      width: 12.w,
+                      child: const CircularProgressIndicator(
+                        color: KColors.primary,
+                        strokeWidth: 1,
+                      ),
+                    ),
+                  ],
+                )
+              : const Text("Submit Rating"),
+        ),
+      ],
     );
   }
 }

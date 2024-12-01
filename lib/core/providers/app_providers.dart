@@ -9,6 +9,7 @@ import 'package:chulesi/features/personalization/providers/location_provider.dar
 import 'package:chulesi/features/personalization/providers/map_provider.dart';
 import 'package:chulesi/features/personalization/providers/order_provider.dart';
 import 'package:chulesi/features/personalization/providers/profile_provider.dart';
+import 'package:chulesi/features/personalization/providers/rating_provider.dart';
 import 'package:chulesi/features/shop/providers/cart_provider.dart';
 
 import 'package:chulesi/features/shop/providers/category_provider.dart';
@@ -38,6 +39,7 @@ class AppProviders {
     }
         //  => CartProvider()
         ),
+    ChangeNotifierProvider(create: (_) => RatingProvider()),
     ChangeNotifierProvider(create: (_) => OrderProvider()),
     ChangeNotifierProvider(create: (_) => CategoryProvider()),
     ChangeNotifierProvider(create: (_) => SliderProvider()),

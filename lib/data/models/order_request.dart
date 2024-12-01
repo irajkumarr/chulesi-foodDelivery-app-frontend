@@ -16,8 +16,10 @@ class OrderRequest {
   final String paymentStatus;
   final String orderStatus;
   final DateTime orderDate;
-  final int rating;
-  final String feedback;
+  // final int rating;
+  // final String feedback;
+  final double? rating; // Optional
+  final String? feedback; // Optional
   final String orderNote;
   final double discountAmount;
   final String promoCode;
@@ -33,8 +35,8 @@ class OrderRequest {
     required this.paymentStatus,
     required this.orderStatus,
     required this.orderDate,
-    required this.rating,
-    required this.feedback,
+    this.rating,
+    this.feedback,
     required this.orderNote,
     required this.discountAmount,
     required this.promoCode,
@@ -52,7 +54,7 @@ class OrderRequest {
         paymentStatus: json["paymentStatus"],
         orderStatus: json["orderStatus"],
         orderDate: DateTime.parse(json["orderDate"]),
-        rating: json["rating"],
+        rating: json["rating"]?.toDouble(),
         feedback: json["feedback"],
         orderNote: json["orderNote"],
         discountAmount: json["discountAmount"],
