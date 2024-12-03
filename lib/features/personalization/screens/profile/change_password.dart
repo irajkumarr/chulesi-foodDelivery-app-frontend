@@ -49,141 +49,164 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
           padding: EdgeInsets.symmetric(
               vertical: KSizes.spaceBtwSections,
               horizontal: KSizes.defaultSpace),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              children: [
-                //old password
-                Consumer<PasswordProvider>(builder: (context, value, child) {
-                  return TextFormField(
-                    controller: _oldPasswordController,
-                    textInputAction: TextInputAction.next,
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyLarge!
-                        .copyWith(fontSize: KSizes.fontSizeSm),
-                    validator: (value) =>
-                        KValidator.validateEmptyText("Old Password", value),
-                    obscureText: value.oldPasswordVisible,
-                    decoration: InputDecoration(
-                      labelText: "Old Password",
-                      suffixIcon: IconButton(
-                        onPressed: () {
-                          value.toggleOldPasswordVisibility();
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Reset Your Password',
+                style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black87,
+                    ),
+              ),
+              SizedBox(height: KSizes.spaceBtwItems),
+              Text(
+                'Ensure your new password is strong and unique',
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      color: Colors.grey[600],
+                    ),
+              ),
+              SizedBox(height: KSizes.spaceBtwSections),
+              Form(
+                key: _formKey,
+                child: Column(
+                  children: [
+                    //old password
+                    Consumer<PasswordProvider>(
+                        builder: (context, value, child) {
+                      return TextFormField(
+                        controller: _oldPasswordController,
+                        textInputAction: TextInputAction.next,
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodyLarge!
+                            .copyWith(fontSize: KSizes.fontSizeSm),
+                        validator: (value) =>
+                            KValidator.validateEmptyText("Old Password", value),
+                        obscureText: value.oldPasswordVisible,
+                        decoration: InputDecoration(
+                          labelText: "Old Password",
+                          suffixIcon: IconButton(
+                            onPressed: () {
+                              value.toggleOldPasswordVisibility();
+                            },
+                            icon: Icon(value.oldPasswordVisible
+                                ? Iconsax.eye_slash
+                                : Iconsax.eye),
+                          ),
+                        ),
+                      );
+                    }),
+                    SizedBox(height: KSizes.spaceBtwSections),
+                    //new password
+                    Consumer<PasswordProvider>(
+                        builder: (context, value, child) {
+                      return TextFormField(
+                        controller: _newPasswordController,
+                        textInputAction: TextInputAction.next,
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodyLarge!
+                            .copyWith(fontSize: KSizes.fontSizeSm),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter your new password';
+                          }
+                          if (value == _oldPasswordController.text) {
+                            return 'New password cannot be the same as old password';
+                          }
+                          return null;
                         },
-                        icon: Icon(value.oldPasswordVisible
-                            ? Iconsax.eye_slash
-                            : Iconsax.eye),
+                        obscureText: value.newPasswordVisible,
+                        decoration: InputDecoration(
+                          labelText: "New Password",
+                          suffixIcon: IconButton(
+                              onPressed: () {
+                                value.toggleNewPasswordVisibility();
+                              },
+                              icon: Icon(value.newPasswordVisible
+                                  ? Iconsax.eye_slash
+                                  : Iconsax.eye)),
+                        ),
+                      );
+                    }),
+                    SizedBox(height: KSizes.spaceBtwSections),
+                    //confirm new password
+                    Consumer<PasswordProvider>(
+                        builder: (context, value, child) {
+                      return TextFormField(
+                        controller: _confirmPasswordController,
+                        textInputAction: TextInputAction.done,
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodyLarge!
+                            .copyWith(fontSize: KSizes.fontSizeSm),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please confirm your new password';
+                          }
+                          if (value != _newPasswordController.text) {
+                            return 'Passwords do not match';
+                          }
+                          return null;
+                        },
+                        obscureText: value.confirmPasswordVisible,
+                        decoration: InputDecoration(
+                          labelText: "Confirm Password",
+                          suffixIcon: IconButton(
+                              onPressed: () {
+                                value.toggleConfirmPasswordVisibility();
+                              },
+                              icon: Icon(value.confirmPasswordVisible
+                                  ? Iconsax.eye_slash
+                                  : Iconsax.eye)),
+                        ),
+                      );
+                    }),
+                    SizedBox(height: KSizes.spaceBtwSections * 2),
+                    // Change password Button
+                    SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          padding: const EdgeInsets.all(KSizes.md),
+                          backgroundColor: KColors.primary,
+                        ),
+                        onPressed: profileProvider.isLoading
+                            ? null
+                            : () async {
+                                if (_formKey.currentState!.validate()) {
+                                  await profileProvider.changePassword(
+                                      context,
+                                      _oldPasswordController.text,
+                                      _newPasswordController.text);
+                                }
+                              },
+                        child:
+                            //  profileProvider.isLoading
+                            //     ? Row(
+                            //         mainAxisAlignment: MainAxisAlignment.center,
+                            //         children: [
+                            //           const Text("Changing Password"),
+                            //           const SizedBox(width: KSizes.md),
+                            //           SizedBox(
+                            //             height: 12.h,
+                            //             width: 12.w,
+                            //             child: const CircularProgressIndicator(
+                            //               color: KColors.primary,
+                            //               strokeWidth: 1,
+                            //             ),
+                            //           ),
+                            //         ],
+                            //       )
+                            //     :
+                            const Text("Change Password"),
                       ),
                     ),
-                  );
-                }),
-                SizedBox(height: KSizes.spaceBtwSections),
-                //new password
-                Consumer<PasswordProvider>(builder: (context, value, child) {
-                  return TextFormField(
-                    controller: _newPasswordController,
-                    textInputAction: TextInputAction.next,
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyLarge!
-                        .copyWith(fontSize: KSizes.fontSizeSm),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter your new password';
-                      }
-                      if (value == _oldPasswordController.text) {
-                        return 'New password cannot be the same as old password';
-                      }
-                      return null;
-                    },
-                    obscureText: value.newPasswordVisible,
-                    decoration: InputDecoration(
-                      labelText: "New Password",
-                      suffixIcon: IconButton(
-                          onPressed: () {
-                            value.toggleNewPasswordVisibility();
-                          },
-                          icon: Icon(value.newPasswordVisible
-                              ? Iconsax.eye_slash
-                              : Iconsax.eye)),
-                    ),
-                  );
-                }),
-                SizedBox(height: KSizes.spaceBtwSections),
-                //confirm new password
-                Consumer<PasswordProvider>(builder: (context, value, child) {
-                  return TextFormField(
-                    controller: _confirmPasswordController,
-                    textInputAction: TextInputAction.done,
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyLarge!
-                        .copyWith(fontSize: KSizes.fontSizeSm),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please confirm your new password';
-                      }
-                      if (value != _newPasswordController.text) {
-                        return 'Passwords do not match';
-                      }
-                      return null;
-                    },
-                    obscureText: value.confirmPasswordVisible,
-                    decoration: InputDecoration(
-                      labelText: "Confirm Password",
-                      suffixIcon: IconButton(
-                          onPressed: () {
-                            value.toggleConfirmPasswordVisibility();
-                          },
-                          icon: Icon(value.confirmPasswordVisible
-                              ? Iconsax.eye_slash
-                              : Iconsax.eye)),
-                    ),
-                  );
-                }),
-                SizedBox(height: KSizes.spaceBtwSections * 2),
-                // Change password Button
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      padding: const EdgeInsets.all(KSizes.md),
-                      backgroundColor: KColors.primary,
-                    ),
-                    onPressed: profileProvider.isLoading
-                        ? null
-                        : () async {
-                            if (_formKey.currentState!.validate()) {
-                              await profileProvider.changePassword(
-                                  context,
-                                  _oldPasswordController.text,
-                                  _newPasswordController.text);
-                            }
-                          },
-                    child:
-                        //  profileProvider.isLoading
-                        //     ? Row(
-                        //         mainAxisAlignment: MainAxisAlignment.center,
-                        //         children: [
-                        //           const Text("Changing Password"),
-                        //           const SizedBox(width: KSizes.md),
-                        //           SizedBox(
-                        //             height: 12.h,
-                        //             width: 12.w,
-                        //             child: const CircularProgressIndicator(
-                        //               color: KColors.primary,
-                        //               strokeWidth: 1,
-                        //             ),
-                        //           ),
-                        //         ],
-                        //       )
-                        //     :
-                        const Text("Change Password"),
-                  ),
+                  ],
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),
