@@ -1,16 +1,79 @@
-# frontend
+## 🍔 Chulesi - Food Delivery App
 
-A new Flutter project.
+A feature-rich food delivery app that allows users to browse food items, order meals, and get them delivered to their doorstep with ease.
 
-## Getting Started
+---
 
-This project is a starting point for a Flutter application.
+## ✨ Features
 
-A few resources to get you started if this is your first Flutter project:
+- 🍽️ Browse and order food items  
+- 🔍 Search and filter food options  
+- 🛒 Add to cart and checkout  
+- 🚚 Track order status in real-time  
+- 💳 Multiple payment options  
+- 🌟 Rate and review orders  
+- 📌 Save favorite meals  
+- 🏷️ Apply discounts and promo codes  
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+---
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## 🚀 Installation
+
+### 📱 Android & iOS (Flutter-based app)
+1. Clone the repository:
+   ```sh
+   git clone https://github.com/your-username/chulesi-food-delivery.git
+   ```
+2. Navigate to the project directory:
+   ```sh
+   cd chulesi-food-delivery
+   ```
+3. Install dependencies:
+   ```sh
+   flutter pub get
+   ```
+4. Run the app:
+   ```sh
+   flutter run
+   ```
+
+---
+
+## 🛠️ Tech Stack
+
+- **Frontend:** Flutter (Dart)  
+- **State Management:** Provider  
+- **Backend:** Node.js (Express)  
+- **Database:** MongoDB  
+- **Authentication:** Firebase Auth  
+
+---
+
+## 📸 Screenshots
+
+![Screenshot 1](https://via.placeholder.com/400)  
+![Screenshot 2](https://via.placeholder.com/400)  
+
+---
+
+## 🏗️ Roadmap
+
+- [ ] Implement delivery partner module  
+- [ ] Push notifications for order updates  
+- [ ] AI-powered food recommendations  
+
+---
+
+## 💡 Contributing
+
+1. Fork the repository  
+2. Create a new branch (`feature-new-feature`)  
+3. Commit changes (`git commit -m "Added new feature"`)  
+4. Push to the branch (`git push origin feature-new-feature`)  
+5. Open a Pull Request  
+
+---
+
+## 📜 License
+
+This project is licensed under the MIT License.
