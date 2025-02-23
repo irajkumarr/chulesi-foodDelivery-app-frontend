@@ -14,27 +14,6 @@ A feature-rich food delivery app that allows users to browse food items, order m
 
 ---
 
-## 🚀 Installation
-
-### 📱 Android & iOS (Flutter-based app)
-1. Clone the repository:
-   ```sh
-   git clone https://github.com/your-username/chulesi-food-delivery.git
-   ```
-2. Navigate to the project directory:
-   ```sh
-   cd chulesi-food-delivery
-   ```
-3. Install dependencies:
-   ```sh
-   flutter pub get
-   ```
-4. Run the app:
-   ```sh
-   flutter run
-   ```
-
----
 
 ## 🛠️ Tech Stack
 
@@ -42,16 +21,8 @@ A feature-rich food delivery app that allows users to browse food items, order m
 - **State Management:** Provider  
 - **Backend:** Node.js (Express)  
 - **Database:** MongoDB  
-- **Authentication:** Firebase Auth  
 
----
-
-## 📸 Screenshots
-
-![Screenshot 1](https://via.placeholder.com/400)  
-![Screenshot 2](https://via.placeholder.com/400)  
-
----
+-
 
 ## 🏗️ Roadmap
 
