@@ -20,7 +20,8 @@ A feature-rich food delivery app that allows users to browse food items, order m
 - **Frontend:** Flutter (Dart)  
 - **State Management:** Provider  
 - **Backend:** Node.js (Express)  
-- **Database:** MongoDB  
+- **Database:** MongoDB
+- **Push Notification:** Firebase 
 
 
 ## 📜 License
