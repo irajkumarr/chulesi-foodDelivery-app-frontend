@@ -23,7 +23,3 @@ A feature-rich food delivery app that allows users to browse food items, order m
 - **Database:** MongoDB
 - **Push Notification:** Firebase 
 
-
-## 📜 License
-
-This project is licensed under the MIT License.
