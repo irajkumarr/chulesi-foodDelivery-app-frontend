@@ -1,6 +1,6 @@
 ## Chulesi - Food Delivery App
 
-A feature-rich food delivery app that allows users to browse food items, order meals, and get them delivered to their doorstep with ease.
+A feature-rich food delivery app that allows users to browse food items, order meals, and get them delivered to their doorsteps.
 
 ---
 
