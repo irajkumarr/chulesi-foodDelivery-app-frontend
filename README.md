@@ -18,7 +18,7 @@ A feature-rich food delivery app that allows users to browse food items, order m
 ## 🛠️ Tech Stack
 
 - **Frontend:** Flutter (Dart)  
-- **State Management:** Provider  
+- **State Management and Local storage:** Provider and Getstorage  
 - **Backend:** Node.js (Express)  
 - **Database:** MongoDB
 - **Push Notification:** Firebase Messaging 
