@@ -8,7 +8,7 @@ A feature-rich food delivery app that allows users to browse food items, order m
 
 - 🍽️ Browse and order food items  
 - 🔍 Search and filter food options  
-- 🛒 Add to cart and checkout   
+- 🛒 Login and Add to cart and checkout   
 - 🌟 Rate and review orders  
 - 🏷️ Apply discounts and promo codes  
 
