@@ -21,4 +21,4 @@ A feature-rich food delivery app that allows users to browse food items, order m
 - **State Management and Local storage:** Provider and Getstorage  
 - **Backend:** Node.js (Express)  
 - **Database:** MongoDB
-- **Push Notification:** Firebase 
+- **Push Notification:** Firebase (Messaging)
