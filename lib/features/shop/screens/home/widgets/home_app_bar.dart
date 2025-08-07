@@ -49,25 +49,24 @@ class HomeAppBar extends StatelessWidget {
                 const SizedBox(width: 4),
                 Expanded(
                   child: Text(
-                    mapProvider.address ?? "Locating your address..",
+                    // mapProvider.address ?? "Locating your address..",
+                    "Hetauda, Nepal",
                     style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                           color: KColors.white,
-                          fontStyle: mapProvider.address == null
-                              ? FontStyle.italic
-                              : FontStyle.normal,
+                          fontStyle: FontStyle.normal,
                         ),
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
-                if (mapProvider.address == null)
-                  SizedBox(
-                    width: 8,
-                    height: 8,
-                    child: CircularProgressIndicator(
-                      strokeWidth: 1,
-                      color: KColors.white,
-                    ),
-                  ),
+                // if (mapProvider.address == null)
+                //   SizedBox(
+                //     width: 8,
+                //     height: 8,
+                //     child: CircularProgressIndicator(
+                //       strokeWidth: 1,
+                //       color: KColors.white,
+                //     ),
+                //   ),
               ],
             ),
           ],
