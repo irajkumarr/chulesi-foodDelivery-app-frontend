@@ -225,7 +225,7 @@ class PermissionProvider extends ChangeNotifier {
         return false;
       }
     } catch (e) {
-      print("Permission error: $e");
+      // print("Permission error: $e");
       return false;
     }
   }
