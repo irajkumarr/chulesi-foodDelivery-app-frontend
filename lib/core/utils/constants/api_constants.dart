@@ -2,7 +2,7 @@
 
 const String kSecretAPIKey = "";
 // const String kGoogleMapAPIKey = "AIzaSyABiF9wE3fxwX9rWGUsQfWurlOzmpyw4S8";
-const String kGoogleMapAPIKey = "AIzaSyAUrJpjClbV4kp1PJSEO73bO3x1EKSQCNU";
+const String kGoogleMapAPIKey = "AIzaSyDJDDMGczJ1loSoP_3QXWpvwDrKbX2RCQg";
 
 // const String kAppBaseUrl = "http://192.168.100.90:5000";
 // const String kAppBaseUrl = "http://192.168.0.108:5000";

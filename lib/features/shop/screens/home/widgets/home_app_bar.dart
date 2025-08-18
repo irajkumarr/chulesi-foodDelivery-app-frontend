@@ -49,8 +49,8 @@ class HomeAppBar extends StatelessWidget {
                 const SizedBox(width: 4),
                 Expanded(
                   child: Text(
-                    // mapProvider.address ?? "Locating your address..",
-                    "Hetauda, Nepal",
+                    mapProvider.address ?? "Locating your address..",
+                    // "Hetauda, Nepal",
                     style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                           color: KColors.white,
                           fontStyle: FontStyle.normal,
@@ -58,15 +58,15 @@ class HomeAppBar extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
-                // if (mapProvider.address == null)
-                //   SizedBox(
-                //     width: 8,
-                //     height: 8,
-                //     child: CircularProgressIndicator(
-                //       strokeWidth: 1,
-                //       color: KColors.white,
-                //     ),
-                //   ),
+                if (mapProvider.address == null)
+                  SizedBox(
+                    width: 8,
+                    height: 8,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 1,
+                      color: KColors.white,
+                    ),
+                  ),
               ],
             ),
           ],

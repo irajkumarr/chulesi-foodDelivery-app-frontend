@@ -23,6 +23,7 @@ class GooglePlacesService {
     final response = await http.get(
       Uri.parse(
           'https://maps.googleapis.com/maps/api/place/autocomplete/json?input=$input&key=$apiKey&sessiontoken=$sessionToken'),
+          // 'https://maps.gomaps.pro/maps/api/place/autocomplete/json?input=$input&key=$apiKey&sessiontoken=$sessionToken'),
     );
 
     if (response.statusCode == 200) {
